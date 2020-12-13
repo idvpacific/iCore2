@@ -1,0 +1,1045 @@
+﻿@{
+    ViewBag.Title = "Admins - Management & List";
+    Layout = "~/Areas/ManagementPortal/Views/Shared/_LayoutPortal.cshtml";
+}
+@section CSSStyle {
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/extensions/sweetalert2.min.css">
+    <style>
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after {
+            left: 10px
+        }
+
+        .MenuToolbox:after {
+            content: '\2807';
+            font-size: 22px;
+        }
+
+        tr:hover {
+            background-color: rgba(235, 234, 234, 0.76) !important;
+        }
+
+        .lds-ripple {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+            .lds-ripple div {
+                position: absolute;
+                border: 4px solid #006abc;
+                opacity: 1;
+                border-radius: 50%;
+                animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+            }
+
+                .lds-ripple div:nth-child(2) {
+                    animation-delay: -0.5s;
+                }
+
+        @@keyframes lds-ripple {
+            0% {
+                top: 36px;
+                left: 36px;
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+
+            100% {
+                top: 0px;
+                left: 0px;
+                width: 72px;
+                height: 72px;
+                opacity: 0;
+            }
+        }
+    </style>
+}
+<div class="content-header row">
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12" style="padding-left:30px">
+                <h2 class="content-header-title float-left mb-0">Admins</h2>
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        @try
+                        {
+                            if (ViewBag.Breadcrumb_Count == 0)
+                            {
+                                <li class="breadcrumb-item active">Management & List</li>
+                            }
+                            else
+                            {
+                                <li class="breadcrumb-item">
+                                    <a href="@Url.Action("Management","Admins", new {id="",area="ManagementPortal" })">Management & List</a>
+                                </li>
+                                if (ViewBag.Breadcrumb_Count > 5)
+                                {
+                                    <li class="breadcrumb-item">
+                                        <a href="@Url.Action("Management","Admins", new { id=ViewBag.Breadcrumb_ListCode[5], area="ManagementPortal" })">@ViewBag.Breadcrumb_ListName[5]</a>
+                                    </li>
+                                    <li class="breadcrumb-item">...</li>
+                                }
+                                if (ViewBag.Breadcrumb_Count > 5) { ViewBag.Breadcrumb_Count = 5; }
+                                for (int i = (ViewBag.Breadcrumb_Count - 1); i >= 0; i--)
+                                {
+                                    if (i == 0)
+                                    {
+                                        <li class="breadcrumb-item active">
+                                            @ViewBag.Breadcrumb_ListName[i]
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="breadcrumb-item">
+                                            <a href="@Url.Action("Management","Admins", new { id=ViewBag.Breadcrumb_ListCode[i], area="ManagementPortal" })">@ViewBag.Breadcrumb_ListName[i]</a>
+                                        </li>
+                                    }
+                                }
+                            }
+                        }
+                        catch (global::System.Exception) { }
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12" style="padding:0px">
+    <div class="card collapse-icon accordion-icon-rotate">
+        <div class="default-collapse collapse-bordered">
+            <div class="card collapse-header" id="Sec_Group" style="pointer-events:auto;opacity:1;display:block">
+                <div class="card-header" data-toggle="collapse" role="button" data-target="#ColGroupManager" aria-expanded="false" aria-controls="ColGroupManager">
+                    <h4 class="card-title" style=""><i class="fa fa-group text-primary" style="margin-right:10px"></i>Add new group</h4>
+                </div>
+                <div id="ColGroupManager" role="tabpanel" aria-labelledby="headingColGroupManager" class="collapse">
+                    <div class="card-body card-dashboard form-inline" style="padding-bottom:35px;">
+                        <div class="col-lg-6">
+                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                Name :
+                            </div>
+                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                <input type="text" class="form-control" id="Txt_Group_Name" placeholder="" style="width:100%" maxlength="200">
+                                <div class="form-control-position">
+                                    <i class="fa fa-group"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                Description :
+                            </div>
+                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                <input type="text" class="form-control" id="Txt_Group_Description" placeholder="" style="width:100%" maxlength="200">
+                                <div class="form-control-position">
+                                    <i class="fa fa-sticky-note"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-12" style="text-align:right">
+                            <div style="margin-top:20px;display:none" id="Btn_Group_Wait">
+                                <button class="btn btn-primary" type="button" disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right:10px"></span>
+                                    Please wait ...
+                                </button>
+                            </div>
+                            <div class="btn-group" role="group" style="margin-top:20px;display:block" id="Btn_Group">
+                                <button type="button" class="btn btn-primary" onclick="Group_AddNew()"><i class="fa fa-plus" style="margin-right:10px"></i>Add new group</button>
+                                <button type="button" class="btn btn-danger" onclick="Group_Clear()"><i class="fa fa-trash" style="margin-right:10px"></i>Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card collapse-header" id="Sec_Admin" style="pointer-events:auto;opacity:1;display:block">
+                <div class="card-header" data-toggle="collapse" role="button" data-target="#ColAdminManager" aria-expanded="false" aria-controls="ColAdminManager">
+                    <h4 class="card-title" style=""><i class="fa fa-user-plus text-primary" style="margin-right:10px"></i>Add new admin</h4>
+                </div>
+                <div id="ColAdminManager" role="tabpanel" aria-labelledby="headingColAdminManager" class="collapse">
+                    <div class="card-body card-dashboard form-inline" style="padding-bottom:35px">
+                        <div class="col-lg-6">
+                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                First Name :
+                            </div>
+                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                <input type="text" class="form-control" id="Txt_Admin_Firstname" placeholder="" style="width:100%" maxlength="200">
+                                <div class="form-control-position">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                Last Name :
+                            </div>
+                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                <input type="text" class="form-control" id="Txt_Admin_Lastname" placeholder="" style="width:100%" maxlength="200">
+                                <div class="form-control-position">
+                                    <i class="fa fa-user-o"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                Email Address :
+                            </div>
+                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                <input type="text" class="form-control" id="Txt_Admin_Email" placeholder="" style="width:100%" maxlength="200">
+                                <div class="form-control-position">
+                                    <i class="fa fa-envelope-open"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6" style="text-align:right">
+                            <div style="margin-top:20px;display:none" id="Btn_Admin_Wait">
+                                <button class="btn btn-primary mb-1" type="button" disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right:10px"></span>
+                                    Please wait ...
+                                </button>
+                            </div>
+                            <div class="btn-group" role="group" style="margin-top:20px;display:block" id="Btn_Admin">
+                                <button type="button" class="btn btn-primary" onclick="Admin_AddNew()"><i class="fa fa-plus" style="margin-right:10px"></i>Add new admin</button>
+                                <button type="button" class="btn btn-danger" onclick="Admin_Clear()"><i class="fa fa-trash" style="margin-right:10px"></i>Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="Sec_Table">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title" style=""><i class="fa fa-list text-primary" style="margin-right:10px"></i>Groups \ Admins list <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadGrid()"><i class="fa fa-refresh"></i> Reload</a> ]</span> :</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body card-dashboard">
+                        <div class="col-lg-12" id="Sec_TableTag_Wait" style="display:none;text-align:center;padding:20px">
+                            <div class="lds-ripple"><div></div><div></div></div>
+                        </div>
+                        <div class="table-responsive" style="pointer-events:auto;opacity:1;display:block" id="Sec_TableTag">
+                            <table id="AdminManagementTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:30px;padding-left:30px">Type</th>
+                                        <th style="padding-left:30px">Name</th>
+                                        <th style="padding-left:30px">Description \ Email</th>
+                                        <th style="width:75px;padding-left:30px">Status</th>
+                                        <th style="width:40px;padding-left:30px">Verified</th>
+                                        <th style="width:20px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="GridBody">
+                                    @if (ViewBag.DT != null)
+                                    {
+                                        foreach (System.Data.DataRow RW in ViewBag.DT)
+                                        {
+                                            if (RW[2].ToString().Trim() == "1")
+                                            {
+                                                <tr>
+                                                    <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer"><i class="fa fa-users text-primary" style="font-size:25px"></i></td>
+                                                    <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">Group</td>
+                                                    <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[3].ToString().Trim()</td>
+                                                    <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[4].ToString().Trim()</td>
+                                                    @if (RW[5].ToString().Trim() == "0")
+                                                    {
+                                                        <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                            <div class="badge badge-pill badge-light-danger" style="width:70px">Disabled</div>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                            <div class="badge badge-pill badge-light-success" style="width:70px">Active</div>
+                                                        </td>
+                                                    }
+                                                    <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                        <div class="badge badge-pill badge-light-success" style="width:35px">Yes</div>
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        <div class="btn-group dropleft">
+                                                            <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <div class="MenuToolbox text-primary" />
+                                                            </button>
+                                                            <div class="dropdown-menu" style="font-size:12px">
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Group_Show('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show subgroup</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Group_Remove('@RW[1].ToString().Trim()','@RW[3].ToString().Trim()')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove group</a>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Group_ChangeStatus('@RW[1].ToString().Trim()','@RW[3].ToString().Trim()')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Group_Edit('@RW[1].ToString().Trim()','@RW[3].ToString().Trim()','@RW[4].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit group</a>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Group_Permission('@RW[1].ToString().Trim()')"><i class="fa fa-id-card-o text-primary" style="width:24px;font-size: 14px"></i>Group permission</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                        @try
+                                                        {
+                                                            string AvatarFileAddress = HttpContext.Current.Server.MapPath("~/Image/AdminAvatar/" + RW[0].ToString().Trim() + ".png");
+                                                            if (File.Exists(AvatarFileAddress) == true)
+                                                            {
+                                                                string AvatarFileFormat = RW[0].ToString().Trim() + ".png";
+                                                                <img class="round" src="~/Image/AdminAvatar/@AvatarFileFormat" alt="avatar" height="35" width="35">
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="fa fa-user-circle-o text-primary" style="font-size:30px"></i>
+                                                            }
+                                                        }
+                                                        catch (Exception)
+                                                        {
+                                                            <i class="fa fa-user-circle-o text-primary" style="font-size:30px"></i>
+                                                        }
+                                                    </td>
+                                                    <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">Admin</td>
+                                                    <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[3].ToString().Trim() @RW[7].ToString().Trim()</td>
+                                                    <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[4].ToString().Trim()</td>
+                                                    @if (RW[5].ToString().Trim() == "0")
+                                                    {
+                                                        <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                            <div class="badge badge-pill badge-light-danger" style="width:70px">Disabled</div>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td onclick="Group_Show('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                            <div class="badge badge-pill badge-light-success" style="width:70px">Active</div>
+                                                        </td>
+                                                    }
+                                                    @switch (RW[6].ToString().Trim())
+                                                    {
+                                                        case "1": //Email send failed - !
+                                                            {
+                                                                <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                    <div class="badge badge-pill badge-light-danger" style="width:35px"><i class="fa fa-exclamation" style="font-size:14px"></i></div>
+                                                                </td>
+                                                                <td style="text-align:center">
+                                                                    <div class="btn-group dropleft">
+                                                                        <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <div class="MenuToolbox text-primary" />
+                                                                        </button>
+                                                                        <div class="dropdown-menu" style="font-size:12px">
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ResendVerifyEmail('@RW[1].ToString().Trim()')"><i class="fa fa-envelope text-danger" style="width:24px;font-size:14px"></i>Resend verify email</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show information</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Edit('@RW[1].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Remove('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ChangeStatus('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                break;
+                                                            }
+                                                        case "2": //Email sent but not verified - No
+                                                            {
+                                                                <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                    <div class="badge badge-pill badge-light-warning" style="width:35px">No</div>
+                                                                </td>
+                                                                <td style="text-align:center">
+                                                                    <div class="btn-group dropleft">
+                                                                        <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <div class="MenuToolbox text-primary" />
+                                                                        </button>
+                                                                        <div class="dropdown-menu" style="font-size:12px">
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show information</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Edit('@RW[1].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Permission('@RW[1].ToString().Trim()')"><i class="fa fa-address-card-o text-primary" style="width:24px;font-size: 14px"></i>Manage permission</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Remove('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ChangeStatus('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                            <div class="dropdown-menu" style="font-size:12px">
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_PersonnelForm('@RW[1].ToString().Trim()')"><i class="fa fa-file-text-o text-primary" style="width:24px;font-size: 14px"></i>Send personnel form</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewNotification('@RW[1].ToString().Trim()')"><i class="fa fa-bell-o text-primary" style="width:24px;font-size: 14px"></i>Add new notification</a>
+                                                                                <div class="dropdown-divider"></div>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewTask('@RW[1].ToString().Trim()')"><i class="fa fa-check-square-o text-primary" style="width:24px;font-size: 14px"></i>Add new task</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Chatbox('@RW[1].ToString().Trim()')"><i class="fa feather icon-message-square text-primary" style="width:24px;font-size: 14px"></i>Send message</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewEmail('@RW[1].ToString().Trim()')"><i class="fa fa-envelope-open-o text-primary" style="width:24px;font-size: 14px"></i>Send new email</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                break;
+                                                            }
+                                                        case "3": //Email seen - Eye
+                                                            {
+                                                                <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                    <div class="badge badge-pill badge-light-warning" style="width:35px"><i class="fa fa-eye" style="font-size:14px"></i></div>
+                                                                </td>
+                                                                <td style="text-align:center">
+                                                                    <div class="btn-group dropleft">
+                                                                        <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <div class="MenuToolbox text-primary" />
+                                                                        </button>
+                                                                        <div class="dropdown-menu" style="font-size:12px">
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show information</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Edit('@RW[1].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Permission('@RW[1].ToString().Trim()')"><i class="fa fa-address-card-o text-primary" style="width:24px;font-size: 14px"></i>Manage permission</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Remove('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ChangeStatus('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                            <div class="dropdown-menu" style="font-size:12px">
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_PersonnelForm('@RW[1].ToString().Trim()')"><i class="fa fa-file-text-o text-primary" style="width:24px;font-size: 14px"></i>Send personnel form</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewNotification('@RW[1].ToString().Trim()')"><i class="fa fa-bell-o text-primary" style="width:24px;font-size: 14px"></i>Add new notification</a>
+                                                                                <div class="dropdown-divider"></div>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewTask('@RW[1].ToString().Trim()')"><i class="fa fa-check-square-o text-primary" style="width:24px;font-size: 14px"></i>Add new task</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Chatbox('@RW[1].ToString().Trim()')"><i class="fa feather icon-message-square text-primary" style="width:24px;font-size: 14px"></i>Send message</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewEmail('@RW[1].ToString().Trim()')"><i class="fa fa-envelope-open-o text-primary" style="width:24px;font-size: 14px"></i>Send new email</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                break;
+                                                            }
+                                                        case "4": //Email not correct - X
+                                                            {
+                                                                <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                    <div class="badge badge-pill badge-light-danger" style="width:35px"><i class="fa fa-close" style="font-size:14px"></i></div>
+                                                                </td>
+                                                                <td style="text-align:center">
+                                                                    <div class="btn-group dropleft">
+                                                                        <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <div class="MenuToolbox text-primary" />
+                                                                        </button>
+                                                                        <div class="dropdown-menu" style="font-size:12px">
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ResendVerifyEmail('@RW[1].ToString().Trim()')"><i class="fa fa-envelope text-primary" style="width:24px;font-size:14px"></i>Resend verify email</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show information</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Edit('@RW[1].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Permission('@RW[1].ToString().Trim()')"><i class="fa fa-address-card-o text-primary" style="width:24px;font-size: 14px"></i>Manage permission</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Remove('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ChangeStatus('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                break;
+                                                            }
+                                                        case "5": //Email verifed - Yes
+                                                            {
+                                                                <td onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                    <div class="badge badge-pill badge-light-success" style="width:35px">Yes</div>
+                                                                </td>
+                                                                <td style="text-align:center">
+                                                                    <div class="btn-group dropleft">
+                                                                        <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <div class="MenuToolbox text-primary" />
+                                                                        </button>
+                                                                        <div class="dropdown-menu" style="font-size:12px">
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ShowInformation('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show information</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Edit('@RW[1].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Permission('@RW[1].ToString().Trim()')"><i class="fa fa-address-card-o text-primary" style="width:24px;font-size: 14px"></i>Manage permission</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Remove('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove admin</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_ChangeStatus('@RW[1].ToString().Trim()','@RW[3].ToString().Trim() @RW[7].ToString().Trim()')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                            <div class="dropdown-menu" style="font-size:12px">
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_PersonnelForm('@RW[1].ToString().Trim()')"><i class="fa fa-file-text-o text-primary" style="width:24px;font-size: 14px"></i>Send personnel form</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewNotification('@RW[1].ToString().Trim()')"><i class="fa fa-bell-o text-primary" style="width:24px;font-size: 14px"></i>Add new notification</a>
+                                                                                <div class="dropdown-divider"></div>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewTask('@RW[1].ToString().Trim()')"><i class="fa fa-check-square-o text-primary" style="width:24px;font-size: 14px"></i>Add new task</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_Chatbox('@RW[1].ToString().Trim()')"><i class="fa feather icon-message-square text-primary" style="width:24px;font-size: 14px"></i>Send message</a>
+                                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="Admin_NewEmail('@RW[1].ToString().Trim()')"><i class="fa fa-envelope-open-o text-primary" style="width:24px;font-size: 14px"></i>Send new email</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                break;
+                                                            }
+                                                    }
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:30px;padding-left:30px">Type</th>
+                                        <th style="padding-left: 30px">Name</th>
+                                        <th style="padding-left: 30px">Description \ Email</th>
+                                        <th style="width:75px;padding-left:30px">Status</th>
+                                        <th style="width:40px;padding-left:30px">Verified</th>
+                                        <th style="width:20px"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade text-left" id="Modal_Group_Editor" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary white" style="border-radius:7px 7px 0px 0px">
+                <h5 class="modal-title" id="Modal_Group_Editor_Title">#</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12" id="Txt_E1" style="opacity:1;pointer-events:auto">
+                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                        Name :
+                    </div>
+                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                        <input type="text" class="form-control" id="Modal_Group_Editor_Name" placeholder="" style="width:100%" maxlength="200">
+                        <div class="form-control-position">
+                            <i class="fa fa-group"></i>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-12" id="Txt_E2" style="opacity:1;pointer-events:auto">
+                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                        Description :
+                    </div>
+                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                        <input type="text" class="form-control" id="Modal_Group_EditorDescription" placeholder="" style="width:100%" maxlength="200">
+                        <div class="form-control-position">
+                            <i class="fa fa-sticky-note"></i>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-lg-12" id="Modal_Group_Wait" style="display:none;text-align:center;padding:10px">
+                    <div class="lds-ripple"><div></div><div></div></div>
+                </div>
+                <input type="hidden" id="Modal_GroupIDU" value="" />
+            </div>
+            <div class="modal-footer" id="Modal_Group_Btn" style="opacity:1;pointer-events:auto">
+                <button type="button" class="btn btn-primary" onclick="Group_Edit_Save()">Save changes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section JSScript {
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script>
+        $('#AdminManagementTable').DataTable();
+        function ReloadGrid() {
+            try {
+                document.getElementById("Sec_TableTag").style.opacity = "0.7";
+                document.getElementById("Sec_TableTag").style.pointerEvents = "none";
+                document.getElementById("Sec_TableTag_Wait").style.display = "block";
+                var formData = new FormData();
+                formData.append("PID", '@ViewBag.Parent_ID');
+                $.ajax({
+                    url: "@Url.Action("Management_Grid", "Admins")", type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+                    error: function () {
+                        document.getElementById("Sec_TableTag_Wait").style.display = "none";
+                        document.getElementById("Sec_TableTag").style.opacity = "1";
+                        document.getElementById("Sec_TableTag").style.pointerEvents = "auto";
+                        toastr.error('An error occurred while processing your request to reload admin\group list', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                    },
+                    success: function (data)
+                    {
+                        var ErrorCode = ""; var ErrorResult = "";
+                        $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                        if (ErrorCode == "0")
+                        {
+                            toastr.success("Group(s) \ admin(s) information list successfully synced", 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            document.getElementById("Sec_TableTag_Wait").style.display = "none";
+                            document.getElementById("Sec_TableTag").style.opacity = "1";
+                            document.getElementById("Sec_TableTag").style.pointerEvents = "auto";
+                            $('#AdminManagementTable').DataTable().destroy();
+                            $('#AdminManagementTable').find('tbody').empty();
+                            $('#AdminManagementTable').find('tbody').append(ErrorResult);
+                            $('#AdminManagementTable').DataTable().draw();
+                            oTable = $('#AdminManagementTable').DataTable();
+                            oTable.fnPageChange(0);
+                        }
+                        else
+                        {
+                            if (ErrorCode != "2") {
+                                document.getElementById("Sec_TableTag_Wait").style.display = "none";
+                                document.getElementById("Sec_TableTag").style.opacity = "1";
+                                document.getElementById("Sec_TableTag").style.pointerEvents = "auto";
+                                toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            }
+                            else { window.location.href = "@Url.Action("Logout", "Dashboard", new { id = "", area = "" })"; }
+                        }
+                    }
+                });
+            } catch (e) {
+                document.getElementById("Sec_TableTag_Wait").style.display = "none";
+                document.getElementById("Sec_TableTag").style.opacity = "1";
+                document.getElementById("Sec_TableTag").style.pointerEvents = "auto";
+                toastr.error('An error occurred while processing your request to reload admin\group list', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            }
+        }
+        function Group_Clear() {
+            document.getElementById('Btn_Group').style.display = 'block';
+            document.getElementById('Btn_Group_Wait').style.display = 'none';
+            document.getElementById('Sec_Group').style.opacity = '1';
+            document.getElementById('Sec_Group').style.pointerEvents = 'auto';
+            document.getElementById('Txt_Group_Name').value = "";
+            document.getElementById('Txt_Group_Description').value = "";
+            document.getElementById('Txt_Group_Name').focus();
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+        }
+        function Group_AddNew() {
+            try {
+                var Gn = document.getElementById('Txt_Group_Name').value.trim();
+                var Gd = document.getElementById('Txt_Group_Description').value.trim();
+                if (Gn == "") { toastr.warning('It is necessary to enter the name, to add a new group', 'An error has occurred ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 }); return; }
+                document.getElementById('Btn_Group').style.display = 'none';
+                document.getElementById('Btn_Group_Wait').style.display = 'block';
+                document.getElementById('Sec_Group').style.opacity = '0.7';
+                document.getElementById('Sec_Group').style.pointerEvents = 'none';
+                var formData = new FormData();
+                formData.append("ParentIDUC", '@ViewBag.Parent_IDUC');
+                formData.append("GroupName", Gn);
+                formData.append("GroupDescription", Gd);
+                $.ajax({
+                    url: "@Url.Action("Group_Addnew", "Admins")", type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+                    error: function () {
+                        document.getElementById('Btn_Group').style.display = 'block';
+                        document.getElementById('Btn_Group_Wait').style.display = 'none';
+                        document.getElementById('Sec_Group').style.opacity = '1';
+                        document.getElementById('Sec_Group').style.pointerEvents = 'auto';
+                        toastr.error('An error occurred while processing your request', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                    },
+                    success: function (data)
+                    {
+                        var ErrorCode = ""; var ErrorResult = "";
+                        $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                        if (ErrorCode == "0")
+                        {
+                            Group_Clear();
+                            toastr.success(ErrorResult.trim(), 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            ReloadGrid();
+                        }
+                        else
+                        {
+                            if (ErrorCode != "2") {
+                                document.getElementById('Btn_Group').style.display = 'block';
+                                document.getElementById('Btn_Group_Wait').style.display = 'none';
+                                document.getElementById('Sec_Group').style.opacity = '1';
+                                document.getElementById('Sec_Group').style.pointerEvents = 'auto';
+                                toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            }
+                            else { window.location.href = "@Url.Action("Logout", "Dashboard", new { id = "", area = "" })"; }
+                        }
+                    }
+                });
+            } catch (e) {
+                document.getElementById('Btn_Group').style.display = 'block';
+                document.getElementById('Btn_Group_Wait').style.display = 'none';
+                document.getElementById('Sec_Group').style.opacity = '1';
+                document.getElementById('Sec_Group').style.pointerEvents = 'auto';
+                toastr.error('An error occurred while processing your request', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            }
+        }
+        function Admin_Clear() {
+            document.getElementById('Btn_Admin').style.display = 'block';
+            document.getElementById('Btn_Admin_Wait').style.display = 'none';
+            document.getElementById('Sec_Admin').style.opacity = '1';
+            document.getElementById('Sec_Admin').style.pointerEvents = 'auto';
+            document.getElementById('Txt_Admin_Firstname').value = "";
+            document.getElementById('Txt_Admin_Lastname').value = "";
+            document.getElementById('Txt_Admin_Email').value = "";
+            document.getElementById('Txt_Admin_Firstname').focus();
+            $('html, body').animate({ scrollTop: $(Sec_Admin).offset().top - 165 }, 'slow');
+        }
+        function Admin_AddNew() {
+            try {
+                var Afn = document.getElementById('Txt_Admin_Firstname').value.trim();
+                var Aln = document.getElementById('Txt_Admin_Lastname').value.trim();
+                var Aem = document.getElementById('Txt_Admin_Email').value.trim();
+                if (Afn == "") { toastr.warning('It is necessary to enter the first name, to add a new admin', 'An error has occurred ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 }); return; }
+                if (Aln == "") { toastr.warning('It is necessary to enter the last name, to add a new admin', 'An error has occurred ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 }); return; }
+                if (Aem == "") { toastr.warning('It is necessary to enter the email address, to add a new admin', 'An error has occurred ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 }); return; }
+                document.getElementById('Btn_Admin').style.display = 'none';
+                document.getElementById('Btn_Admin_Wait').style.display = 'block';
+                document.getElementById('Sec_Admin').style.opacity = '0.7';
+                document.getElementById('Sec_Admin').style.pointerEvents = 'none';
+                var formData = new FormData();
+                formData.append("ParentIDUC", '@ViewBag.Parent_IDUC');
+                formData.append("AdminFirstName", Afn);
+                formData.append("AdminLastName", Aln);
+                formData.append("AdminEmail", Aem);
+                $.ajax({
+                    url: "@Url.Action("Admin_Addnew", "Admins")", type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+                    error: function () {
+                        document.getElementById('Btn_Admin').style.display = 'block';
+                        document.getElementById('Btn_Admin_Wait').style.display = 'none';
+                        document.getElementById('Sec_Admin').style.opacity = '1';
+                        document.getElementById('Sec_Admin').style.pointerEvents = 'auto';
+                        toastr.error('An error occurred while processing your request', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                    },
+                    success: function (data)
+                    {
+                        var ErrorCode = ""; var ErrorResult = "";
+                        $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                        if (ErrorCode == "0")
+                        {
+                            Admin_Clear();
+                            toastr.success(ErrorResult.trim(), 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            ReloadGrid();
+                        }
+                        else
+                        {
+                            if (ErrorCode == "3") {
+                                Admin_Clear();
+                                toastr.info(ErrorResult.trim(), 'Congratulations [C04]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                                ReloadGrid();
+                            }
+                            else {
+                                if (ErrorCode != "2") {
+                                    document.getElementById('Btn_Admin').style.display = 'block';
+                                    document.getElementById('Btn_Admin_Wait').style.display = 'none';
+                                    document.getElementById('Sec_Admin').style.opacity = '1';
+                                    document.getElementById('Sec_Admin').style.pointerEvents = 'auto';
+                                    toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                                }
+                                else { window.location.href = "@Url.Action("Logout", "Dashboard", new { id = "", area = "" })"; }
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                document.getElementById('Btn_Admin').style.display = 'block';
+                document.getElementById('Btn_Admin_Wait').style.display = 'none';
+                document.getElementById('Sec_Admin').style.opacity = '1';
+                document.getElementById('Sec_Admin').style.pointerEvents = 'auto';
+                toastr.error('An error occurred while processing your request', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            }
+        }
+        function Group_Show(GID) { var BUrl = "@Url.Action("Management", "Admins", new { id = "EMASGID", area = "ManagementPortal" })"; window.location.href = BUrl.replace("EMASGID", GID); }
+        function Group_Remove(GID,Gname) {
+            try {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "If you delete the group named " + Gname  + ", access to the group and all subgroups and members is not possible",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonClass: 'btn btn-primary',
+                    cancelButtonClass: 'btn btn-danger ml-1',
+                    buttonsStyling: false,
+                }).then(function (result) {
+                    if (result.value) {
+                        toastr.clear();
+                        toastr.info('The system is reviewing your request', 'Please wait ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                        var formData = new FormData();
+                        formData.append("GroupIDU", GID.trim());
+                        formData.append("GroupName", Gname.trim());
+                        $.ajax({
+                            url: "@Url.Action("Group_Remove", "Admins")", type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+                            error: function () {
+                                toastr.clear();
+                                toastr.error('An error occurred while processing your request', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            },
+                            success: function (data)
+                            {
+                                var ErrorCode = ""; var ErrorResult = "";
+                                $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                                if (ErrorCode == "0")
+                                {
+                                    toastr.clear();
+                                    toastr.success(ErrorResult.trim(), 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                                    ReloadGrid();
+                                }
+                                else
+                                {
+                                    if (ErrorCode != "2") {
+                                        toastr.clear();
+                                        toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                                    }
+                                    else { window.location.href = "@Url.Action("Logout", "Dashboard", new { id = "", area = "" })"; }
+                                }
+                            }
+                        });
+                    }
+                })
+            } catch (e) {
+                toastr.error('An error occurred while processing your request', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            }
+        }
+        function Group_ChangeStatus(GID, Gname) {
+            try {
+                toastr.clear();
+                toastr.info('The system is reviewing your request', 'Please wait ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                var formData = new FormData();
+                formData.append("GroupIDU", GID.trim());
+                formData.append("GroupName", Gname.trim());
+                $.ajax({
+                    url: "@Url.Action("Group_ChangeStatus", "Admins")", type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+                    error: function () {
+                        toastr.clear();
+                        toastr.error('An error occurred while processing your request', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                    },
+                    success: function (data)
+                    {
+                        var ErrorCode = ""; var ErrorResult = "";
+                        $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                        if (ErrorCode == "0")
+                        {
+                            toastr.clear();
+                            toastr.success(ErrorResult.trim(), 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            ReloadGrid();
+                        }
+                        else
+                        {
+                            if (ErrorCode != "2") {
+                                toastr.clear();
+                                toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            }
+                            else { window.location.href = "@Url.Action("Logout", "Dashboard", new { id = "", area = "" })"; }
+                        }
+                    }
+                });
+            } catch (e) {
+                toastr.error('An error occurred while processing your request', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            }
+        }
+        function Group_Edit(GID, Gname, GDesc) {
+            GID = GID.trim();
+            Gname = Gname.trim();
+            GDesc = GDesc.trim();
+            document.getElementById("Modal_Group_Editor_Title").innerText = " Edit Group Information [ " + Gname + " ]";
+            document.getElementById("Txt_E1").style.opacity = "1";
+            document.getElementById("Txt_E1").style.pointerEvents = "auto";
+            document.getElementById("Modal_Group_Editor_Name").value = Gname;
+            document.getElementById("Txt_E2").style.opacity = "1";
+            document.getElementById("Txt_E2").style.pointerEvents = "auto";
+            document.getElementById("Modal_Group_EditorDescription").value = GDesc;
+            document.getElementById("Modal_Group_Wait").style.display = "none";
+            document.getElementById("Modal_Group_Btn").style.opacity = "1";
+            document.getElementById("Modal_Group_Btn").style.pointerEvents = "auto";
+            document.getElementById("Modal_GroupIDU").value = GID;
+            $('#Modal_Group_Editor').modal('show');
+            document.getElementById('Modal_Group_Editor_Name').focus();
+        }
+        function Group_Edit_Save() {
+            try {
+                var GID = document.getElementById('Modal_GroupIDU').value.trim();
+                var Gn = document.getElementById('Modal_Group_Editor_Name').value.trim();
+                var Gd = document.getElementById('Modal_Group_EditorDescription').value.trim();
+                if (Gn == "") { toastr.warning('It is necessary to enter the name, to edit group', 'An error has occurred ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 }); return; }
+                document.getElementById("Txt_E1").style.opacity = "0.7";
+                document.getElementById("Txt_E1").style.pointerEvents = "none";
+                document.getElementById("Txt_E2").style.opacity = "0.7";
+                document.getElementById("Txt_E2").style.pointerEvents = "none";
+                document.getElementById("Modal_Group_Wait").style.display = "block";
+                document.getElementById("Modal_Group_Btn").style.opacity = "0.7";
+                document.getElementById("Modal_Group_Btn").style.pointerEvents = "none";
+                var formData = new FormData();
+                formData.append("GroupIDUC", GID);
+                formData.append("GroupName", Gn);
+                formData.append("GroupDescription", Gd);
+                $.ajax({
+                    url: "@Url.Action("Group_SaveEdit", "Admins")", type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+                    error: function () {
+                        document.getElementById("Txt_E1").style.opacity = "1";
+                        document.getElementById("Txt_E1").style.pointerEvents = "auto";
+                        document.getElementById("Txt_E2").style.opacity = "1";
+                        document.getElementById("Txt_E2").style.pointerEvents = "auto";
+                        document.getElementById("Modal_Group_Wait").style.display = "none";
+                        document.getElementById("Modal_Group_Btn").style.opacity = "1";
+                        document.getElementById("Modal_Group_Btn").style.pointerEvents = "auto";
+                        toastr.error('An error occurred while processing your request', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                    },
+                    success: function (data)
+                    {
+                        var ErrorCode = ""; var ErrorResult = "";
+                        $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                        if (ErrorCode == "0")
+                        {
+                            $('#Modal_Group_Editor').modal('hide');
+                            toastr.success(ErrorResult.trim(), 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            ReloadGrid();
+                        }
+                        else
+                        {
+                            if (ErrorCode != "2") {
+                                document.getElementById("Txt_E1").style.opacity = "1";
+                                document.getElementById("Txt_E1").style.pointerEvents = "auto";
+                                document.getElementById("Txt_E2").style.opacity = "1";
+                                document.getElementById("Txt_E2").style.pointerEvents = "auto";
+                                document.getElementById("Modal_Group_Wait").style.display = "none";
+                                document.getElementById("Modal_Group_Btn").style.opacity = "1";
+                                document.getElementById("Modal_Group_Btn").style.pointerEvents = "auto";
+                                toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            }
+                            else { window.location.href = "@Url.Action("Logout", "Dashboard", new { id = "", area = "" })"; }
+                        }
+                    }
+                });
+            } catch (e) {
+                document.getElementById("Txt_E1").style.opacity = "1";
+                document.getElementById("Txt_E1").style.pointerEvents = "auto";
+                document.getElementById("Txt_E2").style.opacity = "1";
+                document.getElementById("Txt_E2").style.pointerEvents = "auto";
+                document.getElementById("Modal_Group_Wait").style.display = "none";
+                document.getElementById("Modal_Group_Btn").style.opacity = "1";
+                document.getElementById("Modal_Group_Btn").style.pointerEvents = "auto";
+                toastr.error('An error occurred while processing your request', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            }
+        }
+
+
+
+
+        function Group_Permission(GID) {
+            toastr.warning('Group Permission -' + GID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+
+
+
+
+
+
+
+        function Admin_Remove(UID,AFN) {
+            try {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "If you delete the admin named " + AFN  + ", access to the admin all information is not possible",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonClass: 'btn btn-primary',
+                    cancelButtonClass: 'btn btn-danger ml-1',
+                    buttonsStyling: false,
+                }).then(function (result) {
+                    if (result.value) {
+                        toastr.clear();
+                        toastr.info('The system is reviewing your request', 'Please wait ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                        var formData = new FormData();
+                        formData.append("AdminIDU", UID.trim());
+                        formData.append("AdminName", AFN.trim());
+                        $.ajax({
+                            url: "@Url.Action("Admin_Remove", "Admins")", type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+                            error: function () {
+                                toastr.clear();
+                                toastr.error('An error occurred while processing your request', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            },
+                            success: function (data)
+                            {
+                                var ErrorCode = ""; var ErrorResult = "";
+                                $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                                if (ErrorCode == "0")
+                                {
+                                    toastr.clear();
+                                    toastr.success(ErrorResult.trim(), 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                                    ReloadGrid();
+                                }
+                                else
+                                {
+                                    if (ErrorCode != "2") {
+                                        toastr.clear();
+                                        toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                                    }
+                                    else { window.location.href = "@Url.Action("Logout", "Dashboard", new { id = "", area = "" })"; }
+                                }
+                            }
+                        });
+                    }
+                })
+            } catch (e) {
+                toastr.error('An error occurred while processing your request', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            }
+        }
+        function Admin_ChangeStatus(UID,AFN) {
+            try {
+                toastr.clear();
+                toastr.info('The system is reviewing your request', 'Please wait ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                var formData = new FormData();
+                formData.append("AdminIDU", UID.trim());
+                formData.append("AdminName", AFN.trim());
+                $.ajax({
+                    url: "@Url.Action("Admin_ChangeStatus", "Admins")", type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+                    error: function () {
+                        toastr.clear();
+                        toastr.error('An error occurred while processing your request', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                    },
+                    success: function (data)
+                    {
+                        var ErrorCode = ""; var ErrorResult = "";
+                        $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                        if (ErrorCode == "0")
+                        {
+                            toastr.clear();
+                            toastr.success(ErrorResult.trim(), 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            ReloadGrid();
+                        }
+                        else
+                        {
+                            if (ErrorCode != "2") {
+                                toastr.clear();
+                                toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                            }
+                            else { window.location.href = "@Url.Action("Logout", "Dashboard", new { id = "", area = "" })"; }
+                        }
+                    }
+                });
+            } catch (e) {
+                toastr.error('An error occurred while processing your request', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            }
+        }
+
+
+
+
+
+
+
+
+
+        function Admin_ResendVerifyEmail(UID) {
+            toastr.warning('Admin Resend Email -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+        function Admin_ShowInformation(UID) {
+            toastr.warning('Admin Show Information -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+        function Admin_Edit(UID) {
+            toastr.warning('Admin Edit -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+        function Admin_Permission(UID) {
+            toastr.warning('Admin Permission -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+
+
+
+
+
+
+
+
+
+
+
+        function Admin_PersonnelForm(UID) {
+            toastr.warning('Admin Personnel Form -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+        function Admin_NewNotification(UID) {
+            toastr.warning('Admin New Notification -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+        function Admin_NewTask(UID) {
+            toastr.warning('Admin New Task -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+        function Admin_Chatbox(UID) {
+            toastr.warning('Admin ChatBox -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+        function Admin_NewEmail(UID) {
+            toastr.warning('Admin New Email -' + UID, 'Under construction', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        }
+    </script>
+}

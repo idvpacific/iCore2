@@ -16,7 +16,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
     public class ServicesController : Controller
     {
         //====================================================================================================================
-        ActionAuthentication AAuth = new ActionAuthentication();
+        AuthenticationTester AAuth = new AuthenticationTester();
         SQL_Tranceiver Sq = new SQL_Tranceiver();
         PublicFunctions Pb = new PublicFunctions();
         Crypto Cry = new Crypto();
@@ -82,7 +82,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                                     if (PrntID.Trim() != "0")
                                     {
                                         DataTable DT_Breadcrumb = new DataTable();
-                                        DT_Breadcrumb = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID_UnicCode,Name,Parent_ID,Removed From Services_01_Devices_Group Where (ID = '" + PrntID + "')");
+                                        DT_Breadcrumb = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID_UnicCode,Name,Parent_ID,Removed From Services_01_Devices_Group Where (ID = '" + PrntID + "') And (Removed = '0')");
                                         if (DT_Breadcrumb.Rows[0][3].ToString().Trim().ToLower() == "false")
                                         {
                                             PrntID = DT_Breadcrumb.Rows[0][2].ToString().Trim();
@@ -222,7 +222,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind devices information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading devices information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -320,7 +320,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID_UnicCode = '" + DID + "') And (Type_Code = '1')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID_UnicCode = '" + DID + "') And (Type_Code = '1') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -373,7 +373,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Services_01_Devices_Group Where (ID_UnicCode = '" + DID + "') And (Type_Code = '1')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Services_01_Devices_Group Where (ID_UnicCode = '" + DID + "') And (Type_Code = '1') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -557,7 +557,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind group information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading group information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -597,7 +597,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     if (ParentIDUC != "0")
                     {
                         DataTable DT_PID = new DataTable();
-                        DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID_UnicCode = '" + ParentIDUC + "')");
+                        DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID_UnicCode = '" + ParentIDUC + "') And (Removed = '0')");
                         if (DT_PID.Rows != null)
                         {
                             if (DT_PID.Rows.Count == 1)
@@ -681,7 +681,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '2')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '2') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -734,7 +734,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Services_01_Devices_Group Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '2')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Services_01_Devices_Group Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '2') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -887,12 +887,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                         }
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -967,7 +967,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind group properties information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading group properties information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -1007,7 +1007,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT_PID = new DataTable();
-                    DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID = '" + GID + "')");
+                    DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID = '" + GID + "') And (Removed = '0')");
                     if (DT_PID.Rows != null)
                     {
                         if (DT_PID.Rows.Count != 1)
@@ -1289,7 +1289,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 {
                     GID = GID.Trim();
                     DataTable DTUIDTID = new DataTable();
-                    DTUIDTID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID_UnicCode = '" + GID + "')");
+                    DTUIDTID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_01_Devices_Group Where (ID_UnicCode = '" + GID + "') And (Removed = '0')");
                     GID = DTUIDTID.Rows[0][0].ToString().Trim();
                     DataTable DT = new DataTable();
                     DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Name,Master_Unic_ID,Model,Product_ID,Serial_Number,Build_Series_Number,Version,Situation_Code,Description,Extra_Unic_ID_1,Extra_Unic_ID_2,Extra_Unic_ID_3,Extra_Unic_ID_4,Status_Code,Situation_Text From Services_03_Devices_List Where (Group_ID = '" + GID + "') And (Removed = '0') Order By Name,Master_Unic_ID,Product_ID,Serial_Number,Build_Series_Number,Version");
@@ -1371,7 +1371,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind group properties information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading group properties information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -1537,7 +1537,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         try
                         {
                             DataTable DTUM = new DataTable();
-                            DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A3 + "') or (Extra_Unic_ID_1 = '" + A3 + "') or (Extra_Unic_ID_2 = '" + A3 + "') or (Extra_Unic_ID_3 = '" + A3 + "') or (Extra_Unic_ID_4 = '" + A3 + "')");
+                            DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A3 + "') or (Extra_Unic_ID_1 = '" + A3 + "') or (Extra_Unic_ID_2 = '" + A3 + "') or (Extra_Unic_ID_3 = '" + A3 + "') or (Extra_Unic_ID_4 = '" + A3 + "') And (Removed = '0')");
                             if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The master unic ID value is duplicated"; }
                         }
                         catch (Exception) { }
@@ -1549,7 +1549,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A12 + "') or (Extra_Unic_ID_1 = '" + A12 + "') or (Extra_Unic_ID_2 = '" + A12 + "') or (Extra_Unic_ID_3 = '" + A12 + "') or (Extra_Unic_ID_4 = '" + A12 + "')");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A12 + "') or (Extra_Unic_ID_1 = '" + A12 + "') or (Extra_Unic_ID_2 = '" + A12 + "') or (Extra_Unic_ID_3 = '" + A12 + "') or (Extra_Unic_ID_4 = '" + A12 + "') And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #1 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -1562,7 +1562,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A13 + "') or (Extra_Unic_ID_1 = '" + A13 + "') or (Extra_Unic_ID_2 = '" + A13 + "') or (Extra_Unic_ID_3 = '" + A13 + "') or (Extra_Unic_ID_4 = '" + A13 + "')");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A13 + "') or (Extra_Unic_ID_1 = '" + A13 + "') or (Extra_Unic_ID_2 = '" + A13 + "') or (Extra_Unic_ID_3 = '" + A13 + "') or (Extra_Unic_ID_4 = '" + A13 + "') And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #2 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -1575,7 +1575,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A14 + "') or (Extra_Unic_ID_1 = '" + A14 + "') or (Extra_Unic_ID_2 = '" + A14 + "') or (Extra_Unic_ID_3 = '" + A14 + "') or (Extra_Unic_ID_4 = '" + A14 + "')");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A14 + "') or (Extra_Unic_ID_1 = '" + A14 + "') or (Extra_Unic_ID_2 = '" + A14 + "') or (Extra_Unic_ID_3 = '" + A14 + "') or (Extra_Unic_ID_4 = '" + A14 + "') And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #3 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -1588,7 +1588,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A15 + "') or (Extra_Unic_ID_1 = '" + A15 + "') or (Extra_Unic_ID_2 = '" + A15 + "') or (Extra_Unic_ID_3 = '" + A15 + "') or (Extra_Unic_ID_4 = '" + A15 + "')");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (Master_Unic_ID = '" + A15 + "') or (Extra_Unic_ID_1 = '" + A15 + "') or (Extra_Unic_ID_2 = '" + A15 + "') or (Extra_Unic_ID_3 = '" + A15 + "') or (Extra_Unic_ID_4 = '" + A15 + "') And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #4 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -1854,7 +1854,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         try
                         {
                             DataTable DTUM = new DataTable();
-                            DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A3 + "') or (Extra_Unic_ID_1 = '" + A3 + "') or (Extra_Unic_ID_2 = '" + A3 + "') or (Extra_Unic_ID_3 = '" + A3 + "') or (Extra_Unic_ID_4 = '" + A3 + "'))");
+                            DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A3 + "') or (Extra_Unic_ID_1 = '" + A3 + "') or (Extra_Unic_ID_2 = '" + A3 + "') or (Extra_Unic_ID_3 = '" + A3 + "') or (Extra_Unic_ID_4 = '" + A3 + "')) And (Removed = '0')");
                             if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The master unic ID value is duplicated"; }
                         }
                         catch (Exception) { }
@@ -1866,7 +1866,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A12 + "') or (Extra_Unic_ID_1 = '" + A12 + "') or (Extra_Unic_ID_2 = '" + A12 + "') or (Extra_Unic_ID_3 = '" + A12 + "') or (Extra_Unic_ID_4 = '" + A12 + "'))");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A12 + "') or (Extra_Unic_ID_1 = '" + A12 + "') or (Extra_Unic_ID_2 = '" + A12 + "') or (Extra_Unic_ID_3 = '" + A12 + "') or (Extra_Unic_ID_4 = '" + A12 + "')) And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #1 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -1879,7 +1879,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A13 + "') or (Extra_Unic_ID_1 = '" + A13 + "') or (Extra_Unic_ID_2 = '" + A13 + "') or (Extra_Unic_ID_3 = '" + A13 + "') or (Extra_Unic_ID_4 = '" + A13 + "'))");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A13 + "') or (Extra_Unic_ID_1 = '" + A13 + "') or (Extra_Unic_ID_2 = '" + A13 + "') or (Extra_Unic_ID_3 = '" + A13 + "') or (Extra_Unic_ID_4 = '" + A13 + "')) And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #2 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -1892,7 +1892,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A14 + "') or (Extra_Unic_ID_1 = '" + A14 + "') or (Extra_Unic_ID_2 = '" + A14 + "') or (Extra_Unic_ID_3 = '" + A14 + "') or (Extra_Unic_ID_4 = '" + A14 + "'))");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A14 + "') or (Extra_Unic_ID_1 = '" + A14 + "') or (Extra_Unic_ID_2 = '" + A14 + "') or (Extra_Unic_ID_3 = '" + A14 + "') or (Extra_Unic_ID_4 = '" + A14 + "')) And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #3 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -1905,7 +1905,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A15 + "') or (Extra_Unic_ID_1 = '" + A15 + "') or (Extra_Unic_ID_2 = '" + A15 + "') or (Extra_Unic_ID_3 = '" + A15 + "') or (Extra_Unic_ID_4 = '" + A15 + "'))");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_03_Devices_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A15 + "') or (Extra_Unic_ID_1 = '" + A15 + "') or (Extra_Unic_ID_2 = '" + A15 + "') or (Extra_Unic_ID_3 = '" + A15 + "') or (Extra_Unic_ID_4 = '" + A15 + "')) And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #4 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -1984,12 +1984,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind device information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading device information";
                         }
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind device information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading device information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -2028,12 +2028,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     bool ExitNow = false;
                     List<string> GroupID = new List<string>();
                     DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Group_ID From Services_03_Devices_List Where (ID = '" + DID + "')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Group_ID From Services_03_Devices_List Where (ID = '" + DID + "') And (Removed = '0')");
                     string PDID = DT.Rows[0][0].ToString().Trim();
                     while (ExitNow == false)
                     {
                         DT = new DataTable();
-                        DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Parent_ID,Name From Services_01_Devices_Group Where (ID = '" + PDID + "')");
+                        DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Parent_ID,Name From Services_01_Devices_Group Where (ID = '" + PDID + "') And (Removed = '0')");
                         if (DT.Rows.Count == 1)
                         {
                             if (DT.Rows[0][0].ToString().Trim() == "0") { ExitNow = true; }
@@ -2435,7 +2435,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                                     if (PrntID.Trim() != "0")
                                     {
                                         DataTable DT_Breadcrumb = new DataTable();
-                                        DT_Breadcrumb = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID_UnicCode,Name,Parent_ID,Removed From Services_06_Softwares_Group Where (ID = '" + PrntID + "')");
+                                        DT_Breadcrumb = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID_UnicCode,Name,Parent_ID,Removed From Services_06_Softwares_Group Where (ID = '" + PrntID + "') And (Removed = '0')");
                                         if (DT_Breadcrumb.Rows[0][3].ToString().Trim().ToLower() == "false")
                                         {
                                             PrntID = DT_Breadcrumb.Rows[0][2].ToString().Trim();
@@ -2574,7 +2574,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind softwares information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading softwares information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -2672,7 +2672,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID_UnicCode = '" + DID + "') And (Type_Code = '1')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID_UnicCode = '" + DID + "') And (Type_Code = '1') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -2725,7 +2725,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Services_06_Softwares_Group Where (ID_UnicCode = '" + DID + "') And (Type_Code = '1')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Services_06_Softwares_Group Where (ID_UnicCode = '" + DID + "') And (Type_Code = '1') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -2909,7 +2909,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind group information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading group information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -2949,7 +2949,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     if (ParentIDUC != "0")
                     {
                         DataTable DT_PID = new DataTable();
-                        DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID_UnicCode = '" + ParentIDUC + "')");
+                        DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID_UnicCode = '" + ParentIDUC + "') And (Removed = '0')");
                         if (DT_PID.Rows != null)
                         {
                             if (DT_PID.Rows.Count == 1)
@@ -3033,7 +3033,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '2')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '2') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -3086,7 +3086,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Services_06_Softwares_Group Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '2')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Services_06_Softwares_Group Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '2') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -3239,12 +3239,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                         }
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -3319,7 +3319,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind group properties information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading group properties information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -3359,7 +3359,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT_PID = new DataTable();
-                    DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID = '" + GID + "')");
+                    DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID = '" + GID + "') And (Removed = '0')");
                     if (DT_PID.Rows != null)
                     {
                         if (DT_PID.Rows.Count != 1)
@@ -3641,7 +3641,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 {
                     GID = GID.Trim();
                     DataTable DTUIDTID = new DataTable();
-                    DTUIDTID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID_UnicCode = '" + GID + "')");
+                    DTUIDTID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_06_Softwares_Group Where (ID_UnicCode = '" + GID + "') And (Removed = '0')");
                     GID = DTUIDTID.Rows[0][0].ToString().Trim();
                     DataTable DT = new DataTable();
                     DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Name,Master_Unic_ID,Model,Product_ID,Serial_Number,Build_Series_Number,Version,Situation_Code,Description,Extra_Unic_ID_1,Extra_Unic_ID_2,Extra_Unic_ID_3,Extra_Unic_ID_4,Status_Code,Situation_Text From Services_08_Softwares_List Where (Group_ID = '" + GID + "') And (Removed = '0') Order By Name,Master_Unic_ID,Product_ID,Serial_Number,Build_Series_Number,Version");
@@ -3723,7 +3723,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind group properties information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading group properties information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -3889,7 +3889,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         try
                         {
                             DataTable DTUM = new DataTable();
-                            DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A3 + "') or (Extra_Unic_ID_1 = '" + A3 + "') or (Extra_Unic_ID_2 = '" + A3 + "') or (Extra_Unic_ID_3 = '" + A3 + "') or (Extra_Unic_ID_4 = '" + A3 + "')");
+                            DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A3 + "') or (Extra_Unic_ID_1 = '" + A3 + "') or (Extra_Unic_ID_2 = '" + A3 + "') or (Extra_Unic_ID_3 = '" + A3 + "') or (Extra_Unic_ID_4 = '" + A3 + "') And (Removed = '0')");
                             if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The master unic ID value is duplicated"; }
                         }
                         catch (Exception) { }
@@ -3901,7 +3901,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A12 + "') or (Extra_Unic_ID_1 = '" + A12 + "') or (Extra_Unic_ID_2 = '" + A12 + "') or (Extra_Unic_ID_3 = '" + A12 + "') or (Extra_Unic_ID_4 = '" + A12 + "')");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A12 + "') or (Extra_Unic_ID_1 = '" + A12 + "') or (Extra_Unic_ID_2 = '" + A12 + "') or (Extra_Unic_ID_3 = '" + A12 + "') or (Extra_Unic_ID_4 = '" + A12 + "') And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #1 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -3914,7 +3914,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A13 + "') or (Extra_Unic_ID_1 = '" + A13 + "') or (Extra_Unic_ID_2 = '" + A13 + "') or (Extra_Unic_ID_3 = '" + A13 + "') or (Extra_Unic_ID_4 = '" + A13 + "')");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A13 + "') or (Extra_Unic_ID_1 = '" + A13 + "') or (Extra_Unic_ID_2 = '" + A13 + "') or (Extra_Unic_ID_3 = '" + A13 + "') or (Extra_Unic_ID_4 = '" + A13 + "') And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #2 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -3927,7 +3927,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A14 + "') or (Extra_Unic_ID_1 = '" + A14 + "') or (Extra_Unic_ID_2 = '" + A14 + "') or (Extra_Unic_ID_3 = '" + A14 + "') or (Extra_Unic_ID_4 = '" + A14 + "')");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A14 + "') or (Extra_Unic_ID_1 = '" + A14 + "') or (Extra_Unic_ID_2 = '" + A14 + "') or (Extra_Unic_ID_3 = '" + A14 + "') or (Extra_Unic_ID_4 = '" + A14 + "') And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #3 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -3940,7 +3940,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A15 + "') or (Extra_Unic_ID_1 = '" + A15 + "') or (Extra_Unic_ID_2 = '" + A15 + "') or (Extra_Unic_ID_3 = '" + A15 + "') or (Extra_Unic_ID_4 = '" + A15 + "')");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (Master_Unic_ID = '" + A15 + "') or (Extra_Unic_ID_1 = '" + A15 + "') or (Extra_Unic_ID_2 = '" + A15 + "') or (Extra_Unic_ID_3 = '" + A15 + "') or (Extra_Unic_ID_4 = '" + A15 + "') And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #4 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -4206,7 +4206,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         try
                         {
                             DataTable DTUM = new DataTable();
-                            DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A3 + "') or (Extra_Unic_ID_1 = '" + A3 + "') or (Extra_Unic_ID_2 = '" + A3 + "') or (Extra_Unic_ID_3 = '" + A3 + "') or (Extra_Unic_ID_4 = '" + A3 + "'))");
+                            DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A3 + "') or (Extra_Unic_ID_1 = '" + A3 + "') or (Extra_Unic_ID_2 = '" + A3 + "') or (Extra_Unic_ID_3 = '" + A3 + "') or (Extra_Unic_ID_4 = '" + A3 + "')) And (Removed = '0')");
                             if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The master unic ID value is duplicated"; }
                         }
                         catch (Exception) { }
@@ -4218,7 +4218,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A12 + "') or (Extra_Unic_ID_1 = '" + A12 + "') or (Extra_Unic_ID_2 = '" + A12 + "') or (Extra_Unic_ID_3 = '" + A12 + "') or (Extra_Unic_ID_4 = '" + A12 + "'))");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A12 + "') or (Extra_Unic_ID_1 = '" + A12 + "') or (Extra_Unic_ID_2 = '" + A12 + "') or (Extra_Unic_ID_3 = '" + A12 + "') or (Extra_Unic_ID_4 = '" + A12 + "')) And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #1 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -4231,7 +4231,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A13 + "') or (Extra_Unic_ID_1 = '" + A13 + "') or (Extra_Unic_ID_2 = '" + A13 + "') or (Extra_Unic_ID_3 = '" + A13 + "') or (Extra_Unic_ID_4 = '" + A13 + "'))");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A13 + "') or (Extra_Unic_ID_1 = '" + A13 + "') or (Extra_Unic_ID_2 = '" + A13 + "') or (Extra_Unic_ID_3 = '" + A13 + "') or (Extra_Unic_ID_4 = '" + A13 + "')) And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #2 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -4244,7 +4244,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A14 + "') or (Extra_Unic_ID_1 = '" + A14 + "') or (Extra_Unic_ID_2 = '" + A14 + "') or (Extra_Unic_ID_3 = '" + A14 + "') or (Extra_Unic_ID_4 = '" + A14 + "'))");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A14 + "') or (Extra_Unic_ID_1 = '" + A14 + "') or (Extra_Unic_ID_2 = '" + A14 + "') or (Extra_Unic_ID_3 = '" + A14 + "') or (Extra_Unic_ID_4 = '" + A14 + "')) And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #3 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -4257,7 +4257,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             try
                             {
                                 DataTable DTUM = new DataTable();
-                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A15 + "') or (Extra_Unic_ID_1 = '" + A15 + "') or (Extra_Unic_ID_2 = '" + A15 + "') or (Extra_Unic_ID_3 = '" + A15 + "') or (Extra_Unic_ID_4 = '" + A15 + "'))");
+                                DTUM = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Services_08_Softwares_List Where (ID <> '" + A1 + "') And ((Master_Unic_ID = '" + A15 + "') or (Extra_Unic_ID_1 = '" + A15 + "') or (Extra_Unic_ID_2 = '" + A15 + "') or (Extra_Unic_ID_3 = '" + A15 + "') or (Extra_Unic_ID_4 = '" + A15 + "')) And (Removed = '0')");
                                 if (DTUM.Rows.Count != 0) { ResVal = "1"; ResSTR = "The ext unic ID #4 value is duplicated"; }
                             }
                             catch (Exception) { }
@@ -4336,12 +4336,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind software information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading software information";
                         }
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind software information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading software information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -4380,12 +4380,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     bool ExitNow = false;
                     List<string> GroupID = new List<string>();
                     DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Group_ID From Services_08_Softwares_List Where (ID = '" + DID + "')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Group_ID From Services_08_Softwares_List Where (ID = '" + DID + "') And (Removed = '0')");
                     string PDID = DT.Rows[0][0].ToString().Trim();
                     while (ExitNow == false)
                     {
                         DT = new DataTable();
-                        DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Parent_ID,Name From Services_06_Softwares_Group Where (ID = '" + PDID + "')");
+                        DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Parent_ID,Name From Services_06_Softwares_Group Where (ID = '" + PDID + "') And (Removed = '0')");
                         if (DT.Rows.Count == 1)
                         {
                             if (DT.Rows[0][0].ToString().Trim() == "0") { ExitNow = true; }

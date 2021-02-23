@@ -57,7 +57,7 @@ namespace iCore_Administrator.Modules
             string FB = "";
             try
             {
-                const string valid = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const string valid = "ABCDEFG9HI8JK7LM6NO5PQ4RS3TU2VW1XY0Z";
                 StringBuilder res = new StringBuilder();
                 Random rnd = new Random();
                 while (0 < Count--)
@@ -181,6 +181,20 @@ namespace iCore_Administrator.Modules
                 return false;
             }
 
+        }
+
+        public string ConvertDate_Format(string InputDate,string Input_Format,string Output_Foramt)
+        {
+            try
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-AU");
+                DateTime InDate = DateTime.ParseExact(InputDate, Input_Format, new CultureInfo("en-AU"));
+                return InDate.ToString(Output_Foramt);
+            }
+            catch (Exception)
+            {
+                return InputDate;
+            }
         }
 
         public string Get_Time()
@@ -360,6 +374,16 @@ namespace iCore_Administrator.Modules
                 return "";
             }
 
+        }
+
+        public string GetUserIP_HttpRequest(HttpRequest httpReq)
+        {
+            string ip = httpReq.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            if (string.IsNullOrEmpty(ip))
+            {
+                ip = httpReq.ServerVariables["REMOTE_ADDR"];
+            }
+            return ip;
         }
         //==========================================================================================================================================================================================
         //==========================================================================================================================================================================================

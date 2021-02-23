@@ -14,11 +14,23 @@ namespace iCore_Administrator
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //    );
+
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                name: "Request",
+                routeTemplate: "api/Request/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
-            );
+                );
+
+            config.Routes.MapHttpRoute(
+                name: "Result",
+                routeTemplate: "api/Result/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+                );
         }
     }
 }

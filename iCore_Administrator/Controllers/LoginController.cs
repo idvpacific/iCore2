@@ -14,7 +14,7 @@ namespace iCore_Administrator.Controllers
     public class LoginController : Controller
     {
         //====================================================================================================================
-        ActionAuthentication AAuth = new ActionAuthentication();
+        AuthenticationTester AAuth = new AuthenticationTester();
         SQL_Tranceiver Sq = new SQL_Tranceiver();
         PublicFunctions Pb = new PublicFunctions();
         EmailSender Email = new EmailSender();
@@ -27,6 +27,7 @@ namespace iCore_Administrator.Controllers
             try
             {
                 Session["Admin_UID"] = "0";
+                Session["Admin_UNM"] = "";
                 FormsAuthentication.SignOut();
                 string ResVal = "0"; string ResSTR = "";
                 Username = Username.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
@@ -34,7 +35,7 @@ namespace iCore_Administrator.Controllers
                 if ((Username.ToLower() == "tony@idvpacific.com.au") && (Password == "1234"))
                 {
                     FormsAuthentication.SetAuthCookie("ICADLG", false);
-                    Session["Admin_UID"] = "101";
+                    Session["Admin_UID"] = "1";
                     Session["Admin_UNM"] = "Tony Merlo";
                     ResVal = "0"; ResSTR = "";
                 }
@@ -53,7 +54,7 @@ namespace iCore_Administrator.Controllers
                 //}
                 //else
                 //{
-                //    ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                //    ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                 //}
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
                 return Json(FeedBack, JsonRequestBehavior.AllowGet);

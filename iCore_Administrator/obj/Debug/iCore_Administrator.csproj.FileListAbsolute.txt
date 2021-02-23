@@ -86,3 +86,6 @@ E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrato
 E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\BouncyCastle.Crypto.xml
 E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\ICSharpCode.SharpZipLib.pdb
 E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\ICSharpCode.SharpZipLib.xml
+E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\AssureTec.AssureID.Web.SDK.dll
+E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\RestSharp.dll
+E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\RestSharp.xml

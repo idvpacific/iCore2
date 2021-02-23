@@ -1,0 +1,1153 @@
+﻿@{
+    ViewBag.Title = "Users - Management & List";
+    Layout = "~/Areas/ManagementPortal/Views/Shared/_LayoutPortal.cshtml";
+}
+@section CSSStyle {
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/extensions/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/forms/select/select2.min.css">
+    <style>
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after {
+            left: 10px
+        }
+
+        .MenuToolbox:after {
+            content: '\2807';
+            font-size: 22px;
+        }
+
+        tr:hover {
+            background-color: rgba(235, 234, 234, 0.76) !important;
+        }
+
+        .lds-ripple {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+            .lds-ripple div {
+                position: absolute;
+                border: 4px solid #006abc;
+                opacity: 1;
+                border-radius: 50%;
+                animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+            }
+
+                .lds-ripple div:nth-child(2) {
+                    animation-delay: -0.5s;
+                }
+
+        @@keyframes lds-ripple {
+            0% {
+                top: 36px;
+                left: 36px;
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+
+            100% {
+                top: 0px;
+                left: 0px;
+                width: 72px;
+                height: 72px;
+                opacity: 0;
+            }
+        }
+    </style>
+}
+@if (ViewBag.PageID == "1")
+{
+    <div class="content-header row">
+        <div class="content-header-left col-md-9 col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12" style="padding-left:30px">
+                    <h2 class="content-header-title float-left mb-0">Users</h2>
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active">Group Type Management</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12" style="padding:0px">
+        <div class="card collapse-icon accordion-icon-rotate">
+            <div class="default-collapse collapse-bordered">
+                <div class="card collapse-header" id="Sec_GroupType_AddElement" style="pointer-events:auto;opacity:1;display:block">
+                    <div class="card-header" data-toggle="collapse" role="button" data-target="#Sec_GroupType_Add" aria-expanded="false" aria-controls="Sec_GroupType_Add">
+                        <h4 class="card-title" style=""><i class="fa fa-tags text-primary" style="margin-right:10px"></i>Add new group type</h4>
+                    </div>
+                    <div id="Sec_GroupType_Add" role="tabpanel" aria-labelledby="headingSec_GroupType_Add" class="collapse">
+                        <div class="card-body card-dashboard form-inline" style="padding-bottom:35px;">
+                            <div class="col-lg-10">
+                                <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                    Name :
+                                </div>
+                                <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                    <input type="text" class="form-control" id="Txt_GroupType_Name" placeholder="" style="width:100%" maxlength="200">
+                                    <div class="form-control-position">
+                                        <i class="fa fa-tag"></i>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                    Industry :
+                                </div>
+                                <select class="select2 form-control" id="Txt_GroupType_Industry">
+                                    <option value="1">Hospitality</option>
+                                    <option value="2">Automative</option>
+                                    <option value="3">API User</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                    Description :
+                                </div>
+                                <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                    <input type="text" class="form-control" id="Txt_GroupType_Description" placeholder="" style="width:100%" maxlength="200">
+                                    <div class="form-control-position">
+                                        <i class="fa fa-sticky-note"></i>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12" style="text-align:right">
+                                <div style="margin-top:20px;display:none" id="Btn_GroupType_Wait">
+                                    <button class="btn btn-primary" type="button" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right:10px"></span>
+                                        Please wait ...
+                                    </button>
+                                </div>
+                                <div class="btn-group" role="group" style="margin-top:20px;display:block" id="Btn_GroupType">
+                                    <button type="button" class="btn btn-primary" onclick="GroupType_AddNew()"><i class="fa fa-plus" style="margin-right:10px"></i>Add new group type</button>
+                                    <button type="button" class="btn btn-danger" onclick="GroupType_Clear()"><i class="fa fa-trash" style="margin-right:10px"></i>Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" style=""><i class="fa fa-list text-primary" style="margin-right:10px"></i>Group Type list <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="GroupType_ReloadGrid()"><i class="fa fa-refresh"></i> Reload</a> ]</span> :</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body card-dashboard">
+                            <div class="col-lg-12" id="Sec_GroupType_Grid_Wait" style="display:none;text-align:center;padding:20px">
+                                <div class="lds-ripple"><div></div><div></div></div>
+                            </div>
+                            <div class="table-responsive" style="pointer-events:auto;opacity:1;display:block" id="Sec_GroupType_Grid">
+                                <table id="GroupType_Table" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:30px;"></th>
+                                            <th style="padding-left:30px">Name</th>
+                                            <th style="padding-left:30px">Description</th>
+                                            <th style="width:100px;padding-left:30px">Industry</th>
+                                            <th style="width:75px;padding-left:30px">Status</th>
+                                            <th style="width:20px"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.DT_GroupType != null)
+                                        {
+                                            string GroupTypeBadge = "";
+                                            foreach (System.Data.DataRow RW in ViewBag.DT_GroupType)
+                                            {
+                                                GroupTypeBadge = "";
+                                                switch (RW[2].ToString().Trim())
+                                                {
+                                                    case "1": { GroupTypeBadge = "badge-light-primary"; break; }
+                                                    case "2": { GroupTypeBadge = "badge-light-danger"; break; }
+                                                    case "3": { GroupTypeBadge = "badge-light-info"; break; }
+                                                }
+                                                <tr>
+                                                    <td onclick="GroupType_GroupShow('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer"><i class="fa fa-tag text-primary" style="font-size:25px"></i></td>
+                                                    <td onclick="GroupType_GroupShow('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[4].ToString().Trim()</td>
+                                                    <td onclick="GroupType_GroupShow('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[5].ToString().Trim()</td>
+                                                    <td onclick="GroupType_GroupShow('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                        <div class="badge badge-pill @GroupTypeBadge" style="width:95px">@RW[3].ToString().Trim()</div>
+                                                    </td>
+                                                    @if (RW[6].ToString().Trim() == "0")
+                                                    {
+                                                        <td onclick="GroupType_GroupShow('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                            <div class="badge badge-pill badge-light-danger" style="width:70px">Disabled</div>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td onclick="GroupType_GroupShow('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                            <div class="badge badge-pill badge-light-success" style="width:70px">Active</div>
+                                                        </td>
+                                                    }
+                                                    <td style="text-align:center">
+                                                        <div class="btn-group dropleft">
+                                                            <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <div class="MenuToolbox text-primary" />
+                                                            </button>
+                                                            <div class="dropdown-menu" style="font-size:12px">
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="GroupType_GroupShow('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show subgroup</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="GroupType_Remove('@RW[0].ToString().Trim()','@RW[4].ToString().Trim()')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove type</a>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="GroupType_ChangeStatus('@RW[0].ToString().Trim()','@RW[4].ToString().Trim()')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="GroupType_Edit('@RW[0].ToString().Trim()','@RW[4].ToString().Trim()','@RW[5].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit type</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th style="width:30px;"></th>
+                                            <th style="padding-left:30px">Name</th>
+                                            <th style="padding-left:30px">Description</th>
+                                            <th style="width:100px;padding-left:30px">Industry</th>
+                                            <th style="width:75px;padding-left:30px">Status</th>
+                                            <th style="width:20px"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade text-left" id="Modal_GroupType_Editor" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary white" style="border-radius:7px 7px 0px 0px">
+                    <h5 class="modal-title" id="Modal_GroupType_Editor_Title">#</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12" id="GroupType_Txt_E1" style="opacity:1;pointer-events:auto">
+                        <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                            Name :
+                        </div>
+                        <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                            <input type="text" class="form-control" id="Modal_GroupType_Editor_Name" placeholder="" style="width:100%" maxlength="240">
+                            <div class="form-control-position">
+                                <i class="fa fa-tag"></i>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12" id="GroupType_Txt_E2" style="opacity:1;pointer-events:auto">
+                        <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                            Description :
+                        </div>
+                        <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                            <input type="text" class="form-control" id="Modal_GroupType_Editor_Description" placeholder="" style="width:100%" maxlength="240">
+                            <div class="form-control-position">
+                                <i class="fa fa-sticky-note"></i>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12" id="Modal_GroupType_Wait" style="display:none;text-align:center;padding:10px">
+                        <div class="lds-ripple"><div></div><div></div></div>
+                    </div>
+                    <input type="hidden" id="Modal_GroupType_ID" value="" />
+                </div>
+                <div class="modal-footer" id="Modal_GroupType_Btn" style="opacity:1;pointer-events:auto">
+                    <button type="button" class="btn btn-primary" onclick="GroupType_Edit_Save()">Save changes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="content-header row">
+        <div class="content-header-left col-md-9 col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12" style="padding-left:30px">
+                    <h2 class="content-header-title float-left mb-0">Users</h2>
+                    @if (ViewBag.HeaderType_Text != "")
+                    {
+                        <h2 class="content-header-title float-left mb-0" style="font-size:14px">[ @ViewBag.HeaderType_Text ]</h2>
+                    }
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb">
+                            @try
+                            {
+                                <li class="breadcrumb-item">
+                                    <a href="@Url.Action("Management","Users", new {id="",area="ManagementPortal" })">Group Type</a>
+                                </li>
+                                if (ViewBag.Breadcrumb_Count == 0)
+                                {
+
+                                }
+                                else
+                                {
+                                    if (ViewBag.Breadcrumb_Count > 5)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            <a href="@Url.Action("Management","Users", new { id=ViewBag.Breadcrumb_ListCode[5], area="ManagementPortal" })">@ViewBag.Breadcrumb_ListName[5]</a>
+                                        </li>
+                                        <li class="breadcrumb-item">...</li>
+                                    }
+                                    if (ViewBag.Breadcrumb_Count > 5) { ViewBag.Breadcrumb_Count = 5; }
+                                    for (int i = (ViewBag.Breadcrumb_Count - 1); i >= 0; i--)
+                                    {
+                                        if (i == 0)
+                                        {
+                                            <li class="breadcrumb-item active">
+                                                @ViewBag.Breadcrumb_ListName[i]
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="breadcrumb-item">
+                                                <a href="@Url.Action("Management","Users", new { id=ViewBag.Breadcrumb_ListCode[i], area="ManagementPortal" })">@ViewBag.Breadcrumb_ListName[i]</a>
+                                            </li>
+                                        }
+                                    }
+                                }
+                            }
+                            catch (global::System.Exception) { }
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12" style="padding:0px">
+        <div class="card collapse-icon accordion-icon-rotate">
+            <div class="default-collapse collapse-bordered">
+                <div class="card collapse-header" id="Sec_GroupUser_AddElement" style="pointer-events:auto;opacity:1;display:block">
+                    <div class="card-header" data-toggle="collapse" role="button" data-target="#Sec_GroupUser_Add" aria-expanded="false" aria-controls="Sec_GroupUser_Add">
+                        <h4 class="card-title" style=""><i class="fa fa-address-book text-primary" style="margin-right:10px"></i>Add new single layer group</h4>
+                    </div>
+                    <div id="Sec_GroupUser_Add" role="tabpanel" aria-labelledby="headingSec_GroupUser_Add" class="collapse">
+                        <div class="card-body card-dashboard form-inline" style="padding-bottom:35px;">
+                            <div class="col-lg-4">
+                                <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                    Name :
+                                </div>
+                                <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                    <input type="text" class="form-control" id="Txt_GroupUser_Name" placeholder="" style="width:100%" maxlength="200">
+                                    <div class="form-control-position">
+                                        <i class="fa fa-id-badge"></i>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                    Description :
+                                </div>
+                                <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                    <input type="text" class="form-control" id="Txt_GroupUser_Description" placeholder="" style="width:100%" maxlength="200">
+                                    <div class="form-control-position">
+                                        <i class="fa fa-sticky-note"></i>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12" style="text-align:right">
+                                <div style="margin-top:20px;display:none" id="Btn_GroupUser_Wait">
+                                    <button class="btn btn-primary" type="button" disabled>
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right:10px"></span>
+                                        Please wait ...
+                                    </button>
+                                </div>
+                                <div class="btn-group" role="group" style="margin-top:20px;display:block" id="Btn_GroupUser">
+                                    <button type="button" class="btn btn-primary" onclick="GroupUser_AddNew()"><i class="fa fa-plus" style="margin-right:10px"></i>Add new group</button>
+                                    <button type="button" class="btn btn-danger" onclick="GroupUser_Clear()"><i class="fa fa-trash" style="margin-right:10px"></i>Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" style=""><i class="fa fa-list text-primary" style="margin-right:10px"></i>Single Layer Group list <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="GroupUser_ReloadGrid()"><i class="fa fa-refresh"></i> Reload</a> ]</span> :</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body card-dashboard">
+                            <div class="col-lg-12" id="Sec_GroupUser_Grid_Wait" style="display:none;text-align:center;padding:20px">
+                                <div class="lds-ripple"><div></div><div></div></div>
+                            </div>
+                            <div class="table-responsive" style="pointer-events:auto;opacity:1;display:block" id="Sec_GroupUser_Grid">
+                                <table id="GroupUser_Table" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:30px;"></th>
+                                            <th style="padding-left:30px">Name</th>
+                                            <th style="padding-left:30px">Description</th>
+                                            <th style="width:75px;padding-left:30px">Status</th>
+                                            <th style="width:20px"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.DT_GroupUser != null)
+                                        {
+                                            foreach (System.Data.DataRow RW in ViewBag.DT_GroupUser)
+                                            {
+                                                <tr>
+                                                    <td onclick="GroupUser_GroupShow('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer"><i class="fa fa-id-badge text-primary" style="font-size:25px"></i></td>
+                                                    <td onclick="GroupUser_GroupShow('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[2].ToString().Trim()</td>
+                                                    <td onclick="GroupUser_GroupShow('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[3].ToString().Trim()</td>
+                                                    @if (RW[4].ToString().Trim() == "0")
+                                                    {
+                                                        <td onclick="GroupUser_GroupShow('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                            <div class="badge badge-pill badge-light-danger" style="width:70px">Disabled</div>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td onclick="GroupUser_GroupShow('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                            <div class="badge badge-pill badge-light-success" style="width:70px">Active</div>
+                                                        </td>
+                                                    }
+                                                    <td style="text-align:center">
+                                                        <div class="btn-group dropleft">
+                                                            <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <div class="MenuToolbox text-primary" />
+                                                            </button>
+                                                            <div class="dropdown-menu" style="font-size:12px">
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="GroupUser_GroupShow('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show subgroup</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="GroupUser_Remove('@RW[0].ToString().Trim()','@RW[2].ToString().Trim()')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove group</a>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="GroupUser_ChangeStatus('@RW[0].ToString().Trim()','@RW[2].ToString().Trim()')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <a class="dropdown-item" href="javascript:void(0)" onclick="GroupUser_Edit('@RW[0].ToString().Trim()','@RW[2].ToString().Trim()','@RW[3].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit group</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th style="width:30px;"></th>
+                                            <th style="padding-left:30px">Name</th>
+                                            <th style="padding-left:30px">Description</th>
+                                            <th style="width:75px;padding-left:30px">Status</th>
+                                            <th style="width:20px"></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade text-left" id="Modal_GroupUser_Editor" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary white" style="border-radius:7px 7px 0px 0px">
+                    <h5 class="modal-title" id="Modal_GroupUser_Editor_Title">#</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12" id="GroupUser_Txt_E1" style="opacity:1;pointer-events:auto">
+                        <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                            Name :
+                        </div>
+                        <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                            <input type="text" class="form-control" id="Modal_GroupUser_Editor_Name" placeholder="" style="width:100%" maxlength="240">
+                            <div class="form-control-position">
+                                <i class="fa fa-tag"></i>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12" id="GroupUser_Txt_E2" style="opacity:1;pointer-events:auto">
+                        <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                            Description :
+                        </div>
+                        <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                            <input type="text" class="form-control" id="Modal_GroupUser_Editor_Description" placeholder="" style="width:100%" maxlength="240">
+                            <div class="form-control-position">
+                                <i class="fa fa-sticky-note"></i>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12" id="Modal_GroupUser_Wait" style="display:none;text-align:center;padding:10px">
+                        <div class="lds-ripple"><div></div><div></div></div>
+                    </div>
+                    <input type="hidden" id="Modal_GroupUser_ID" value="" />
+                </div>
+                <div class="modal-footer" id="Modal_GroupUser_Btn" style="opacity:1;pointer-events:auto">
+                    <button type="button" class="btn btn-primary" onclick="GroupUser_Edit_Save()">Save changes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    switch (ViewBag.HeaderType_Code)
+    {
+        // Hospitality
+        case "1":
+            {
+                <div class="col-lg-12" style="padding:0px" id="Sec_Hospitality_Single_UserAdd">
+                    <div class="card collapse-icon accordion-icon-rotate">
+                        <div class="default-collapse collapse-bordered">
+                            <div class="card collapse-header" id="Sec_Hospitality_SingleUser_AddElement" style="pointer-events:auto;opacity:1;display:block">
+                                <div class="card-header" data-toggle="collapse" role="button" data-target="#Sec_Hospitality_SingleUser_Add" aria-expanded="false" aria-controls="Sec_Hospitality_SingleUser_Add">
+                                    <h4 class="card-title" style=""><i class="fa fa-user-plus text-primary" style="margin-right:10px"></i>Add new single layer user</h4>
+                                </div>
+                                <div id="Sec_Hospitality_SingleUser_Add" role="tabpanel" aria-labelledby="headingSec_Hospitality_SingleUser_Add" class="collapse">
+                                    <div class="card-body card-dashboard form-inline" style="padding-bottom:35px;">
+                                        <div class="col-lg-2">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                User type :
+                                            </div>
+                                            <select class="select2 form-control" id="Txt_Hospitality_SingleUser_Type" onchange="SelectUserType(this.value)">
+                                                <option value="1" selected>Organization</option>
+                                                <option value="2">Person</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6" id="Txt_Hospitality_SingleUser_CompanyName_Tag" style="display:block">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                Organization name :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_Hospitality_SingleUser_CompanyName" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-building-o"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-3" id="Txt_Hospitality_SingleUser_Firstname_Tag" style="display:none">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                First name :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_Hospitality_SingleUser_Firstname" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-user-o"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-3" id="Txt_Hospitality_SingleUser_Lastname_Tag" style="display:none">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                Last name :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_Hospitality_SingleUser_Lastname" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-user-circle-o"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                Email address :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_Hospitality_SingleUser_Email" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-envelope-o"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                Description :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_Hospitality_SingleUser_Description" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-sticky-note"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-12" style="text-align:right">
+                                            <div style="margin-top:20px;display:none" id="Btn_Hospitality_SingleUser_Wait">
+                                                <button class="btn btn-primary" type="button" disabled>
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right:10px"></span>
+                                                    Please wait ...
+                                                </button>
+                                            </div>
+                                            <div class="btn-group" role="group" style="margin-top:20px;display:block" id="Btn_Hospitality_SingleUser">
+                                                <button type="button" class="btn btn-primary" onclick="Hospitality_SingleUser_AddNew()"><i class="fa fa-plus" style="margin-right:10px"></i>Add new single layer user</button>
+                                                <button type="button" class="btn btn-danger" onclick="Hospitality_SingleUser_Clear()"><i class="fa fa-trash" style="margin-right:10px"></i>Clear</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" style=""><i class="fa fa-list text-primary" style="margin-right:10px"></i>Single Layer User list <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="Hospitality_SingleUser_ReloadGrid()"><i class="fa fa-refresh"></i> Reload</a> ]</span> :</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body card-dashboard">
+                                        <div class="col-lg-12" id="Sec_Hospitality_SingleUser_Grid_Wait" style="display:none;text-align:center;padding:20px">
+                                            <div class="lds-ripple"><div></div><div></div></div>
+                                        </div>
+                                        <div class="table-responsive" style="pointer-events:auto;opacity:1;display:block" id="Sec_Hospitality_SingleUser_Grid">
+                                            <table id="Hospitality_SingleUser_Table" class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:30px;"></th>
+                                                        <th style="padding-left:30px">Name</th>
+                                                        <th style="padding-left:30px">Email</th>
+                                                        <th style="padding-left:30px">Description</th>
+                                                        <th style="width:100px;padding-left:30px">Type</th>
+                                                        <th style="width:75px;padding-left:30px">Status</th>
+                                                        <th style="width:20px"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (ViewBag.DT_Hospitality_SingleUser != null)
+                                                    {
+                                                        string Hospitality_SingleUserBadge = "";
+                                                        foreach (System.Data.DataRow RW in ViewBag.DT_Hospitality_SingleUser)
+                                                        {
+                                                            Hospitality_SingleUserBadge = "";
+                                                            string LstName = "";
+                                                            switch (RW[2].ToString().Trim())
+                                                            {
+                                                                case "1": { LstName = RW[4].ToString().Trim(); Hospitality_SingleUserBadge = "badge-light-primary"; break; }
+                                                                case "2": { LstName = RW[4].ToString().Trim() + " " + RW[5].ToString().Trim(); Hospitality_SingleUserBadge = "badge-light-danger"; break; }
+                                                            }
+                                                            <tr>
+                                                                @if (RW[2].ToString().Trim() == "1")
+                                                                {
+                                                                    <td onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer"><i class="fa fa-building-o text-primary" style="font-size:25px"></i></td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer"><i class="fa fa-user-o text-primary" style="font-size:25px"></i></td>
+                                                                }
+                                                                <td onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="cursor:pointer">@LstName</td>
+                                                                <td onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[6].ToString().Trim()</td>
+                                                                <td onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[7].ToString().Trim()</td>
+                                                                <td onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                    <div class="badge badge-pill @Hospitality_SingleUserBadge" style="width:95px">@RW[3].ToString().Trim()</div>
+                                                                </td>
+                                                                @if (RW[8].ToString().Trim() == "0")
+                                                                {
+                                                                    <td onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                        <div class="badge badge-pill badge-light-danger" style="width:70px">Disabled</div>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                        <div class="badge badge-pill badge-light-success" style="width:70px">Active</div>
+                                                                    </td>
+                                                                }
+                                                                <td style="text-align:center">
+                                                                    <div class="btn-group dropleft">
+                                                                        <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <div class="MenuToolbox text-primary" />
+                                                                        </button>
+                                                                        <div class="dropdown-menu" style="font-size:12px">
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Hospitality_SingleUser_UserDetails('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show user account details</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Hospitality_SingleUser_Remove('@RW[0].ToString().Trim()','@LstName')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove user</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Hospitality_SingleUser_ChangeStatus('@RW[0].ToString().Trim()','@LstName')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="Hospitality_SingleUser_Edit('@RW[0].ToString().Trim()','@RW[2].ToString().Trim()','@RW[4].ToString().Trim()','@RW[5].ToString().Trim()','@RW[6].ToString().Trim()','@RW[7].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit user</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th style="width:30px;"></th>
+                                                        <th style="padding-left:30px">Name</th>
+                                                        <th style="padding-left:30px">Email</th>
+                                                        <th style="padding-left:30px">Description</th>
+                                                        <th style="width:100px;padding-left:30px">Type</th>
+                                                        <th style="width:75px;padding-left:30px">Status</th>
+                                                        <th style="width:20px"></th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="modal fade text-left" id="Modal_Hospitality_SingleUser_Editor" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary white" style="border-radius:7px 7px 0px 0px">
+                                <h5 class="modal-title" id="Modal_Hospitality_SingleUser_Editor_Title">#</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-lg-12" id="Hospitality_SingleUser_Txt_E1" style="opacity:1;pointer-events:auto">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        User type :
+                                    </div>
+                                    <select class="select2 form-control" id="Modal_Hospitality_SingleUser_Editor_Type" onchange="SelectUserTypeModal(this.value)">
+                                        <option value="1">Organization</option>
+                                        <option value="2">Person</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-12" id="Hospitality_SingleUser_Txt_E2" style="opacity:1;pointer-events:auto;display:none">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        Organization name :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_Hospitality_SingleUser_CompanyName" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-building-o"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="Hospitality_SingleUser_Txt_E3" style="opacity:1;pointer-events:auto;display:none">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        First name :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_Hospitality_SingleUser_Firstname" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-user-o"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="Hospitality_SingleUser_Txt_E4" style="opacity:1;pointer-events:auto;display:none">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        Last name :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_Hospitality_SingleUser_Lastname" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-user-circle-o"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="Hospitality_SingleUser_Txt_E5" style="opacity:1;pointer-events:auto">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        Email address :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_Hospitality_SingleUser_Email" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-envelope-o"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="Hospitality_SingleUser_Txt_E6" style="opacity:1;pointer-events:auto">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        Description :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_Hospitality_SingleUser_Description" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-sticky-note"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="Modal_Hospitality_SingleUser_Wait" style="display:none;text-align:center;padding:10px">
+                                    <div class="lds-ripple"><div></div><div></div></div>
+                                </div>
+                                <input type="hidden" id="Modal_Hospitality_SingleUser_ID" value="" />
+                            </div>
+                            <div class="modal-footer" id="Modal_Hospitality_SingleUser_Btn" style="opacity:1;pointer-events:auto">
+                                <button type="button" class="btn btn-primary" onclick="Hospitality_SingleUser_Edit_Save()">Save changes</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                break;
+            }
+        // Automative
+        case "2":
+            {
+                <h2 class="text-primary" style="margin-left:10px">Under Construction ...</h2>
+                <h6 class="text-warning" style="margin-left:15px">Other elements are being designed</h6>
+                break;
+            }
+        // API User
+        case "3":
+            {
+                <div class="col-lg-12" style="padding:0px" id="Sec_APIUser_Single_UserAdd">
+                    <div class="card collapse-icon accordion-icon-rotate">
+                        <div class="default-collapse collapse-bordered">
+                            <div class="card collapse-header" id="Sec_APIUser_SingleUser_AddElement" style="pointer-events:auto;opacity:1;display:block">
+                                <div class="card-header" data-toggle="collapse" role="button" data-target="#Sec_APIUser_SingleUser_Add" aria-expanded="false" aria-controls="Sec_APIUser_SingleUser_Add">
+                                    <h4 class="card-title" style=""><i class="fa fa-user-plus text-primary" style="margin-right:10px"></i>Add new API user</h4>
+                                </div>
+                                <div id="Sec_APIUser_SingleUser_Add" role="tabpanel" aria-labelledby="headingSec_APIUser_SingleUser_Add" class="collapse">
+                                    <div class="card-body card-dashboard form-inline" style="padding-bottom:35px;">
+                                        <div class="col-lg-2">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                User type :
+                                            </div>
+                                            <select class="select2 form-control" id="Txt_APIUser_SingleUser_Type" onchange="SelectUserType(this.value)">
+                                                <option value="1" selected>Organization</option>
+                                                <option value="2">Person</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6" id="Txt_APIUser_SingleUser_CompanyName_Tag" style="display:block">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                Organization name :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_APIUser_SingleUser_CompanyName" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-building-o"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-3" id="Txt_APIUser_SingleUser_Firstname_Tag" style="display:none">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                First name :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_APIUser_SingleUser_Firstname" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-user-o"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-3" id="Txt_APIUser_SingleUser_Lastname_Tag" style="display:none">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                Last name :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_APIUser_SingleUser_Lastname" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-user-circle-o"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                Email address :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_APIUser_SingleUser_Email" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-envelope-o"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                                Description :
+                                            </div>
+                                            <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                                <input type="text" class="form-control" id="Txt_APIUser_SingleUser_Description" placeholder="" style="width:100%" maxlength="200">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-sticky-note"></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-12" style="text-align:right">
+                                            <div style="margin-top:20px;display:none" id="Btn_APIUser_SingleUser_Wait">
+                                                <button class="btn btn-primary" type="button" disabled>
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right:10px"></span>
+                                                    Please wait ...
+                                                </button>
+                                            </div>
+                                            <div class="btn-group" role="group" style="margin-top:20px;display:block" id="Btn_APIUser_SingleUser">
+                                                <button type="button" class="btn btn-primary" onclick="APIUser_SingleUser_AddNew()"><i class="fa fa-plus" style="margin-right:10px"></i>Add new API user</button>
+                                                <button type="button" class="btn btn-danger" onclick="APIUser_SingleUser_Clear()"><i class="fa fa-trash" style="margin-right:10px"></i>Clear</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" style=""><i class="fa fa-list text-primary" style="margin-right:10px"></i>API User list <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="APIUser_SingleUser_ReloadGrid()"><i class="fa fa-refresh"></i> Reload</a> ]</span> :</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body card-dashboard">
+                                        <div class="col-lg-12" id="Sec_APIUser_SingleUser_Grid_Wait" style="display:none;text-align:center;padding:20px">
+                                            <div class="lds-ripple"><div></div><div></div></div>
+                                        </div>
+                                        <div class="table-responsive" style="pointer-events:auto;opacity:1;display:block" id="Sec_APIUser_SingleUser_Grid">
+                                            <table id="APIUser_SingleUser_Table" class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:30px;"></th>
+                                                        <th style="padding-left:30px">Name</th>
+                                                        <th style="padding-left:30px">Email</th>
+                                                        <th style="padding-left:30px">Description</th>
+                                                        <th style="width:100px;padding-left:30px">Type</th>
+                                                        <th style="width:75px;padding-left:30px">Status</th>
+                                                        <th style="width:20px"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (ViewBag.DT_APIUser_SingleUser != null)
+                                                    {
+                                                        string APIUser_SingleUserBadge = "";
+                                                        foreach (System.Data.DataRow RW in ViewBag.DT_APIUser_SingleUser)
+                                                        {
+                                                            APIUser_SingleUserBadge = "";
+                                                            string LstName = "";
+                                                            switch (RW[2].ToString().Trim())
+                                                            {
+                                                                case "1": { LstName = RW[4].ToString().Trim(); APIUser_SingleUserBadge = "badge-light-primary"; break; }
+                                                                case "2": { LstName = RW[4].ToString().Trim() + " " + RW[5].ToString().Trim(); APIUser_SingleUserBadge = "badge-light-danger"; break; }
+                                                            }
+                                                            <tr>
+                                                                @if (RW[2].ToString().Trim() == "1")
+                                                                {
+                                                                    <td onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer"><i class="fa fa-building-o text-primary" style="font-size:25px"></i></td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer"><i class="fa fa-user-o text-primary" style="font-size:25px"></i></td>
+                                                                }
+                                                                <td onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="cursor:pointer">@LstName</td>
+                                                                <td onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[6].ToString().Trim()</td>
+                                                                <td onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="cursor:pointer">@RW[7].ToString().Trim()</td>
+                                                                <td onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                    <div class="badge badge-pill @APIUser_SingleUserBadge" style="width:95px">@RW[3].ToString().Trim()</div>
+                                                                </td>
+                                                                @if (RW[8].ToString().Trim() == "0")
+                                                                {
+                                                                    <td onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                        <div class="badge badge-pill badge-light-danger" style="width:70px">Disabled</div>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')" style="text-align:center;cursor:pointer">
+                                                                        <div class="badge badge-pill badge-light-success" style="width:70px">Active</div>
+                                                                    </td>
+                                                                }
+                                                                <td style="text-align:center">
+                                                                    <div class="btn-group dropleft">
+                                                                        <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <div class="MenuToolbox text-primary" />
+                                                                        </button>
+                                                                        <div class="dropdown-menu" style="font-size:12px">
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="APIUser_SingleUser_UserDetails('@RW[1].ToString().Trim()')"><i class="fa fa-search text-primary" style="width:24px;font-size:14px"></i>Show user account details</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="APIUser_SingleUser_Remove('@RW[0].ToString().Trim()','@LstName')"><i class="fa fa-trash-o text-primary" style="width:24px;font-size:14px"></i>Remove user</a>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="APIUser_SingleUser_ChangeStatus('@RW[0].ToString().Trim()','@LstName')"><i class="fa fa-refresh text-primary" style="width:24px;font-size: 14px"></i>Change status</a>
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <a class="dropdown-item" href="javascript:void(0)" onclick="APIUser_SingleUser_Edit('@RW[0].ToString().Trim()','@RW[2].ToString().Trim()','@RW[4].ToString().Trim()','@RW[5].ToString().Trim()','@RW[6].ToString().Trim()','@RW[7].ToString().Trim()')"><i class="fa fa-pencil-square-o text-primary" style="width:24px;font-size: 14px"></i>Edit user</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th style="width:30px;"></th>
+                                                        <th style="padding-left:30px">Name</th>
+                                                        <th style="padding-left:30px">Email</th>
+                                                        <th style="padding-left:30px">Description</th>
+                                                        <th style="width:100px;padding-left:30px">Type</th>
+                                                        <th style="width:75px;padding-left:30px">Status</th>
+                                                        <th style="width:20px"></th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="modal fade text-left" id="Modal_APIUser_SingleUser_Editor" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary white" style="border-radius:7px 7px 0px 0px">
+                                <h5 class="modal-title" id="Modal_APIUser_SingleUser_Editor_Title">#</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-lg-12" id="APIUser_SingleUser_Txt_E1" style="opacity:1;pointer-events:auto">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        User type :
+                                    </div>
+                                    <select class="select2 form-control" id="Modal_APIUser_SingleUser_Editor_Type" onchange="SelectUserTypeModal(this.value)">
+                                        <option value="1">Organization</option>
+                                        <option value="2">Person</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-12" id="APIUser_SingleUser_Txt_E2" style="opacity:1;pointer-events:auto;display:none">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        Organization name :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_APIUser_SingleUser_CompanyName" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-building-o"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="APIUser_SingleUser_Txt_E3" style="opacity:1;pointer-events:auto;display:none">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        First name :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_APIUser_SingleUser_Firstname" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-user-o"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="APIUser_SingleUser_Txt_E4" style="opacity:1;pointer-events:auto;display:none">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        Last name :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_APIUser_SingleUser_Lastname" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-user-circle-o"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="APIUser_SingleUser_Txt_E5" style="opacity:1;pointer-events:auto">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        Email address :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_APIUser_SingleUser_Email" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-envelope-o"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="APIUser_SingleUser_Txt_E6" style="opacity:1;pointer-events:auto">
+                                    <div class="text-bold-300 font-medium-1" style="margin-top:10px;margin-left:5px">
+                                        Description :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left" style="width:100%">
+                                        <input type="text" class="form-control" id="Modal_APIUser_SingleUser_Description" placeholder="" style="width:100%" maxlength="200">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-sticky-note"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" id="Modal_APIUser_SingleUser_Wait" style="display:none;text-align:center;padding:10px">
+                                    <div class="lds-ripple"><div></div><div></div></div>
+                                </div>
+                                <input type="hidden" id="Modal_APIUser_SingleUser_ID" value="" />
+                            </div>
+                            <div class="modal-footer" id="Modal_APIUser_SingleUser_Btn" style="opacity:1;pointer-events:auto">
+                                <button type="button" class="btn btn-primary" onclick="APIUser_SingleUser_Edit_Save()">Save changes</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                break;
+            }
+    }
+}
+@section JSScript {
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    @if (ViewBag.PageID == "1")
+    {
+        <script type="text/javascript">
+            var app = app || {}; app.Urls = app.Urls || {};
+            app.Urls.U1 = "@Url.Action("GroupType_Grid", "Users")";
+            app.Urls.U2 = "@Url.Action("Logout", "Dashboard", new {id = "", area = ""})";
+            app.Urls.U3 = "@Url.Action("GroupType_AddNew", "Users")";
+            app.Urls.U4 = "@Url.Action("Management", "Users", new {id = "EMASGID", area = "ManagementPortal"})";
+            app.Urls.U5 = "@Url.Action("GroupType_Remove", "Users")";
+            app.Urls.U6 = "@Url.Action("GroupType_ChangeStatus", "Users")";
+            app.Urls.U7 = "@Url.Action("GroupType_SaveEdit", "Users")";
+        </script>
+        <script src="~/Areas/ManagementPortal/Data/manamegenttype.js"></script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            var app = app || {}; app.Urls = app.Urls || {};
+            app.Urls.U1 = "@Url.Action("GroupUser_Grid", "Users")";
+            app.Urls.U2 = "@Url.Action("Logout", "Dashboard", new {id = "", area = ""})";
+            app.Urls.U3 = "@Url.Action("GroupUser_AddNew", "Users")";
+            app.Urls.U4 = "@Url.Action("Management", "Users", new {id = "EMASGID", area = "ManagementPortal"})";
+            app.Urls.U5 = "@Url.Action("GroupUser_Remove", "Users")";
+            app.Urls.U6 = "@Url.Action("GroupUser_ChangeStatus", "Users")";
+            app.Urls.U7 = "@Url.Action("GroupUser_SaveEdit", "Users")";
+            app.Urls.PID = "@ViewBag.Parent_ID";
+            app.Urls.PUID = "@ViewBag.Parent_IDUC";
+            app.Urls.RID = "@ViewBag.HeaderID";
+        </script>
+        <script src="~/Areas/ManagementPortal/Data/manamegentgroup.js"></script>
+        switch (ViewBag.HeaderType_Code)
+        {
+            case "1":
+                {
+                    <script type="text/javascript">
+                        var app2 = app2 || {}; app2.Urls = app2.Urls || {};
+                        app2.Urls.U1 = "@Url.Action("Hospitality_SingleUser_Grid", "Users")";
+                        app2.Urls.U2 = "@Url.Action("Logout", "Dashboard", new {id = "", area = ""})";
+                        app2.Urls.U3 = "@Url.Action("Hospitality_SingleUser_AddNew", "Users")";
+                        app2.Urls.U4 = "@Url.Action("HospitalitySingleUser", "Users", new {id = "EMASGID", area = "ManagementPortal"})";
+                        app2.Urls.U5 = "@Url.Action("Hospitality_SingleUser_Remove", "Users")";
+                        app2.Urls.U6 = "@Url.Action("Hospitality_SingleUser_ChangeStatus", "Users")";
+                        app2.Urls.U7 = "@Url.Action("Hospitality_SingleUser_SaveEdit", "Users")";
+                        app2.Urls.PID = "@ViewBag.Parent_ID";
+                        app2.Urls.PUID = "@ViewBag.Parent_IDUC";
+                        app2.Urls.RID = "@ViewBag.HeaderID";
+                    </script>
+                    <script src="~/Areas/ManagementPortal/Data/manamegenthossingleuser.js"></script>
+                    break;
+                }
+            case "2":
+                {
+
+                    break;
+                }
+            case "3":
+                {
+                    <script type="text/javascript">
+                        var app2 = app2 || {}; app2.Urls = app2.Urls || {};
+                        app2.Urls.U1 = "@Url.Action("APIUser_SingleUser_Grid", "Users")";
+                        app2.Urls.U2 = "@Url.Action("Logout", "Dashboard", new {id = "", area = ""})";
+                        app2.Urls.U3 = "@Url.Action("APIUser_SingleUser_AddNew", "Users")";
+                        app2.Urls.U4 = "@Url.Action("APISingleUser", "Users", new {id = "EMASGID", area = "ManagementPortal"})";
+                        app2.Urls.U5 = "@Url.Action("APIUser_SingleUser_Remove", "Users")";
+                        app2.Urls.U6 = "@Url.Action("APIUser_SingleUser_ChangeStatus", "Users")";
+                        app2.Urls.U7 = "@Url.Action("APIUser_SingleUser_SaveEdit", "Users")";
+                        app2.Urls.PID = "@ViewBag.Parent_ID";
+                        app2.Urls.PUID = "@ViewBag.Parent_IDUC";
+                        app2.Urls.RID = "@ViewBag.HeaderID";
+                    </script>
+                    <script src="~/Areas/ManagementPortal/Data/managementapiuser.js"></script>
+                    break;
+                }
+        }
+    }
+}

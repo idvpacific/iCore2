@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AssureTec.AssureID.Web.SDK">
+      <HintPath>..\..\..\..\..\02- Projects Done\05- IDV Kiosk V1\Test\ConnectDemo\AssureIDConnectDemo\bin\Debug\AssureTec.AssureID.Web.SDK.dll</HintPath>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\packages\Portable.BouncyCastle.1.8.6\lib\net40\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
@@ -62,6 +65,10 @@
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats, Version=2.5.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <HintPath>..\packages\NPOI.2.5.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="RestSharp, Version=106.11.8.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.11.8-alpha.0.12\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
@@ -119,6 +126,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\ManagementPortal\Data\apiuseraccount.js" />
+    <Content Include="Areas\ManagementPortal\Data\hospitalitysingleuseraccount.js" />
+    <Content Include="Areas\ManagementPortal\Data\managementapiuser.js" />
+    <Content Include="Areas\ManagementPortal\Data\manamegentgroup.js" />
+    <Content Include="Areas\ManagementPortal\Data\manamegenttype.js" />
+    <Content Include="Areas\ManagementPortal\Data\manamegenthossingleuser.js" />
     <Content Include="FIcon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Image\Logo\FAicon.ico" />
@@ -1295,10 +1308,27 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Modules\CallBackFunction.cs" />
+    <Compile Include="API\Modules\Acuant_ModuleFunction.cs" />
+    <Compile Include="API\Modules\User_API_AccessPolicy.cs" />
+    <Compile Include="API\Request\Acuant\IDScanController.cs" />
+    <Compile Include="API\Request\Acuant\IDValidationController.cs" />
+    <Compile Include="API\Request\Acuant\PassportScanController.cs" />
+    <Compile Include="API\Request\Acuant\PassportValidationController.cs" />
+    <Compile Include="API\ResultStructure\Acuant_Results.cs" />
+    <Compile Include="API\ResultStructure\API_Main_Result.cs" />
+    <Compile Include="API\Result\Acuant\RetrieveFileController.cs" />
+    <Compile Include="API\Result\Acuant\RetrieveTransactionController.cs" />
+    <Compile Include="API\Result\Acuant\RIDScanController.cs" />
+    <Compile Include="API\Result\Acuant\RIDValidationController.cs" />
+    <Compile Include="API\Result\Acuant\RPassportScanController.cs" />
+    <Compile Include="API\Result\Acuant\RPassportValidationController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\ManagementPortal\Controllers\AdminsController.cs" />
-    <Compile Include="Areas\ManagementPortal\Controllers\CustomersController.cs" />
+    <Compile Include="Areas\ManagementPortal\Controllers\ApplicationsController.cs" />
+    <Compile Include="Areas\ManagementPortal\Controllers\TransactionController.cs" />
+    <Compile Include="Areas\ManagementPortal\Controllers\UsersController.cs" />
     <Compile Include="Areas\ManagementPortal\Controllers\DashboardController.cs" />
     <Compile Include="Areas\ManagementPortal\Controllers\ServicesController.cs" />
     <Compile Include="Areas\ManagementPortal\ManagementPortalAreaRegistration.cs" />
@@ -1307,11 +1337,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Modules\AuthenticationTester.cs" />
     <Compile Include="Modules\Crypto.cs" />
     <Compile Include="Modules\EmailSender.cs" />
+    <Compile Include="Modules\HSU_Application\Application_Acuant.cs" />
+    <Compile Include="Modules\HSU_Application\Application_Guesty.cs" />
+    <Compile Include="Modules\HSU_Application\Application_MasterFunction.cs" />
+    <Compile Include="Modules\HSU_Application\Conditions\HSU_1.cs" />
     <Compile Include="Modules\MimeTypeMap.cs" />
     <Compile Include="Modules\PublicFunctions.cs" />
-    <Compile Include="Modules\SecurityAuthentication\ActionAuthentication.cs" />
     <Compile Include="Modules\SecurityAuthentication\EMASRoleProvider.cs" />
     <Compile Include="Modules\SQL_Tranceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1329,11 +1363,21 @@
     <Content Include="Areas\ManagementPortal\Views\Dashboard\IconPack.cshtml" />
     <Content Include="Areas\ManagementPortal\Views\Admins\RegisterForms_SectionPreview.cshtml" />
     <Content Include="Areas\ManagementPortal\Views\Admins\RegisterForms_FormPreview.cshtml" />
-    <Content Include="Areas\ManagementPortal\Views\Customers\Management.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Users\Management.cshtml" />
     <Content Include="Areas\ManagementPortal\Views\Services\Devices_Management.cshtml" />
     <Content Include="Areas\ManagementPortal\Views\Services\Devices_List.cshtml" />
     <Content Include="Areas\ManagementPortal\Views\Services\Softwares_List.cshtml" />
     <Content Include="Areas\ManagementPortal\Views\Services\Softwares_Management.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Users\HospitalitySingleUser.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Applications\HSU.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Applications\HSU_New.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Applications\HSU_Application.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Users\APISingleUser.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Transaction\APIU.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Transaction\APIU_New.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Transaction\APIU_Transaction.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Transaction\APIUErr.cshtml" />
+    <Content Include="Areas\ManagementPortal\Views\Transaction\APIUErr_New.cshtml" />
     <None Include="packages.config" />
     <Content Include="Theme\Base\app-assets\data\ag-grid-data.json" />
     <Content Include="Theme\Base\app-assets\data\cities.json" />
@@ -1657,10 +1701,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="API\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\ManagementPortal\Data\" />
     <Folder Include="Drive\Admins\RegisterForms\" />
+    <Folder Include="Drive\Users\API\" />
     <Folder Include="Image\AdminAvatar\" />
     <Folder Include="Models\" />
   </ItemGroup>

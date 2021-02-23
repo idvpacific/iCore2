@@ -16,7 +16,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
     public class AdminsController : Controller
     {
         //====================================================================================================================
-        ActionAuthentication AAuth = new ActionAuthentication();
+        AuthenticationTester AAuth = new AuthenticationTester();
         SQL_Tranceiver Sq = new SQL_Tranceiver();
         PublicFunctions Pb = new PublicFunctions();
         EmailSender Email = new EmailSender();
@@ -89,7 +89,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                                     if (PrntID.Trim() != "0")
                                     {
                                         DataTable DT_Breadcrumb = new DataTable();
-                                        DT_Breadcrumb = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID_UnicCode,Name,Parent_ID,Removed From Admins_01_Group_User Where (ID = '" + PrntID + "')");
+                                        DT_Breadcrumb = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID_UnicCode,Name,Parent_ID,Removed From Admins_01_Group_User Where (ID = '" + PrntID + "') And (Removed = '0')");
                                         if (DT_Breadcrumb.Rows[0][3].ToString().Trim().ToLower() == "false")
                                         {
                                             PrntID = DT_Breadcrumb.Rows[0][2].ToString().Trim();
@@ -386,7 +386,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind admin/group information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading admin/group information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -426,7 +426,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     if (ParentIDUC != "0")
                     {
                         DataTable DT_PID = new DataTable();
-                        DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Admins_01_Group_User Where (ID_UnicCode = '" + ParentIDUC + "')");
+                        DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Admins_01_Group_User Where (ID_UnicCode = '" + ParentIDUC + "') And (Removed = '0')");
                         if (DT_PID.Rows != null)
                         {
                             if (DT_PID.Rows.Count == 1)
@@ -510,7 +510,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Admins_01_Group_User Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '1')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Admins_01_Group_User Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '1') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -563,7 +563,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Admins_01_Group_User Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '1')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Admins_01_Group_User Where (ID_UnicCode = '" + GroupIDU + "') And (Type_Code = '1') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -710,7 +710,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     if (ParentIDUC != "0")
                     {
                         DataTable DT_PID = new DataTable();
-                        DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Admins_01_Group_User Where (ID_UnicCode = '" + ParentIDUC + "')");
+                        DT_PID = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Admins_01_Group_User Where (ID_UnicCode = '" + ParentIDUC + "') And (Removed = '0')");
                         if (DT_PID.Rows != null)
                         {
                             if (DT_PID.Rows.Count == 1)
@@ -823,7 +823,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Admins_01_Group_User Where (ID_UnicCode = '" + AdminIDU + "') And (Type_Code = '2')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID From Admins_01_Group_User Where (ID_UnicCode = '" + AdminIDU + "') And (Type_Code = '2') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -876,7 +876,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Admins_01_Group_User Where (ID_UnicCode = '" + AdminIDU + "') And (Type_Code = '2')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Status_Code From Admins_01_Group_User Where (ID_UnicCode = '" + AdminIDU + "') And (Type_Code = '2') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -989,7 +989,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -1052,7 +1052,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                                     if (PrntID.Trim() != "0")
                                     {
                                         DataTable DT_Breadcrumb = new DataTable();
-                                        DT_Breadcrumb = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Name,Parent_ID From Admins_01_Group_User Where (ID = '" + PrntID + "')");
+                                        DT_Breadcrumb = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select ID,Name,Parent_ID From Admins_01_Group_User Where (ID = '" + PrntID + "') And (Removed = '0')");
 
                                         PrntID = DT_Breadcrumb.Rows[0][2].ToString().Trim();
                                         Breadcrumb_Count++;
@@ -1100,12 +1100,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                             }
                             else
                             {
-                                ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                                ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                             }
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                         }
                     }
                 }
@@ -1189,7 +1189,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -1236,12 +1236,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                         }
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -1281,7 +1281,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     Sec_Col = Sec_Col.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     if ((GroupID == "0") || (GroupID == ""))
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind group information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading group information";
                     }
                     else
                     {
@@ -1303,7 +1303,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                         }
                     }
                 }
@@ -1340,7 +1340,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Name From Admins_02_RegisterForms_Section Where (Group_ID = '" + GroupID + "') And (Section_ID  = '" + SecID + "')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Name From Admins_02_RegisterForms_Section Where (Group_ID = '" + GroupID + "') And (Section_ID  = '" + SecID + "') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -1393,7 +1393,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Name,Status_Code From Admins_02_RegisterForms_Section Where (Group_ID = '" + GroupID + "') And (Section_ID = '" + SecID + "')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Name,Status_Code From Admins_02_RegisterForms_Section Where (Group_ID = '" + GroupID + "') And (Section_ID = '" + SecID + "') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -1509,7 +1509,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     Sec_Col = Sec_Col.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     if ((GroupID == "0") || (GroupID == ""))
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind group information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading group information";
                     }
                     else
                     {
@@ -1531,7 +1531,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                         }
                     }
                 }
@@ -1576,7 +1576,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT1 = new DataTable();
-                    DT1 = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Element_ID From Admins_03_RegisterForms_Elements Where (Group_ID = '" + GroupID + "') And (Section_ID = '" + SecID + "') And (Element_Tag_Name = '" + El_Title + "')");
+                    DT1 = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Element_ID From Admins_03_RegisterForms_Elements Where (Group_ID = '" + GroupID + "') And (Section_ID = '" + SecID + "') And (Element_Tag_Name = '" + El_Title + "') And (Removed = '0')");
                     if (DT1.Rows != null)
                     {
                         if (DT1.Rows.Count == 0)
@@ -1611,7 +1611,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -2173,12 +2173,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         }
                         else
                         {
-                            ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                            ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                         }
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -2215,7 +2215,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Element_Tag_Name From Admins_03_RegisterForms_Elements Where (Group_ID = '" + GroupID + "') And (Section_ID  = '" + SecID + "') And (Element_ID = '" + ELID + "')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Element_Tag_Name From Admins_03_RegisterForms_Elements Where (Group_ID = '" + GroupID + "') And (Section_ID  = '" + SecID + "') And (Element_ID = '" + ELID + "') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -2269,7 +2269,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (ResVal == "0")
                 {
                     DataTable DT = new DataTable();
-                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Element_Tag_Name,Status_Code From Admins_03_RegisterForms_Elements Where (Group_ID = '" + GroupID + "') And (Section_ID  = '" + SecID + "') And (Element_ID = '" + ELID + "')");
+                    DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Element_Tag_Name,Status_Code From Admins_03_RegisterForms_Elements Where (Group_ID = '" + GroupID + "') And (Section_ID  = '" + SecID + "') And (Element_ID = '" + ELID + "') And (Removed = '0')");
                     if (DT.Rows != null)
                     {
                         if (DT.Rows.Count == 1)
@@ -2373,7 +2373,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     }
                     else
                     {
-                        ResVal = "1"; ResSTR = "The server encountered an error while reloadind information";
+                        ResVal = "1"; ResSTR = "The server encountered an error while reloading information";
                     }
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };

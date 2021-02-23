@@ -1,0 +1,471 @@
+﻿@using System.Data;
+@using iCore_Administrator.Modules
+@using RestSharp;
+@{
+    ViewBag.Title = "API User - Show Transaction";
+    Layout = "~/Areas/ManagementPortal/Views/Shared/_LayoutPortal.cshtml";
+    SQL_Tranceiver Sq = new SQL_Tranceiver();
+    string Trans_Type_Code = ViewBag.DT_Tran[5].ToString().Trim();
+}
+@section CSSStyle {
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/extensions/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/forms/select/select2.min.css">
+    <style>
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after {
+            left: 10px
+        }
+
+        .MenuToolbox:after {
+            content: '\2807';
+            font-size: 22px;
+        }
+
+        tr:hover {
+            background-color: rgba(235, 234, 234, 0.76) !important;
+        }
+
+        .lds-ripple {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+            .lds-ripple div {
+                position: absolute;
+                border: 4px solid #006abc;
+                opacity: 1;
+                border-radius: 50%;
+                animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+            }
+
+                .lds-ripple div:nth-child(2) {
+                    animation-delay: -0.5s;
+                }
+
+        @@keyframes lds-ripple {
+            0% {
+                top: 36px;
+                left: 36px;
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+
+            100% {
+                top: 0px;
+                left: 0px;
+                width: 72px;
+                height: 72px;
+                opacity: 0;
+            }
+        }
+    </style>
+}
+<section>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"><i class="fa fa-sticky-note-o text-primary"></i> Basic information</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body form-inline">
+                        <div class="divider divider-left col-lg-12">
+                            <div class="divider-text">User information : </div>
+                        </div>
+                        <h5 class="col-lg-6 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> User unique ID : <span class="text-primary">@ViewBag.DT_User[2].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-6 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> User type : <span class="text-primary">@ViewBag.DT_User[6].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-6 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> User name : <span class="text-primary">@ViewBag.DT_User[7].ToString().Trim() @ViewBag.DT_User[8].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-6 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Email address : <span class="text-primary">@ViewBag.DT_User[9].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-2 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Status : <span class="text-primary">@ViewBag.DT_User[12].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-2 text-dark">
+                            <i class="fa fa-arrow-circle-o-right text-secondary"></i> Register date : <span class="text-primary">
+                                @try
+                                {@ViewBag.DT_User[13].ToString().Trim().Substring(0, 10)}
+                            catch (Exception) { }
+                            </span>
+                        </h5>
+                        <h5 class="col-lg-2 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Register time : <span class="text-primary">@ViewBag.DT_User[14].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-3 text-dark">
+                            <i class="fa fa-arrow-circle-o-right text-secondary"></i> Last update : <span class="text-primary">
+                                @try
+                                {@ViewBag.DT_User[16].ToString().Trim().Substring(0, 10)}
+                            catch (Exception) { }
+                            </span>
+                        </h5>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Last update time : <span class="text-primary">@ViewBag.DT_User[17].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-12 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Description : <span class="text-primary">@ViewBag.DT_User[10].ToString().Trim()</span></h5>
+                        <div class="divider divider-left col-lg-12">
+                            <div class="divider-text">Transaction basic data : </div>
+                        </div>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> API Name : <span class="text-primary">@ViewBag.DT_Tran[4].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> API Type : <span class="text-primary">@ViewBag.DT_Tran[6].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-3 text-dark">
+                            <i class="fa fa-arrow-circle-o-right text-secondary"></i> Request date : <span class="text-primary">
+                                @try
+                                {@ViewBag.DT_Tran[7].ToString().Trim().Substring(0, 10)}
+                            catch (Exception) { }
+                            </span>
+                        </h5>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Request time : <span class="text-primary">@ViewBag.DT_Tran[8].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Request IP : <span class="text-primary">@ViewBag.DT_Tran[9].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Date format : <span class="text-primary">@ViewBag.DT_Tran[15].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Capture type : <span class="text-primary">@ViewBag.DT_Tran[17].ToString().Trim()</span></h5>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Cropping mode : <span class="text-primary">@ViewBag.DT_Tran[19].ToString().Trim()</span></h5>
+                        @if (ViewBag.DT_Tran[20].ToString().Trim().ToLower() == "true")
+                        {
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> OCR order : <span class="text-primary">Yes</span></h5>
+                        }
+                        else
+                        {
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> OCR order : <span class="text-primary">No</span></h5>
+                        }
+                        @if (ViewBag.DT_Tran[21].ToString().Trim().ToLower() == "true")
+                        {
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Validation order : <span class="text-primary">Yes</span></h5>
+                        }
+                        else
+                        {
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Validation order : <span class="text-primary">No</span></h5>
+                        }
+                        <h5 class="col-lg-3 text-dark">
+                            <i class="fa fa-arrow-circle-o-right text-secondary"></i> User last update : <span class="text-primary">
+                                @try
+                                {@ViewBag.DT_Tran[22].ToString().Trim().Substring(0, 10)}
+                            catch (Exception) { }
+                            </span>
+                        </h5>
+                        <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> User last update time : <span class="text-primary">@ViewBag.DT_Tran[23].ToString().Trim()</span></h5>
+                        @if (ViewBag.DT_Tran[37].ToString().Trim() != "")
+                        {
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Async request : <span class="text-primary">Yes</span></h5>
+                            if (ViewBag.DT_Tran[36].ToString().Trim().ToLower() != "true")
+                            {
+                                <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Callback send : <span class="text-primary">Yes</span></h5>
+                            }
+                            else
+                            {
+                                <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Callback send : <span class="text-primary">No</span></h5>
+                            }
+                            <h5 class="col-lg-3 text-dark">
+                                <i class="fa fa-arrow-circle-o-right text-secondary"></i> Send date : <span class="text-primary">
+                                    @try
+                                    {@ViewBag.DT_Tran[38].ToString().Trim().Substring(0, 10)}
+                                catch (Exception) { }
+                                </span>
+                            </h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Send time : <span class="text-primary">@ViewBag.DT_Tran[39].ToString().Trim()</span></h5>
+                            <h5 class="col-lg-12 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Callback URL : <span class="text-primary">@ViewBag.DT_Tran[37].ToString().Trim()</span></h5>
+                        }
+                        else
+                        {
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Async request : <span class="text-primary">No</span></h5>
+                            if (ViewBag.DT_Tran[36].ToString().Trim().ToLower() != "true")
+                            {
+                                <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Callback send : <span class="text-primary">Yes</span></h5>
+                            }
+                            else
+                            {
+                                <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Callback send : <span class="text-primary">No</span></h5>
+                            }
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Send date : <span class="text-primary">Unknown</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Send time : <span class="text-primary">Unknown</span></h5>
+                            <h5 class="col-lg-12 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Callback URL : <span class="text-primary">Not set</span></h5>
+                        }
+                        <div class="divider divider-left col-lg-12">
+                            <div class="divider-text">Retrieve basic data : </div>
+                        </div>
+                        @if (ViewBag.DT_Tran[40].ToString().Trim().ToLower() == "1")
+                        {
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Retrieve data : <span class="text-primary">Yes</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Retrieve count : <span class="text-primary">@ViewBag.DT_Tran[41].ToString().Trim()</span></h5>
+                            <h5 class="col-lg-3 text-dark">
+                                <i class="fa fa-arrow-circle-o-right text-secondary"></i> First retrieve date : <span class="text-primary">
+                                    @try
+                                    {@ViewBag.DT_Tran[42].ToString().Trim().Substring(0, 10)}
+                                catch (Exception) { }
+                                </span>
+                            </h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> First retrieve time : <span class="text-primary">@ViewBag.DT_Tran[43].ToString().Trim()</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> First retrieve IP : <span class="text-primary">@ViewBag.DT_Tran[44].ToString().Trim()</span></h5>
+                            <h5 class="col-lg-3 text-dark">
+                                <i class="fa fa-arrow-circle-o-right text-secondary"></i> Last retrieve date : <span class="text-primary">
+                                    @try
+                                    {@ViewBag.DT_Tran[45].ToString().Trim().Substring(0, 10)}
+                                catch (Exception) { }
+                                </span>
+                            </h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Last retrieve time : <span class="text-primary">@ViewBag.DT_Tran[46].ToString().Trim()</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Last retrieve IP : <span class="text-primary">@ViewBag.DT_Tran[47].ToString().Trim()</span></h5>
+                        }
+                        else
+                        {
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Retrieve data : <span class="text-primary">No</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Retrieve count : <span class="text-primary">0</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> First retrieve date : <span class="text-primary">Unknown</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> First retrieve time : <span class="text-primary">Unknown</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> First retrieve IP : <span class="text-primary">Unknown</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Last retrieve date : <span class="text-primary">Unknown</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Last retrieve time : <span class="text-primary">Unknown</span></h5>
+                            <h5 class="col-lg-3 text-dark"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Last retrieve IP : <span class="text-primary">Unknown</span></h5>
+                        }
+                        @{
+                            string BackgroundColor = "bg-warning";
+                            switch (ViewBag.DT_Tran[13].ToString().Trim())
+                            {
+                                case "1": { BackgroundColor = "bg-warning"; break; }
+                                case "2": { BackgroundColor = "bg-info"; break; }
+                                case "3": { BackgroundColor = "bg-danger"; break; }
+                                case "4": { BackgroundColor = "bg-success"; break; }
+                            }
+                            <div style="margin-top:10px;padding:20px;border:1px solid gray;" class="col-lg-12 form-inline rounded text-center @BackgroundColor colors-container">
+                                <h5 class="col-lg-6 text-dark" style="margin-top:8px">Transaction ID : <span class="text-white">@ViewBag.DT_Tran[1].ToString().Trim()</span></h5>
+                                <h5 class="col-lg-5 text-dark" style="margin-top:8px">Transaction status : <span class="text-white">@ViewBag.DT_Tran[14].ToString().Trim()</span></h5>
+                            </div>
+                        }
+                        <div class="divider divider-left col-lg-12">
+                            <div class="divider-text"><i class="fa fa-exclamation-triangle text-danger"></i> Proccess log :</div>
+                        </div>
+                        <div class="col-lg-12">
+                            <ul>
+                                @{
+                                    try
+                                    {
+                                        string MessAll = ViewBag.DT_Tran[108].ToString().Trim();
+                                        string[] SepMess = MessAll.Split('$');
+                                        int Logvalid = 0;
+                                        foreach (string StrD in SepMess)
+                                        {
+                                            if (StrD.Trim() != "")
+                                            {
+                                                Logvalid = 1;
+                                                <li>@StrD.Trim()</li>
+                                            }
+                                        }
+                                        if (Logvalid == 0)
+                                        {
+                                            <li>No messages have been registered for this transaction</li>
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                        <li>Error during load log data</li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"><i class="fa fa-upload text-primary"></i> Upload file(s)</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body form-inline">
+                        @{
+                            for (int i = 0; i < 6; i++)
+                            {
+                                if (ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim() != "")
+                                {
+                                    string Upload_Image_Path = HttpContext.Current.Server.MapPath("~/Drive/Users/API/" + ViewBag.TID + "/Upload/" + ViewBag.DT_Tran[52 + (i * 10)].ToString().Trim() + "." + ViewBag.DT_Tran[50 + (i * 10)].ToString().Trim());
+                                    if (File.Exists(Upload_Image_Path) == true)
+                                    {
+                                        byte[] imgdata = System.IO.File.ReadAllBytes(Upload_Image_Path);
+                                        var base64 = Convert.ToBase64String(imgdata);
+                                        string IMGSrc = String.Format("data:image/png;base64,{0}", base64);
+                                        <div class="col-lg-3" style="height:300px">
+                                            <h5><i class="fa fa-arrow-circle-o-right text-secondary"></i> @ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim()</h5>
+                                            <img src="@IMGSrc" id="UPIMG_@i" onclick="ShowRealSize(this.id)" style="cursor:pointer;width:auto;max-height:270px;border:1px solid lightgray;border-radius:3px" />
+                                        </div>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"><i class="fa fa-cogs text-primary"></i> Processed file(s)</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body form-inline">
+                        @{
+                            for (int i = 0; i < 6; i++)
+                            {
+                                try
+                                {
+                                    if (ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim() != "")
+                                    {
+                                        string Upload_Image_Path = HttpContext.Current.Server.MapPath("~/Drive/Users/API/" + ViewBag.TID + "/Result/" + ViewBag.DT_Tran[52 + (i * 10)].ToString().Trim() + "." + ViewBag.DT_Tran[50 + (i * 10)].ToString().Trim());
+                                        if (File.Exists(Upload_Image_Path) == true)
+                                        {
+                                            byte[] imgdata = System.IO.File.ReadAllBytes(Upload_Image_Path);
+                                            var base64 = Convert.ToBase64String(imgdata);
+                                            string IMGSrc = String.Format("data:image/png;base64,{0}", base64);
+                                            <div class="col-lg-3" style="height:300px">
+                                                <h5><i class="fa fa-arrow-circle-o-right text-secondary"></i> @ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim()</h5>
+                                                <img src="@IMGSrc" id="RSIMG_@i" onclick="ShowRealSize(this.id)" style="cursor:pointer;width:auto;max-height:270px;border:1px solid lightgray;border-radius:3px" />
+                                            </div>
+                                        }
+                                    }
+                                }
+                                catch (Exception) { }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@{
+    if ((Trans_Type_Code == "1") || (Trans_Type_Code == "2") || (Trans_Type_Code == "3") || (Trans_Type_Code == "4"))
+    {
+        <section>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title"><i class="fa fa-file-text-o text-primary"></i> Document processed informations</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body form-inline">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Document Key</th>
+                                            <th scope="col">Document Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @try
+                                        {
+                                            DataTable DT_OCRResult = new DataTable();
+                                            DT_OCRResult = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + ViewBag.TID + "') Order by Document_ID");
+                                            foreach (DataRow RSROCR in DT_OCRResult.Rows)
+                                            {
+                                                <tr>
+                                                    <th scope="row">@RSROCR[0].ToString().Trim()</th>
+                                                    <td>@RSROCR[1].ToString().Trim()</td>
+                                                </tr>
+                                            }
+                                        }
+                                        catch (Exception)
+                                        { }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    if ((Trans_Type_Code == "2") || (Trans_Type_Code == "4"))
+    {
+        <section>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title"><i class="fa fa-search text-primary"></i> Document validation informations</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body form-inline">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Document validation alert</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @try
+                                        {
+                                            DataTable DT_AlertResult = new DataTable();
+                                            DT_AlertResult = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Alert_Text From Users_17_API_Acuant_Alert Where (Transaction_ID = '" + ViewBag.TID + "') Order by Alert_Text");
+                                            foreach (DataRow RSRALRT in DT_AlertResult.Rows)
+                                            {
+                                                <tr>
+                                                    <td>@RSRALRT[0].ToString().Trim()</td>
+                                                </tr>
+                                            }
+                                        }
+                                        catch (Exception)
+                                        { }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title"><i class="fa fa-user-secret text-primary"></i> Document authentication</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body form-inline">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Result code</th>
+                                            <th scope="col">AUthentication result</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @try
+                                        {
+                                            DataTable DT_AuthResult = new DataTable();
+                                            DT_AuthResult = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Result_Code,Result_Text From Users_18_API_Acuant_Authentication Where (Transaction_ID = '" + ViewBag.TID + "') Order by Result_Text");
+                                            foreach (DataRow RSROCR in DT_AuthResult.Rows)
+                                            {
+                                                <tr>
+                                                    <th scope="row">@RSROCR[0].ToString().Trim()</th>
+                                                    <th scope="row">@RSROCR[1].ToString().Trim()</th>
+                                                </tr>
+                                            }
+                                        }
+                                        catch (Exception)
+                                        { }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+<div id="IMGRSIMGMDL" class="modal"> <span class="close" onclick="CloseModal()" style="font-size:50px;cursor:pointer;width:50px;text-align:center">&times;</span> <img class="modal-content" id="IMGModal"> </div>
+@section JSScript {
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    <script>
+        function ShowRealSize(IMGCode) { var IMGC = document.getElementById(IMGCode); var modalImg = document.getElementById("IMGModal"); modalImg.src = IMGC.src; $("#IMGRSIMGMDL").modal(); }
+        function CloseModal() { $("#IMGRSIMGMDL").modal("hide"); }
+    </script>
+}

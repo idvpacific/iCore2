@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using iCore_Administrator.Modules.SecurityAuthentication;
+using System.Web.Security;
+using iCore_Administrator.Modules;
 
 namespace iCore_Administrator.Areas.ManagementPortal.Controllers
 {
     public class DashboardController : Controller
     {
         //====================================================================================================================
-        ActionAuthentication AAuth = new ActionAuthentication();
+        AuthenticationTester AAuth = new AuthenticationTester();
 
         //====================================================================================================================
         public ActionResult Index()
@@ -50,6 +51,9 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
         //====================================================================================================================
         public ActionResult Logout()
         {
+            Session["Admin_UID"] = "0";
+            Session["Admin_UNM"] = "";
+            FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Login", new { id = "", area = "" });
         }
         //====================================================================================================================

@@ -1,0 +1,347 @@
+﻿@{
+    ViewBag.Title = "Hospitality User Managament";
+    Layout = "~/Areas/ManagementPortal/Views/Shared/_LayoutPortal.cshtml";
+}
+@section CSSStyle {
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/extensions/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/vendors/css/forms/select/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Theme/Base/app-assets/css/pages/app-user.css">
+    <style>
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after {
+            left: 10px
+        }
+
+        .MenuToolbox:after {
+            content: '\2807';
+            font-size: 22px;
+        }
+
+        tr:hover {
+            background-color: rgba(235, 234, 234, 0.76) !important;
+        }
+
+        .lds-ripple {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+            .lds-ripple div {
+                position: absolute;
+                border: 4px solid #006abc;
+                opacity: 1;
+                border-radius: 50%;
+                animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+            }
+
+                .lds-ripple div:nth-child(2) {
+                    animation-delay: -0.5s;
+                }
+
+        @@keyframes lds-ripple {
+            0% {
+                top: 36px;
+                left: 36px;
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+
+            100% {
+                top: 0px;
+                left: 0px;
+                width: 72px;
+                height: 72px;
+                opacity: 0;
+            }
+        }
+    </style>
+}
+<div class="content-header row">
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12" style="padding-left:30px">
+                <h2 class="content-header-title float-left mb-0">Users</h2>
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("Management","Users", new {id="",area="ManagementPortal" })">Management & List</a>
+                        </li>
+                        <li class="breadcrumb-item">Hospitality Single User</li>
+                        <li class="breadcrumb-item active">@ViewBag.UserFullname</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="users-edit">
+    <div class="card">
+        <div class="card-content">
+            <div class="card-body" style="padding-bottom:10px">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center active" id="account-tab" data-toggle="tab" href="#account" aria-controls="account" role="tab" aria-selected="true">
+                            <i class="fa fa-cogs mr-25"></i><span class="d-none d-sm-block" style="margin-left:10px">Account</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-address-card-o"></i><span class="d-none d-sm-block" style="margin-left:10px">Information Forms</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-sliders"></i><span class="d-none d-sm-block" style="margin-left:10px">Access Policy</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-eercast"></i><span class="d-none d-sm-block" style="margin-left:10px">Licence</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-newspaper-o"></i><span class="d-none d-sm-block" style="margin-left:10px">Activity Log</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-bell-o"></i><span class="d-none d-sm-block" style="margin-left:10px">Notifications</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-comment-o"></i><span class="d-none d-sm-block" style="margin-left:10px">Chats</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="feather icon-mail"></i><span class="d-none d-sm-block" style="margin-left:10px">Emails</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-question-circle-o"></i><span class="d-none d-sm-block" style="margin-left:10px">Tickets</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="feather icon-users"></i><span class="d-none d-sm-block" style="margin-left:10px">Customers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="feather icon-layers"></i><span class="d-none d-sm-block" style="margin-left:10px">Orders</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-cog"></i><span class="d-none d-sm-block" style="margin-left:10px">Local Setting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="UnderConst-tab" data-toggle="tab" href="#UnderConst" aria-controls="UnderConst" role="tab" aria-selected="false">
+                            <i class="fa fa-list"></i><span class="d-none d-sm-block" style="margin-left:10px">Customer Forms</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="users-edit">
+    <div class="card">
+        <div class="card-content">
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
+                        <div class="mb-2 col-lg-12">
+                            <h4 style="padding-bottom:10px"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Basic Information</h4>
+                            <div class="col-lg-12 form-inline">
+                                <h6 class="text-primary col-lg-5"><i class="fa fa-caret-right text-secondary" style="margin-right:10px"></i> User Type : <span class="text-dark">@ViewBag.DT_UserInfo[6].ToString().Trim()</span></h6>
+                                <h6 class="text-primary col-lg-5"><i class="fa fa-caret-right text-secondary" style="margin-right:10px"></i> User Unic ID : <span class="text-dark">@ViewBag.DT_UserInfo[2].ToString().Trim()</span></h6>
+                                <h6 class="text-primary col-lg-5"><i class="fa fa-caret-right text-secondary" style="margin-right:10px"></i> User Fullname : <span class="text-dark">@ViewBag.UserFullname</span></h6>
+                                @if (ViewBag.DT_UserInfo[11].ToString().Trim() == "1")
+                                {
+                                    <h6 class="text-primary col-lg-7"><i class="fa fa-caret-right text-secondary" style="margin-right:10px"></i> Status : <span class="text-dark"><i class="fa fa-check text-success"></i> @ViewBag.DT_UserInfo[12].ToString().Trim()</span></h6>
+                                }
+                                else
+                                {
+                                    <h6 class="text-primary col-lg-7"><i class="fa fa-caret-right text-secondary" style="margin-right:10px"></i> Status : <span class="text-dark"><i class="fa fa-times text-danger"></i> @ViewBag.DT_UserInfo[12].ToString().Trim()</span></h6>
+                                }
+                                <h6 class="text-primary col-lg-5"><i class="fa fa-caret-right text-secondary" style="margin-right:10px"></i> Register Date : <span class="text-dark">@ViewBag.DT_UserInfo[13].ToString().Trim().Substring(0, 10) - @ViewBag.DT_UserInfo[14].ToString().Trim()</span></h6>
+                                <h6 class="text-primary col-lg-7"><i class="fa fa-caret-right text-secondary" style="margin-right:10px"></i> Last Update : <span class="text-dark">@ViewBag.DT_UserInfo[16].ToString().Trim().Substring(0, 10) - @ViewBag.DT_UserInfo[17].ToString().Trim()</span></h6>
+                                <h6 class="text-primary col-lg-12"><i class="fa fa-caret-right text-secondary" style="margin-right:10px"></i> Description : <span class="text-dark">@ViewBag.DT_UserInfo[10].ToString().Trim()</span></h6>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="mb-2 col-lg-12">
+                            <h4 style="padding-bottom:10px"><i class="fa fa-arrow-circle-o-right text-secondary"></i> Account Login Setting</h4>
+                            <div class="row col-lg-12" id="ACC_Login_Wait" style="display:none;text-align:center;padding:20px">
+                                <div class="lds-ripple"><div></div><div></div></div>
+                            </div>
+                            <div class="row" id="ACC_Login">
+                                <div class="col-lg-4">
+                                    <div class="text-bold-600 mb-1">
+                                        User portal login email address :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_ACC_Login_Email" placeholder="Account login email address" value="@ViewBag.DT_UserInfo[9].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-envelope"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="text-bold-600 mb-1">
+                                        User portal login username <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadKey('1')"><i class="fa fa-refresh"></i> Generate</a> ]</span> :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_ACC_Login_Username" placeholder="Account login username" value="@ViewBag.DT_UserInfo[20].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="text-bold-600 mb-1">
+                                        User portal login password <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadKey('2')"><i class="fa fa-refresh"></i> Generate</a> ]</span> :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_ACC_Login_Password" placeholder="Account login password" value="@ViewBag.DT_UserInfo[21].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-key"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" style="text-align:right">
+                                    <button class="btn btn-success mr-1 mb-1" onclick="T_Account_Login_Save()"><i class="fa fa-save" style="margin-right:10px"></i>Save</button>
+                                    <button class="btn btn-outline-primary mr-1 mb-1" onclick="T_Account_Login_Reload()"><i class="fa fa-refresh" style="margin-right:10px"></i>Reload</button>
+                                    <button class="btn btn-outline-danger mr-1 mb-1" onclick="T_Account_Login_Clear()"><i class="fa fa-trash" style="margin-right:10px"></i>Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="mb-2 col-lg-12">
+                            <h4 style="padding-bottom:10px"><i class="fa fa-arrow-circle-o-right text-secondary"></i> API Management</h4>
+                            <div class="row col-lg-12" id="ACC_API_Wait" style="display:none;text-align:center;padding:20px">
+                                <div class="lds-ripple"><div></div><div></div></div>
+                            </div>
+                            <div class="row" id="ACC_API">
+                                <div class="col-lg-6">
+                                    <div class="text-bold-600 mb-1">
+                                        Authentication request API username <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadKey('3')"><i class="fa fa-refresh"></i> Generate</a> ]</span> :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_API_Auth_Username" placeholder="Authentication Username" value="@ViewBag.DT_UserInfo[22].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-code"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="text-bold-600 mb-1">
+                                        Authentication request API password <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadKey('4')"><i class="fa fa-refresh"></i> Generate</a> ]</span> :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_API_Auth_Key" placeholder="Authentication Key" value="@ViewBag.DT_UserInfo[23].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-lock"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="text-bold-600 mb-1">
+                                        Get request API username <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadKey('5')"><i class="fa fa-refresh"></i> Generate</a> ]</span> :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_API_Get_Username" placeholder="Get API Username" value="@ViewBag.DT_UserInfo[24].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-get-pocket"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="text-bold-600  mb-1">
+                                        Get request API password <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadKey('6')"><i class="fa fa-refresh"></i> Generate</a> ]</span> :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_API_Get_Key" placeholder="Get API Key" value="@ViewBag.DT_UserInfo[25].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-lock"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="text-bold-600 mb-1">
+                                        Post request API username <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadKey('7')"><i class="fa fa-refresh"></i> Generate</a> ]</span> :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_API_Post_Username" placeholder="Post API Username" value="@ViewBag.DT_UserInfo[26].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-get-pocket"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="text-bold-600 mb-1">
+                                        Post request API password <span style="font-size:12px;">[ <a href="javascript:void(0)" onclick="ReloadKey('8')"><i class="fa fa-refresh"></i> Generate</a> ]</span> :
+                                    </div>
+                                    <fieldset class="form-group position-relative has-icon-left input-divider-left">
+                                        <input type="text" class="form-control" id="TXT_API_Post_Key" placeholder="Post API Key" value="@ViewBag.DT_UserInfo[27].ToString().Trim()">
+                                        <div class="form-control-position">
+                                            <i class="fa fa-lock"></i>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-lg-12" style="text-align:right">
+                                    <button class="btn btn-success mr-1 mb-1" onclick="T_Account_API_Save()"><i class="fa fa-save" style="margin-right:10px"></i>Save</button>
+                                    <button class="btn btn-outline-primary mr-1 mb-1" onclick="T_Account_API_Reload()"><i class="fa fa-refresh" style="margin-right:10px"></i>Reload</button>
+                                    <button class="btn btn-outline-danger mr-1 mb-1" onclick="T_Account_API_Clear()"><i class="fa fa-trash" style="margin-right:10px"></i>Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <div class="tab-pane" id="UnderConst" aria-labelledby="UnderConst-tab" role="tabpanel">
+                        <form novalidate>
+                            <div class="row">
+                                <h2 class="text-primary col-lg-12" style="margin-left:10px">Under Construction ...</h2>
+                                <h6 class="text-warning col-lg-12" style="margin-left:15px">Other elements are being designed</h6>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section JSScript {
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="~/Theme/Base/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="~/Theme/Base/app-assets/js/scripts/pages/app-user.js"></script>
+    <script type="text/javascript">
+        var app = app || {}; app.Urls = app.Urls || {};
+        app.Urls.U1 = "@Url.Action("HSU_Account_KeyGenerator", "Users", new { id = "", area = "ManagementPortal" })";
+        app.Urls.U2 = "@Url.Action("Logout", "Dashboard", new {id = "", area = ""})";
+        app.Urls.U3 = "@Url.Action("HSU_Account_Login_Reload", "Users", new { id = "", area = "ManagementPortal" })";
+        app.Urls.U4 = "@Url.Action("HSU_Account_Login_Save", "Users", new { id = "", area = "ManagementPortal" })";
+        app.Urls.U5 = "@Url.Action("HSU_Account_API_Reload", "Users", new { id = "", area = "ManagementPortal" })";
+        app.Urls.U6 = "@Url.Action("HSU_Account_API_Save", "Users", new { id = "", area = "ManagementPortal" })";
+        app.Urls.UID = "@ViewBag.UserID";
+    </script>
+    <script src="~/Areas/ManagementPortal/Data/hospitalitysingleuseraccount.js"></script>
+}

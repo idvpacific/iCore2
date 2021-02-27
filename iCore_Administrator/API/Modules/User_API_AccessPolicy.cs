@@ -42,6 +42,7 @@ namespace iCore_Administrator.API.Modules
                                     case "2": { if (DT_Access.Rows[0][4].ToString().Trim() == "1") { ResAcc = true; } break; }
                                     case "3": { if (DT_Access.Rows[0][5].ToString().Trim() == "1") { ResAcc = true; } break; }
                                     case "4": { if (DT_Access.Rows[0][6].ToString().Trim() == "1") { ResAcc = true; } break; }
+                                    case "7": { if (DT_Access.Rows[0][1].ToString().Trim() == "1") { ResAcc = true; } break; }
                                 }
                             }
                         }

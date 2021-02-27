@@ -44,6 +44,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.3.8.2-alpha\lib\net462\Accord.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Imaging, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Imaging.3.8.2-alpha\lib\net462\Accord.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.MachineLearning, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.MachineLearning.3.8.2-alpha\lib\net462\Accord.MachineLearning.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.8.2-alpha\lib\net462\Accord.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math.Core, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.8.2-alpha\lib\net462\Accord.Math.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Statistics.3.8.2-alpha\lib\net462\Accord.Statistics.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Video, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Video.3.8.2-alpha\lib\net462\Accord.Video.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Vision, Version=3.8.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Vision.3.8.2-alpha\lib\net462\Accord.Vision.dll</HintPath>
+    </Reference>
     <Reference Include="AssureTec.AssureID.Web.SDK">
       <HintPath>..\..\..\..\..\02- Projects Done\05- IDV Kiosk V1\Test\ConnectDemo\AssureIDConnectDemo\bin\Debug\AssureTec.AssureID.Web.SDK.dll</HintPath>
     </Reference>
@@ -67,8 +91,17 @@
       <HintPath>..\packages\NPOI.2.5.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="QRCodeDecoderLibrary, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCodeDecoderLibrary.2.0.1\lib\net462\QRCodeDecoderLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=106.11.8.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.11.8-alpha.0.12\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Barcode, Version=5.1.4.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Barcode.5.1.4\lib\net46\Spire.Barcode.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.3.8.46, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Barcode.5.1.4\lib\net46\Spire.License.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
@@ -1308,17 +1341,56 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\DocTemplates\DT_01_AuthenticationController.cs" />
+    <Compile Include="API\DocTemplates\DT_02_AddCountryController.cs" />
+    <Compile Include="API\DocTemplates\DT_03_ReloadCountryController.cs" />
+    <Compile Include="API\DocTemplates\DT_04_EditCountryController.cs" />
+    <Compile Include="API\DocTemplates\DT_05_StatusCountryController.cs" />
+    <Compile Include="API\DocTemplates\DT_06_AddStateController.cs" />
+    <Compile Include="API\DocTemplates\DT_07_ReloadStateController.cs" />
+    <Compile Include="API\DocTemplates\DT_08_EditStateController.cs" />
+    <Compile Include="API\DocTemplates\DT_09_StatusStateController.cs" />
+    <Compile Include="API\DocTemplates\DT_10_AddNewDocumentTypeController.cs" />
+    <Compile Include="API\DocTemplates\DT_11_ReloadDocumentTypeController.cs" />
+    <Compile Include="API\DocTemplates\DT_12_EditDocumentTypeController.cs" />
+    <Compile Include="API\DocTemplates\DT_13_StatusDocumentTypeController.cs" />
+    <Compile Include="API\DocTemplates\DT_14_ReloadDocTypeController.cs" />
+    <Compile Include="API\DocTemplates\DT_15_ReloadStateCMBController.cs" />
+    <Compile Include="API\DocTemplates\DT_16_AddDocumentController.cs" />
+    <Compile Include="API\DocTemplates\DT_17_ReloadDocumentController.cs" />
+    <Compile Include="API\DocTemplates\DT_18_EditDocumentController.cs" />
+    <Compile Include="API\DocTemplates\DT_19_StatusDocumentController.cs" />
+    <Compile Include="API\DocTemplates\DT_20_GetDocumentInformationController.cs" />
+    <Compile Include="API\DocTemplates\DT_21_LoadTemplateController.cs" />
+    <Compile Include="API\DocTemplates\DT_22_BasicConfigurationLoadController.cs" />
+    <Compile Include="API\DocTemplates\DT_23_FrontImageLoadController.cs" />
+    <Compile Include="API\DocTemplates\DT_24_BackImageLoadController.cs" />
+    <Compile Include="API\DocTemplates\DT_25_FIElementsLoadController.cs" />
+    <Compile Include="API\DocTemplates\DT_26_BIElementsLoadController.cs" />
+    <Compile Include="API\DocTemplates\DT_27_FIColorLoadController.cs" />
+    <Compile Include="API\DocTemplates\DT_28_BIColorLoadController.cs" />
+    <Compile Include="API\DocTemplates\DT_29_BasicConfigurationSaveController.cs" />
+    <Compile Include="API\DocTemplates\DT_30_FrontImageSaveController.cs" />
+    <Compile Include="API\DocTemplates\DT_31_BackImageSaveController.cs" />
+    <Compile Include="API\DocTemplates\DT_32_FIElementsSaveController.cs" />
+    <Compile Include="API\DocTemplates\DT_33_BIElementsSaveController.cs" />
+    <Compile Include="API\DocTemplates\DT_34_FIColorsSaveController.cs" />
+    <Compile Include="API\DocTemplates\DT_35_BIColorsSaveController.cs" />
     <Compile Include="API\Modules\CallBackFunction.cs" />
     <Compile Include="API\Modules\Acuant_ModuleFunction.cs" />
+    <Compile Include="API\Modules\IDV_OCR.cs" />
+    <Compile Include="API\Modules\SimilarityFunction.cs" />
     <Compile Include="API\Modules\User_API_AccessPolicy.cs" />
     <Compile Include="API\Request\Acuant\IDScanController.cs" />
     <Compile Include="API\Request\Acuant\IDValidationController.cs" />
     <Compile Include="API\Request\Acuant\PassportScanController.cs" />
     <Compile Include="API\Request\Acuant\PassportValidationController.cs" />
+    <Compile Include="API\Request\IDV\OCRIDController.cs" />
     <Compile Include="API\ResultStructure\Acuant_Results.cs" />
     <Compile Include="API\ResultStructure\API_Main_Result.cs" />
-    <Compile Include="API\Result\Acuant\RetrieveFileController.cs" />
-    <Compile Include="API\Result\Acuant\RetrieveTransactionController.cs" />
+    <Compile Include="API\Result\IDV\ROCRIDController.cs" />
+    <Compile Include="API\Result\RetrieveFileController.cs" />
+    <Compile Include="API\Result\RetrieveTransactionController.cs" />
     <Compile Include="API\Result\Acuant\RIDScanController.cs" />
     <Compile Include="API\Result\Acuant\RIDValidationController.cs" />
     <Compile Include="API\Result\Acuant\RPassportScanController.cs" />
@@ -1346,6 +1418,7 @@
     <Compile Include="Modules\HSU_Application\Conditions\HSU_1.cs" />
     <Compile Include="Modules\MimeTypeMap.cs" />
     <Compile Include="Modules\PublicFunctions.cs" />
+    <Compile Include="Modules\RawContentReader.cs" />
     <Compile Include="Modules\SecurityAuthentication\EMASRoleProvider.cs" />
     <Compile Include="Modules\SQL_Tranceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1740,7 +1813,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Accord.3.8.2-alpha\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.2-alpha\build\Accord.targets'))" />
   </Target>
+  <Import Project="..\packages\Accord.3.8.2-alpha\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.2-alpha\build\Accord.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

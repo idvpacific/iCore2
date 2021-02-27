@@ -203,7 +203,7 @@ namespace iCore_Administrator.API.Modules
                                                         {
                                                             string Image4_Name = Tra_ID + "I4" + PB.Make_Security_Code(20);
                                                             Bitmap SIMG = _assureIdServiceClient.GetDocumentFieldImage(document.InstanceId, "Signature");
-                                                            var filePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/" + Tra_ID + "/Result/" + Image4_Name + ".jpg");
+                                                            var filePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Tra_ID + "/Result/" + Image4_Name + ".jpg");
                                                             SIMG.Save(filePath, ImageFormat.Jpeg);
                                                             SQ.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_4_Title] = 'Signature',[Image_4_File_Name] = '" + Image4_Name + "',[Image_4_File_Format] = 'jpg',[Image_4_File_Type] = 'image/jpeg',[Image_4_Download_ID] = '" + Image4_Name + "',[Image_4_Download_Count] = '0' Where (ID = '" + Tra_ID + "')");
                                                         }

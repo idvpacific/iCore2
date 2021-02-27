@@ -456,6 +456,48 @@
             </div>
         </section>
     }
+    if ((Trans_Type_Code == "7"))
+    {
+        <section>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title"><i class="fa fa-file-text-o text-primary"></i> Document processed informations</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body form-inline">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Document Key</th>
+                                            <th scope="col">Document Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @try
+                                        {
+                                            DataTable DT_OCRResult = new DataTable();
+                                            DT_OCRResult = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + ViewBag.TID + "') Order by Document_ID");
+                                            foreach (DataRow RSROCR in DT_OCRResult.Rows)
+                                            {
+                                                <tr>
+                                                    <th scope="row">@RSROCR[0].ToString().Trim()</th>
+                                                    <td>@RSROCR[1].ToString().Trim()</td>
+                                                </tr>
+                                            }
+                                        }
+                                        catch (Exception)
+                                        { }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
 }
 <div id="IMGRSIMGMDL" class="modal"> <span class="close" onclick="CloseModal()" style="font-size:50px;cursor:pointer;width:50px;text-align:center">&times;</span> <img class="modal-content" id="IMGModal"> </div>
 @section JSScript {

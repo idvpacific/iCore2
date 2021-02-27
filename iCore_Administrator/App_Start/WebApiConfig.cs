@@ -31,6 +31,12 @@ namespace iCore_Administrator
                 routeTemplate: "api/Result/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
                 );
+
+            config.Routes.MapHttpRoute(
+                name: "DocBuilder",
+                routeTemplate: "api/DocBuilder/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+                );
         }
     }
 }

@@ -27,7 +27,7 @@ namespace iCore_Administrator.API.DocTemplates
                 DTID = DTID.ToString().Trim();
                 DID = DID.ToString().Trim();
                 DataTable DT = new DataTable();
-                DT = SQ.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select X1,Y1,X2,Y2,X3,Y3,X4,Y4,Elm_Width,Elm_Height,OutputTag,OutputTitle,KeyActive,KeyCode,Similarity,KeyIndex,KeyPosition From Template_08_FrontImage_Elements Where (CID = '" + CID + "') And (SID = '" + SID + "') And (DTID = '" + DTID + "') And (DID = '" + DID + "')");
+                DT = SQ.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select X1,Y1,X2,Y2,X3,Y3,X4,Y4,Elm_Width,Elm_Height,OutputTag,OutputTitle,KeyActive,KeyCode,Similarity,KeyIndex,KeyPosition,Data_Processing,TypeCode,Sub_Start,Sub_Length,Sub_Left,Input_Format,Input_Format_Sep,Output_Format,Output_Format_Sep From Template_08_FrontImage_Elements Where (CID = '" + CID + "') And (SID = '" + SID + "') And (DTID = '" + DTID + "') And (DID = '" + DID + "')");
                 if (DT.Rows != null)
                 {
                     if (DT.Rows.Count != 0)

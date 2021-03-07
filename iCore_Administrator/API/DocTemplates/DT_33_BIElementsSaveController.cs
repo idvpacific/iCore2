@@ -48,6 +48,15 @@ namespace iCore_Administrator.API.DocTemplates
         public string V15 { get; set; }
         public string V16 { get; set; }
         public string V17 { get; set; }
+        public string V18 { get; set; }
+        public string V19 { get; set; }
+        public string V20 { get; set; }
+        public string V21 { get; set; }
+        public string V22 { get; set; }
+        public string V23 { get; set; }
+        public string V24 { get; set; }
+        public string V25 { get; set; }
+        public string V26 { get; set; }
     }
     public class DT_33_BIElementsSaveController : ApiController
     {
@@ -87,7 +96,12 @@ namespace iCore_Administrator.API.DocTemplates
                             {
                                 BIElement FIE = new BIElement();
                                 FIE = Newtonsoft.Json.JsonConvert.DeserializeObject<BIElement>(H_raw);
-                                SQ.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Template_09_BackImage_Elements Values ('" + DBI.CountryID + "','" + DBI.StateID + "','" + DBI.DocumentTypeID + "','" + DBI.DocumentID + "','" + FIE.V1 + "','" + FIE.V2 + "','" + FIE.V3 + "','" + FIE.V4 + "','" + FIE.V5 + "','" + FIE.V6 + "','" + FIE.V7 + "','" + FIE.V8 + "','" + FIE.V9 + "','" + FIE.V10 + "','" + FIE.V11 + "','" + FIE.V12 + "','" + FIE.V13 + "','" + FIE.V14 + "','" + FIE.V15 + "','" + FIE.V16 + "','" + FIE.V17 + "')");
+                                try { if (FIE.V18.Trim() == "") { FIE.V18 = "0"; } } catch (Exception) { }
+                                try { if (FIE.V19.Trim() == "") { FIE.V19 = "1"; } } catch (Exception) { }
+                                try { if (FIE.V20.Trim() == "") { FIE.V20 = "0"; } } catch (Exception) { }
+                                try { if (FIE.V21.Trim() == "") { FIE.V21 = "0"; } } catch (Exception) { }
+                                try { if (FIE.V22.Trim() == "") { FIE.V22 = "0"; } } catch (Exception) { }
+                                SQ.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Template_09_BackImage_Elements Values ('" + DBI.CountryID + "','" + DBI.StateID + "','" + DBI.DocumentTypeID + "','" + DBI.DocumentID + "','" + FIE.V1 + "','" + FIE.V2 + "','" + FIE.V3 + "','" + FIE.V4 + "','" + FIE.V5 + "','" + FIE.V6 + "','" + FIE.V7 + "','" + FIE.V8 + "','" + FIE.V9 + "','" + FIE.V10 + "','" + FIE.V11 + "','" + FIE.V12 + "','" + FIE.V13 + "','" + FIE.V14 + "','" + FIE.V15 + "','" + FIE.V16 + "','" + FIE.V17 + "','" + FIE.V18 + "','" + FIE.V19 + "','" + FIE.V20 + "','" + FIE.V21 + "','" + FIE.V22 + "','" + FIE.V23 + "','" + FIE.V24 + "','" + FIE.V25 + "','" + FIE.V26 + "')");
                                 LastRes = "OK";
                             }
                             else

@@ -659,7 +659,7 @@ namespace iCore_Administrator.API.Modules
                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 20] = 0; // Template Last Rank -------------------------------> OK
                                                                     // Search For Key Front Image :
                                                                     DT_FIEK = new DataTable();
-                                                                    DT_FIEK = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select KeyCode,Similarity,X1,Y1,Y2,KeyIndex,KeyPosition From Template_08_FrontImage_Elements Where (DID = '" + RW1[0].ToString().Trim() + "') And (KeyActive = '1') And (KeyCode <> '') Order By X1,Y1");
+                                                                    DT_FIEK = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select KeyCode,Similarity,X1,Y1,Y2,KeyIndex,KeyPosition From Template_08_FrontImage_Elements Where (DID = '" + RW1[0].ToString().Trim() + "') And (KeyActive = '1') And (KeyCode <> '') Order By Y1,X1");
                                                                     if (DT_FIEK.Rows != null)
                                                                     {
                                                                         if (DT_FIEK.Rows.Count > 0)
@@ -696,9 +696,9 @@ namespace iCore_Administrator.API.Modules
                                                                             int M_X1 = 0; int M_Y1 = 0; int M_X2 = 0; int M_Y2 = 0;
                                                                             int S_X1 = 0; int S_Y1 = 0; int S_X2 = 0; int S_Y2 = 0;
                                                                             M_X1 = int.Parse(DT_FIEK.Rows[0][2].ToString().Trim());
-                                                                            M_Y1 = (int)((int.Parse(DT_FIEK.Rows[0][3].ToString().Trim()) + int.Parse(DT_FIEK.Rows[0][4].ToString().Trim())) / 2);
+                                                                            M_Y1 = int.Parse(DT_FIEK.Rows[0][3].ToString().Trim());
                                                                             M_X2 = int.Parse(DT_FIEK.Rows[DT_FIEK.Rows.Count - 1][2].ToString().Trim());
-                                                                            M_Y2 = (int)((int.Parse(DT_FIEK.Rows[DT_FIEK.Rows.Count - 1][3].ToString().Trim()) + int.Parse(DT_FIEK.Rows[DT_FIEK.Rows.Count - 1][4].ToString().Trim())) / 2);
+                                                                            M_Y2 = int.Parse(DT_FIEK.Rows[DT_FIEK.Rows.Count - 1][3].ToString().Trim());
                                                                             if (SF.KeyDetector(ref S_X1, ref S_Y1, DT_FIEK.Rows[0][0].ToString().Trim(), OCRRes.ParsedResults[0].TextOverlay.Lines, DT_FIEK.Rows[0][1].ToString().Trim(), int.Parse(DT_FIEK.Rows[0][5].ToString().Trim()), DT_FIEK.Rows[0][6].ToString().Trim()) == true)
                                                                             {
                                                                                 if (SF.KeyDetector(ref S_X2, ref S_Y2, DT_FIEK.Rows[DT_FIEK.Rows.Count - 1][0].ToString().Trim(), OCRRes.ParsedResults[0].TextOverlay.Lines, DT_FIEK.Rows[DT_FIEK.Rows.Count - 1][1].ToString().Trim(), int.Parse(DT_FIEK.Rows[DT_FIEK.Rows.Count - 1][5].ToString().Trim()), DT_FIEK.Rows[DT_FIEK.Rows.Count - 1][6].ToString().Trim()) == true)
@@ -707,16 +707,16 @@ namespace iCore_Administrator.API.Modules
                                                                                     int XMM = Math.Abs(M_X1 - M_X2);
                                                                                     if (XSM == 0) { XSM = 1; }
                                                                                     if (XMM == 0) { XMM = 1; }
-                                                                                    FI_X_Coe = (double)((double)XSM / (double)XMM);
+                                                                                    FI_X_Coe = (double)((double)XMM / (double)XSM);
                                                                                     int YSM = Math.Abs(S_Y1 - S_Y2);
                                                                                     int YMM = Math.Abs(M_Y1 - M_Y2);
                                                                                     if (YSM == 0) { YSM = 1; }
                                                                                     if (YMM == 0) { YMM = 1; }
-                                                                                    FI_Y_Coe = (double)((double)YSM / (double)YMM);
+                                                                                    FI_Y_Coe = (double)((double)YMM / (double)YSM);
                                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 6] = FI_X_Coe; // X Coefficient Front Image
                                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 7] = FI_Y_Coe; // Y Coefficient Front Image
-                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 8] = S_X1 - (M_X1 * FI_X_Coe); // Scan X Top-Left Front Image
-                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 9] = S_Y1 - (M_Y1 * FI_Y_Coe); ; // Scan Y Top-Left Front Image
+                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 8] = S_X1 - (M_X1 / FI_X_Coe); // Scan X Top-Left Front Image
+                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 9] = S_Y1 - (M_Y1 / FI_Y_Coe); ; // Scan Y Top-Left Front Image
                                                                                     ProContinue = true;
                                                                                 }
                                                                             }
@@ -781,7 +781,7 @@ namespace iCore_Administrator.API.Modules
                                                                                     }
                                                                                     // Search For Key Back Image :
                                                                                     DataTable DT_FBEK = new DataTable();
-                                                                                    DT_FBEK = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select KeyCode,Similarity,X1,Y1,Y2,KeyIndex,KeyPosition From Template_09_BackImage_Elements Where (DID = '" + RW1[0].ToString().Trim() + "') And (KeyActive = '1') And (KeyCode <> '') Order By X1,Y1");
+                                                                                    DT_FBEK = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select KeyCode,Similarity,X1,Y1,Y2,KeyIndex,KeyPosition From Template_09_BackImage_Elements Where (DID = '" + RW1[0].ToString().Trim() + "') And (KeyActive = '1') And (KeyCode <> '') Order By Y1,X1");
                                                                                     if (DT_FBEK.Rows != null)
                                                                                     {
                                                                                         if (DT_FBEK.Rows.Count > 0)
@@ -829,16 +829,16 @@ namespace iCore_Administrator.API.Modules
                                                                                                     int XMM = Math.Abs(M_X1 - M_X2);
                                                                                                     if (XSM == 0) { XSM = 1; }
                                                                                                     if (XMM == 0) { XMM = 1; }
-                                                                                                    FI_X_CoeB = (double)((double)XSM / (double)XMM);
+                                                                                                    FI_X_CoeB = (double)((double)XMM / (double)XSM);
                                                                                                     int YSM = Math.Abs(S_Y1 - S_Y2);
                                                                                                     int YMM = Math.Abs(M_Y1 - M_Y2);
                                                                                                     if (YSM == 0) { YSM = 1; }
                                                                                                     if (YMM == 0) { YMM = 1; }
-                                                                                                    FI_Y_CoeB = (double)((double)YSM / (double)YMM);
+                                                                                                    FI_Y_CoeB = (double)((double)YMM / (double)YSM);
                                                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 10] = FI_X_CoeB; // X Coefficient Back Image
                                                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 11] = FI_Y_CoeB; // Y Coefficient Back Image
-                                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 12] = S_X1 - (M_X1 * FI_X_CoeB); // Scan X Top-Left Back Image
-                                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 13] = S_Y1 - (M_Y1 * FI_Y_CoeB); ; // Scan Y Top-Left Back Image
+                                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 12] = S_X1 - (M_X1 / FI_X_CoeB); // Scan X Top-Left Back Image
+                                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 13] = S_Y1 - (M_Y1 / FI_Y_CoeB); ; // Scan Y Top-Left Back Image
                                                                                                     ProContinueB = true;
                                                                                                 }
                                                                                             }
@@ -1232,7 +1232,7 @@ namespace iCore_Administrator.API.Modules
                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 20] = 0; // Template Last Rank -------------------------------> OK
                                                                     // Search For Key Back Image :
                                                                     DT_FIEK = new DataTable();
-                                                                    DT_FIEK = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select KeyCode,Similarity,X1,Y1,Y2,KeyIndex,KeyPosition From Template_09_BackImage_Elements Where (DID = '" + RW1[0].ToString().Trim() + "') And (KeyActive = '1') And (KeyCode <> '') Order By X1,Y1");
+                                                                    DT_FIEK = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select KeyCode,Similarity,X1,Y1,Y2,KeyIndex,KeyPosition From Template_09_BackImage_Elements Where (DID = '" + RW1[0].ToString().Trim() + "') And (KeyActive = '1') And (KeyCode <> '') Order By Y1,X1");
                                                                     if (DT_FIEK.Rows != null)
                                                                     {
                                                                         if (DT_FIEK.Rows.Count > 0)
@@ -1280,16 +1280,16 @@ namespace iCore_Administrator.API.Modules
                                                                                     int XMM = Math.Abs(M_X1 - M_X2);
                                                                                     if (XSM == 0) { XSM = 1; }
                                                                                     if (XMM == 0) { XMM = 1; }
-                                                                                    FI_X_Coe = (double)((double)XSM / (double)XMM);
+                                                                                    FI_X_Coe = (double)((double)XMM / (double)XSM);
                                                                                     int YSM = Math.Abs(S_Y1 - S_Y2);
                                                                                     int YMM = Math.Abs(M_Y1 - M_Y2);
                                                                                     if (YSM == 0) { YSM = 1; }
                                                                                     if (YMM == 0) { YMM = 1; }
-                                                                                    FI_Y_Coe = (double)((double)YSM / (double)YMM);
+                                                                                    FI_Y_Coe = (double)((double)YMM / (double)YSM);
                                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 6] = FI_X_Coe; // X Coefficient Back Image
                                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 7] = FI_Y_Coe; // Y Coefficient Back Image
-                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 8] = S_X1 - (M_X1 * FI_X_Coe); // Scan X Top-Left Back Image
-                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 9] = S_Y1 - (M_Y1 * FI_Y_Coe); ; // Scan Y Top-Left Back Image
+                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 8] = S_X1 - (M_X1 / FI_X_Coe); // Scan X Top-Left Back Image
+                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 9] = S_Y1 - (M_Y1 / FI_Y_Coe); ; // Scan Y Top-Left Back Image
                                                                                     ProContinue = true;
                                                                                 }
                                                                             }
@@ -1350,7 +1350,7 @@ namespace iCore_Administrator.API.Modules
                                                                                     }
                                                                                     // Search For Key Front Image :
                                                                                     DataTable DT_FBEK = new DataTable();
-                                                                                    DT_FBEK = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select KeyCode,Similarity,X1,Y1,Y2,KeyIndex,KeyPosition From Template_08_FrontImage_Elements Where (DID = '" + RW1[0].ToString().Trim() + "') And (KeyActive = '1') And (KeyCode <> '') Order By X1,Y1");
+                                                                                    DT_FBEK = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select KeyCode,Similarity,X1,Y1,Y2,KeyIndex,KeyPosition From Template_08_FrontImage_Elements Where (DID = '" + RW1[0].ToString().Trim() + "') And (KeyActive = '1') And (KeyCode <> '') Order By Y1,X1");
                                                                                     if (DT_FBEK.Rows != null)
                                                                                     {
                                                                                         if (DT_FBEK.Rows.Count > 0)
@@ -1398,16 +1398,16 @@ namespace iCore_Administrator.API.Modules
                                                                                                     int XMM = Math.Abs(M_X1 - M_X2);
                                                                                                     if (XSM == 0) { XSM = 1; }
                                                                                                     if (XMM == 0) { XMM = 1; }
-                                                                                                    FI_X_CoeB = (double)((double)XSM / (double)XMM);
+                                                                                                    FI_X_CoeB = (double)((double)XMM / (double)XSM);
                                                                                                     int YSM = Math.Abs(S_Y1 - S_Y2);
                                                                                                     int YMM = Math.Abs(M_Y1 - M_Y2);
                                                                                                     if (YSM == 0) { YSM = 1; }
                                                                                                     if (YMM == 0) { YMM = 1; }
-                                                                                                    FI_Y_CoeB = (double)((double)YSM / (double)YMM);
+                                                                                                    FI_Y_CoeB = (double)((double)YMM / (double)YSM);
                                                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 10] = FI_X_CoeB; // X Coefficient Front Image
                                                                                                     FIE_TemplateCode[FIE_TemplateCode_Row - 1, 11] = FI_Y_CoeB; // Y Coefficient Front Image
-                                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 12] = S_X1 - (M_X1 * FI_X_CoeB); // Scan X Top-Left Front Image
-                                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 13] = S_Y1 - (M_Y1 * FI_Y_CoeB); ; // Scan Y Top-Left Front Image
+                                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 12] = S_X1 - (M_X1 / FI_X_CoeB); // Scan X Top-Left Front Image
+                                                                                                    FIE_TemplateCode[FIE_TemplateCode_Row - 1, 13] = S_Y1 - (M_Y1 / FI_Y_CoeB); ; // Scan Y Top-Left Front Image
                                                                                                     ProContinueB = true;
                                                                                                 }
                                                                                             }
@@ -1821,10 +1821,10 @@ namespace iCore_Administrator.API.Modules
                                                                                     {
                                                                                         try
                                                                                         {
-                                                                                            int T = (int)Math.Round((WD.Top - LST_Template.FrontImage_Y_TopLeft_Refrence) / LST_Template.FrontImage_Y_Coeficient);
-                                                                                            int B = (int)Math.Round(T + (WD.Height / LST_Template.FrontImage_Y_Coeficient));
-                                                                                            int L = (int)Math.Round((WD.Left - LST_Template.FrontImage_X_TopLeft_Refrence) / LST_Template.FrontImage_X_Coeficient);
-                                                                                            int R = (int)Math.Round(L + (WD.Width / LST_Template.FrontImage_X_Coeficient));
+                                                                                            int T = (int)Math.Round((WD.Top - LST_Template.FrontImage_Y_TopLeft_Refrence) * LST_Template.FrontImage_Y_Coeficient);
+                                                                                            int B = (int)Math.Round(T + (WD.Height * LST_Template.FrontImage_Y_Coeficient));
+                                                                                            int L = (int)Math.Round((WD.Left - LST_Template.FrontImage_X_TopLeft_Refrence) * LST_Template.FrontImage_X_Coeficient);
+                                                                                            int R = (int)Math.Round(L + (WD.Width * LST_Template.FrontImage_X_Coeficient));
                                                                                             DTWRD = new DataTable();
                                                                                             DTWRD = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select OutputTitle From Template_08_FrontImage_Elements Where (DID = '" + LST_Template.TemplateID + "') And (OutputTag = '1') And (X1 <= '" + L + "') And (Y1 <= '" + T + "') And (X4 >= '" + R + "') And (Y4 >= '" + B + "')");
                                                                                             if (DTWRD.Rows != null)
@@ -1903,10 +1903,10 @@ namespace iCore_Administrator.API.Modules
                                                                                     {
                                                                                         try
                                                                                         {
-                                                                                            int T = (int)Math.Round((WD.Top - LST_Template.BackImage_Y_TopLeft_Refrence) / LST_Template.BackImage_Y_Coeficient);
-                                                                                            int B = (int)Math.Round(T + (WD.Height / LST_Template.BackImage_Y_Coeficient));
-                                                                                            int L = (int)Math.Round((WD.Left - LST_Template.BackImage_X_TopLeft_Refrence) / LST_Template.BackImage_X_Coeficient);
-                                                                                            int R = (int)Math.Round(L + (WD.Width / LST_Template.BackImage_X_Coeficient));
+                                                                                            int T = (int)Math.Round((WD.Top - LST_Template.BackImage_Y_TopLeft_Refrence) * LST_Template.BackImage_Y_Coeficient);
+                                                                                            int B = (int)Math.Round(T + (WD.Height * LST_Template.BackImage_Y_Coeficient));
+                                                                                            int L = (int)Math.Round((WD.Left - LST_Template.BackImage_X_TopLeft_Refrence) * LST_Template.BackImage_X_Coeficient);
+                                                                                            int R = (int)Math.Round(L + (WD.Width * LST_Template.BackImage_X_Coeficient));
                                                                                             DTWRD = new DataTable();
                                                                                             DTWRD = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select OutputTitle From Template_09_BackImage_Elements Where (DID = '" + LST_Template.TemplateID + "') And (OutputTag = '1') And (X1 <= '" + L + "') And (Y1 <= '" + T + "') And (X4 >= '" + R + "') And (Y4 >= '" + B + "')");
                                                                                             if (DTWRD.Rows != null)
@@ -1950,13 +1950,268 @@ namespace iCore_Administrator.API.Modules
                                                                             }
                                                                         }
                                                                     }
+                                                                    // Save Country And State And Document Type :
+                                                                    try
+                                                                    {
+                                                                        int DT_FND = 0;
+                                                                        string Country_ID = "0";
+                                                                        string State_ID = "0";
+                                                                        string DocType_ID = "0";
+                                                                        DataTable DT_Codes = new DataTable();
+                                                                        DT_Codes = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select Top 1 CID,SID,DTID From Template_08_FrontImage_Elements Where (DID = '" + LST_Template.TemplateID + "')");
+                                                                        if (DT_Codes.Rows.Count == 1)
+                                                                        {
+                                                                            DT_FND = 1;
+                                                                            Country_ID = DT_Codes.Rows[0][0].ToString().Trim();
+                                                                            State_ID = DT_Codes.Rows[0][1].ToString().Trim();
+                                                                            DocType_ID = DT_Codes.Rows[0][2].ToString().Trim();
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            DT_Codes = new DataTable();
+                                                                            DT_Codes = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select Top 1 CID,SID,DTID From Template_09_BackImage_Elements Where (DID = '" + LST_Template.TemplateID + "')");
+                                                                            if (DT_Codes.Rows.Count == 1)
+                                                                            {
+                                                                                DT_FND = 1;
+                                                                                Country_ID = DT_Codes.Rows[0][0].ToString().Trim();
+                                                                                State_ID = DT_Codes.Rows[0][1].ToString().Trim();
+                                                                                DocType_ID = DT_Codes.Rows[0][2].ToString().Trim();
+                                                                            }
+                                                                        }
+                                                                        if (DT_FND == 1)
+                                                                        {
+                                                                            DataTable DT_DTVL = new DataTable();
+                                                                            try
+                                                                            {
+                                                                                DT_DTVL = new DataTable();
+                                                                                DT_DTVL = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select Top 1 Country_Code,Country_Name From Template_01_Country Where (Country_ID = '" + Country_ID + "')");
+                                                                                if (DT_DTVL.Rows.Count == 1)
+                                                                                {
+                                                                                    DataReady(ref OREL, "Country Code", DT_DTVL.Rows[0][0].ToString().Trim());
+                                                                                    DataReady(ref OREL, "Country Name", DT_DTVL.Rows[0][1].ToString().Trim());
+                                                                                }
+                                                                            }
+                                                                            catch (Exception) { }
+                                                                            try
+                                                                            {
+                                                                                DT_DTVL = new DataTable();
+                                                                                DT_DTVL = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select Top 1 State_Code,State_Name From Template_02_State Where (Country_ID = '" + Country_ID + "') And (State_ID = '" + State_ID + "')");
+                                                                                if (DT_DTVL.Rows.Count == 1)
+                                                                                {
+                                                                                    DataReady(ref OREL, "State Code", DT_DTVL.Rows[0][0].ToString().Trim());
+                                                                                    DataReady(ref OREL, "State Name", DT_DTVL.Rows[0][1].ToString().Trim());
+                                                                                }
+                                                                            }
+                                                                            catch (Exception) { }
+                                                                            try
+                                                                            {
+                                                                                DT_DTVL = new DataTable();
+                                                                                DT_DTVL = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select Top 1 DocType_Code,DocType_Name From Template_03_DocumentType Where (DocType_ID = '" + DocType_ID + "')");
+                                                                                if (DT_DTVL.Rows.Count == 1)
+                                                                                {
+                                                                                    DataReady(ref OREL, "Document Code", DT_DTVL.Rows[0][0].ToString().Trim());
+                                                                                    DataReady(ref OREL, "Document Name", DT_DTVL.Rows[0][1].ToString().Trim());
+                                                                                }
+                                                                            }
+                                                                            catch (Exception) { }
+                                                                        }
+                                                                    }
+                                                                    catch (Exception) { }
                                                                     // Save Data To Sql :
                                                                     SQ.Execute_TSql(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Delete From Users_16_API_Acuant_Result Where (Transaction_ID = '" + TransactionID + "')");
                                                                     int RowN = 0;
+                                                                    int TemplateFnd = 0;
+                                                                    string DP_TypeCode = "";
+                                                                    string DP_Sub_Start = "";
+                                                                    string DP_Sub_Length = "";
+                                                                    string DP_Sub_Left = "";
+                                                                    string DP_Input_Format = "";
+                                                                    string DP_Input_Format_Sep = "";
+                                                                    string DP_Output_Format = "";
+                                                                    string DP_Output_Format_Sep = "";
                                                                     foreach (OCR_Relut_Elements ORE in OREL)
                                                                     {
+                                                                        TemplateFnd = 0;
+                                                                        DP_TypeCode = "0";
+                                                                        DP_Sub_Start = "";
+                                                                        DP_Sub_Length = "";
+                                                                        DP_Sub_Left = "";
+                                                                        DP_Input_Format = "";
+                                                                        DP_Input_Format_Sep = "";
+                                                                        DP_Output_Format = "";
+                                                                        DP_Output_Format_Sep = "";
+                                                                        try
+                                                                        {
+                                                                            DataTable DT_EL = new DataTable();
+                                                                            DT_EL = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select TypeCode,Sub_Start,Sub_Length,Sub_Left,Input_Format,Input_Format_Sep,Output_Format,Output_Format_Sep From Template_08_FrontImage_Elements Where (Data_Processing = '1') And (OutputTitle = '" + ORE.Element_Key + "') And (DID = '" + LST_Template.TemplateID + "') And (OutputTag = '1')");
+                                                                            if (DT_EL.Rows.Count == 1)
+                                                                            {
+                                                                                TemplateFnd = 1;
+                                                                                DP_TypeCode = DT_EL.Rows[0][0].ToString();
+                                                                                DP_Sub_Start = DT_EL.Rows[0][1].ToString();
+                                                                                DP_Sub_Length = DT_EL.Rows[0][2].ToString();
+                                                                                DP_Sub_Left = DT_EL.Rows[0][3].ToString();
+                                                                                DP_Input_Format = DT_EL.Rows[0][4].ToString();
+                                                                                DP_Input_Format_Sep = DT_EL.Rows[0][5].ToString();
+                                                                                DP_Output_Format = DT_EL.Rows[0][6].ToString();
+                                                                                DP_Output_Format_Sep = DT_EL.Rows[0][7].ToString();
+                                                                            }
+                                                                            if (TemplateFnd == 0)
+                                                                            {
+                                                                                DT_EL = new DataTable();
+                                                                                DT_EL = SQ.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select TypeCode,Sub_Start,Sub_Length,Sub_Left,Input_Format,Input_Format_Sep,Output_Format,Output_Format_Sep From Template_09_BackImage_Elements Where (Data_Processing = '1') And (OutputTitle = '" + ORE.Element_Key + "') And (DID = '" + LST_Template.TemplateID + "') And (OutputTag = '1')");
+                                                                                if (DT_EL.Rows.Count == 1)
+                                                                                {
+                                                                                    TemplateFnd = 1;
+                                                                                    DP_TypeCode = DT_EL.Rows[0][0].ToString();
+                                                                                    DP_Sub_Start = DT_EL.Rows[0][1].ToString();
+                                                                                    DP_Sub_Length = DT_EL.Rows[0][2].ToString();
+                                                                                    DP_Sub_Left = DT_EL.Rows[0][3].ToString();
+                                                                                    DP_Input_Format = DT_EL.Rows[0][4].ToString();
+                                                                                    DP_Input_Format_Sep = DT_EL.Rows[0][5].ToString();
+                                                                                    DP_Output_Format = DT_EL.Rows[0][6].ToString();
+                                                                                    DP_Output_Format_Sep = DT_EL.Rows[0][7].ToString();
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { TemplateFnd = 0; }
+                                                                        ORE.Element_Value = ORE.Element_Value.Replace("?", "").Replace(",", "").Replace("'", "").Replace("\"", "").Replace("  ", " ").Trim();
+                                                                        if (TemplateFnd == 1)
+                                                                        {
+                                                                            string LastValueResult = "";
+                                                                            string BeforeValue = ORE.Element_Value.Trim();
+                                                                            try
+                                                                            {
+                                                                                // Substring :
+                                                                                if ((DP_Sub_Start != "0") && (DP_Sub_Start != ""))
+                                                                                {
+                                                                                    if ((DP_Sub_Length != "0") && (DP_Sub_Length != ""))
+                                                                                    {
+                                                                                        if ((DP_Sub_Left == "0") || (DP_Sub_Left == ""))
+                                                                                        {
+                                                                                            LastValueResult = BeforeValue.Substring(int.Parse(DP_Sub_Start) - 1, int.Parse(DP_Sub_Length));
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            LastValueResult = BeforeValue.Substring(BeforeValue.Length - int.Parse(DP_Sub_Start), int.Parse(DP_Sub_Length));
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                // Type :
+                                                                                switch (DP_TypeCode)
+                                                                                {
+                                                                                    case "1": //Alphabet and number
+                                                                                        {
+                                                                                            break;
+                                                                                        }
+                                                                                    case "2": //Only alphabet
+                                                                                        {
+                                                                                            break;
+                                                                                        }
+                                                                                    case "3": //Only number
+                                                                                        {
+                                                                                            BeforeValue = BeforeValue.Replace("O", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("o", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("C", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("c", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("Q", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("e", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("U", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("u", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("*", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("(", "0");
+                                                                                            BeforeValue = BeforeValue.Replace(")", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("n", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("!", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("L", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("l", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("I", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("i", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("z", "2");
+                                                                                            BeforeValue = BeforeValue.Replace("Z", "2");
+                                                                                            BeforeValue = BeforeValue.Replace("?", "3");
+                                                                                            BeforeValue = BeforeValue.Replace("Y", "4");
+                                                                                            BeforeValue = BeforeValue.Replace("y", "4");
+                                                                                            BeforeValue = BeforeValue.Replace("S", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("s", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("F", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("f", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("P", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("p", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("$", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("G", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("b", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("h", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("r", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("d", "7");
+                                                                                            BeforeValue = BeforeValue.Replace("B", "8");
+                                                                                            BeforeValue = BeforeValue.Replace("&", "8");
+                                                                                            BeforeValue = BeforeValue.Replace("q", "9");
+                                                                                            BeforeValue = BeforeValue.Replace("g", "9");
+                                                                                            BeforeValue = BeforeValue.Replace(",", "").Replace("\"", "").Replace(" ", "").Trim();
+                                                                                            LastValueResult = BeforeValue.Trim();
+                                                                                            break;
+                                                                                        }
+                                                                                    case "4": //Address
+                                                                                        {
+                                                                                            break;
+                                                                                        }
+                                                                                    case "5": //Date with full month name ( D:day - NTHN:month name - M:month - Y:year )
+                                                                                        {
+                                                                                            BeforeValue = BeforeValue.Replace(DP_Input_Format_Sep, "-");
+                                                                                            BeforeValue = BeforeValue.Replace("--", "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace(DP_Input_Format_Sep, "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("--", "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("D", "d");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("NTHN", "MMMM");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("Y", "y");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("m", "M");
+                                                                                            LastValueResult = PB.ConvertDate_Format(BeforeValue, DP_Input_Format, DP_Output_Format);
+                                                                                            break;
+                                                                                        }
+                                                                                    case "6": //Date with summary month name ( D:day - NTHN:month name - M:month - Y:year )
+                                                                                        {
+                                                                                            BeforeValue = BeforeValue.Replace(DP_Input_Format_Sep, "-");
+                                                                                            BeforeValue = BeforeValue.Replace("--", "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace(DP_Input_Format_Sep, "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("--", "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("D", "d");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("NTHN", "MMM");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("Y", "y");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("m", "M");
+                                                                                            DP_Output_Format = DP_Output_Format.Replace("Y", "y");
+                                                                                            DP_Output_Format = DP_Output_Format.Replace("m", "M");
+                                                                                            DP_Output_Format = DP_Output_Format.Replace("D", "d");
+                                                                                            LastValueResult = PB.ConvertDate_Format(BeforeValue, DP_Input_Format, DP_Output_Format);
+                                                                                            break;
+                                                                                        }
+                                                                                    case "7": //Date - only number ( D:day - M:month - Y:year )
+                                                                                        {
+                                                                                            BeforeValue = BeforeValue.Replace(DP_Input_Format_Sep, "-");
+                                                                                            BeforeValue = BeforeValue.Replace("--", "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace(DP_Input_Format_Sep, "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("--", "-");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("D", "d");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("Y", "y");
+                                                                                            DP_Input_Format = DP_Input_Format.Replace("m", "M");
+                                                                                            DP_Output_Format = DP_Output_Format.Replace("Y", "y");
+                                                                                            DP_Output_Format = DP_Output_Format.Replace("m", "M");
+                                                                                            DP_Output_Format = DP_Output_Format.Replace("D", "d");
+                                                                                            LastValueResult = PB.ConvertDate_Format(BeforeValue, DP_Input_Format, DP_Output_Format);
+                                                                                            break;
+                                                                                        }
+                                                                                    case "8": //Time ( H:hour - M:minutes - S:seconds
+                                                                                        {
+                                                                                            LastValueResult = PB.ConvertDate_Format(BeforeValue, DP_Input_Format, DP_Output_Format);
+                                                                                            break;
+                                                                                        }
+                                                                                }
+                                                                                ORE.Element_Value = LastValueResult.Trim();
+                                                                            }
+                                                                            catch (Exception) { }
+                                                                        }
                                                                         RowN++;
-                                                                        SQ.Execute_TSql(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Insert Into Users_16_API_Acuant_Result Values ('" + TransactionID + "','" + RowN + "','" + ORE.Element_Key.Trim() + "','" + ORE.Element_Value.Replace("?", " ").Replace("  ", " ").Trim() + "')");
+                                                                        SQ.Execute_TSql(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Insert Into Users_16_API_Acuant_Result Values ('" + TransactionID + "','" + RowN + "','" + ORE.Element_Key.Trim() + "','" + ORE.Element_Value.Trim() + "')");
                                                                     }
                                                                 }
                                                             }

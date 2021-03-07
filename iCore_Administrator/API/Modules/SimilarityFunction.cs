@@ -582,7 +582,7 @@ namespace iCore_Administrator.API.Modules
                 {
                     double LNTop = SelectedLineKeyLst.MinTop;
                     double LNHeight = SelectedLineKeyLst.MaxHeight;
-                    Y = (int)Math.Round((LNTop + (LNTop + LNHeight)) / 2);
+                    Y = (int)Math.Round(LNTop);
                     foreach (Word WD in SelectedLineKeyLst.Words)
                     {
                         if ((int)(Math.Round(CalculateSimilarity(Key.ToUpper(), WD.WordText.Trim().ToUpper()) * 100)) >= SimilarityInt)

@@ -2166,11 +2166,80 @@ namespace iCore_Administrator.API.Modules
                                                                                             DP_Input_Format = DP_Input_Format.Replace("NTHN", "MMMM");
                                                                                             DP_Input_Format = DP_Input_Format.Replace("Y", "y");
                                                                                             DP_Input_Format = DP_Input_Format.Replace("m", "M");
+                                                                                            try
+                                                                                            {
+                                                                                                string[] BF = BeforeValue.Split('-');
+                                                                                                string[] InF = DP_Input_Format.Split('-');
+                                                                                                string InFT = "";
+                                                                                                for (int i = 0; i < InF.Length; i++)
+                                                                                                {
+                                                                                                    InFT = "";
+                                                                                                    InFT = InF[i].Trim().ToUpper();
+                                                                                                    if ((InFT == "D") || (InFT == "DD") || (InFT == "M") || (InFT == "MM") || (InFT == "Y") || (InFT == "YY") || (InFT == "YYY") || (InFT == "YYYY"))
+                                                                                                    {
+                                                                                                        BF[i] = BF[i].Replace("O", "0");
+                                                                                                        BF[i] = BF[i].Replace("o", "0");
+                                                                                                        BF[i] = BF[i].Replace("C", "0");
+                                                                                                        BF[i] = BF[i].Replace("c", "0");
+                                                                                                        BF[i] = BF[i].Replace("Q", "0");
+                                                                                                        BF[i] = BF[i].Replace("e", "0");
+                                                                                                        BF[i] = BF[i].Replace("U", "0");
+                                                                                                        BF[i] = BF[i].Replace("u", "0");
+                                                                                                        BF[i] = BF[i].Replace("*", "0");
+                                                                                                        BF[i] = BF[i].Replace("(", "0");
+                                                                                                        BF[i] = BF[i].Replace(")", "0");
+                                                                                                        BF[i] = BF[i].Replace("n", "0");
+                                                                                                        BF[i] = BF[i].Replace("!", "1");
+                                                                                                        BF[i] = BF[i].Replace("L", "1");
+                                                                                                        BF[i] = BF[i].Replace("l", "1");
+                                                                                                        BF[i] = BF[i].Replace("I", "1");
+                                                                                                        BF[i] = BF[i].Replace("i", "1");
+                                                                                                        BF[i] = BF[i].Replace("z", "2");
+                                                                                                        BF[i] = BF[i].Replace("Z", "2");
+                                                                                                        BF[i] = BF[i].Replace("?", "3");
+                                                                                                        BF[i] = BF[i].Replace("Y", "4");
+                                                                                                        BF[i] = BF[i].Replace("y", "4");
+                                                                                                        BF[i] = BF[i].Replace("S", "5");
+                                                                                                        BF[i] = BF[i].Replace("s", "5");
+                                                                                                        BF[i] = BF[i].Replace("F", "5");
+                                                                                                        BF[i] = BF[i].Replace("f", "5");
+                                                                                                        BF[i] = BF[i].Replace("P", "5");
+                                                                                                        BF[i] = BF[i].Replace("p", "5");
+                                                                                                        BF[i] = BF[i].Replace("$", "5");
+                                                                                                        BF[i] = BF[i].Replace("G", "6");
+                                                                                                        BF[i] = BF[i].Replace("b", "6");
+                                                                                                        BF[i] = BF[i].Replace("h", "6");
+                                                                                                        BF[i] = BF[i].Replace("r", "6");
+                                                                                                        BF[i] = BF[i].Replace("d", "7");
+                                                                                                        BF[i] = BF[i].Replace("B", "8");
+                                                                                                        BF[i] = BF[i].Replace("&", "8");
+                                                                                                        BF[i] = BF[i].Replace("q", "9");
+                                                                                                        BF[i] = BF[i].Replace("g", "9");
+                                                                                                        BF[i] = BF[i].Replace(",", "").Replace("\"", "").Replace(" ", "").Trim();
+                                                                                                        BF[i] = BF[i].Trim();
+                                                                                                    }
+                                                                                                }
+                                                                                                BeforeValue = "";
+                                                                                                DP_Input_Format = "";
+                                                                                                for (int i = 0; i < InF.Length; i++)
+                                                                                                {
+                                                                                                    BeforeValue += "-" + BF[i];
+                                                                                                    DP_Input_Format += "-" + InF[i];
+                                                                                                }
+                                                                                                BeforeValue = BeforeValue.Trim();
+                                                                                                DP_Input_Format = DP_Input_Format.Trim();
+                                                                                                if (BeforeValue.Substring(0, 1) == "-") { BeforeValue = BeforeValue.Substring(1, BeforeValue.Length - 1); }
+                                                                                                if (DP_Input_Format.Substring(0, 1) == "-") { DP_Input_Format = DP_Input_Format.Substring(1, DP_Input_Format.Length - 1); }
+                                                                                                BeforeValue = BeforeValue.Trim();
+                                                                                                DP_Input_Format = DP_Input_Format.Trim();
+                                                                                            }
+                                                                                            catch (Exception) { }
                                                                                             LastValueResult = PB.ConvertDate_Format(BeforeValue, DP_Input_Format, DP_Output_Format);
                                                                                             break;
                                                                                         }
                                                                                     case "6": //Date with summary month name ( D:day - NTHN:month name - M:month - Y:year )
                                                                                         {
+
                                                                                             BeforeValue = BeforeValue.Replace(DP_Input_Format_Sep, "-");
                                                                                             BeforeValue = BeforeValue.Replace("--", "-");
                                                                                             DP_Input_Format = DP_Input_Format.Replace(DP_Input_Format_Sep, "-");
@@ -2182,11 +2251,117 @@ namespace iCore_Administrator.API.Modules
                                                                                             DP_Output_Format = DP_Output_Format.Replace("Y", "y");
                                                                                             DP_Output_Format = DP_Output_Format.Replace("m", "M");
                                                                                             DP_Output_Format = DP_Output_Format.Replace("D", "d");
+                                                                                            try
+                                                                                            {
+                                                                                                string[] BF = BeforeValue.Split('-');
+                                                                                                string[] InF = DP_Input_Format.Split('-');
+                                                                                                string InFT = "";
+                                                                                                for (int i = 0; i < InF.Length; i++)
+                                                                                                {
+                                                                                                    InFT = "";
+                                                                                                    InFT = InF[i].Trim().ToUpper();
+                                                                                                    if ((InFT == "D") || (InFT == "DD") || (InFT == "M") || (InFT == "MM") || (InFT == "Y") || (InFT == "YY") || (InFT == "YYY") || (InFT == "YYYY"))
+                                                                                                    {
+                                                                                                        BF[i] = BF[i].Replace("O", "0");
+                                                                                                        BF[i] = BF[i].Replace("o", "0");
+                                                                                                        BF[i] = BF[i].Replace("C", "0");
+                                                                                                        BF[i] = BF[i].Replace("c", "0");
+                                                                                                        BF[i] = BF[i].Replace("Q", "0");
+                                                                                                        BF[i] = BF[i].Replace("e", "0");
+                                                                                                        BF[i] = BF[i].Replace("U", "0");
+                                                                                                        BF[i] = BF[i].Replace("u", "0");
+                                                                                                        BF[i] = BF[i].Replace("*", "0");
+                                                                                                        BF[i] = BF[i].Replace("(", "0");
+                                                                                                        BF[i] = BF[i].Replace(")", "0");
+                                                                                                        BF[i] = BF[i].Replace("n", "0");
+                                                                                                        BF[i] = BF[i].Replace("!", "1");
+                                                                                                        BF[i] = BF[i].Replace("L", "1");
+                                                                                                        BF[i] = BF[i].Replace("l", "1");
+                                                                                                        BF[i] = BF[i].Replace("I", "1");
+                                                                                                        BF[i] = BF[i].Replace("i", "1");
+                                                                                                        BF[i] = BF[i].Replace("z", "2");
+                                                                                                        BF[i] = BF[i].Replace("Z", "2");
+                                                                                                        BF[i] = BF[i].Replace("?", "3");
+                                                                                                        BF[i] = BF[i].Replace("Y", "4");
+                                                                                                        BF[i] = BF[i].Replace("y", "4");
+                                                                                                        BF[i] = BF[i].Replace("S", "5");
+                                                                                                        BF[i] = BF[i].Replace("s", "5");
+                                                                                                        BF[i] = BF[i].Replace("F", "5");
+                                                                                                        BF[i] = BF[i].Replace("f", "5");
+                                                                                                        BF[i] = BF[i].Replace("P", "5");
+                                                                                                        BF[i] = BF[i].Replace("p", "5");
+                                                                                                        BF[i] = BF[i].Replace("$", "5");
+                                                                                                        BF[i] = BF[i].Replace("G", "6");
+                                                                                                        BF[i] = BF[i].Replace("b", "6");
+                                                                                                        BF[i] = BF[i].Replace("h", "6");
+                                                                                                        BF[i] = BF[i].Replace("r", "6");
+                                                                                                        BF[i] = BF[i].Replace("d", "7");
+                                                                                                        BF[i] = BF[i].Replace("B", "8");
+                                                                                                        BF[i] = BF[i].Replace("&", "8");
+                                                                                                        BF[i] = BF[i].Replace("q", "9");
+                                                                                                        BF[i] = BF[i].Replace("g", "9");
+                                                                                                        BF[i] = BF[i].Replace(",", "").Replace("\"", "").Replace(" ", "").Trim();
+                                                                                                        BF[i] = BF[i].Trim();
+                                                                                                    }
+                                                                                                }
+                                                                                                BeforeValue = "";
+                                                                                                DP_Input_Format = "";
+                                                                                                for (int i = 0; i < InF.Length; i++)
+                                                                                                {
+                                                                                                    BeforeValue += "-" + BF[i];
+                                                                                                    DP_Input_Format += "-" + InF[i];
+                                                                                                }
+                                                                                                BeforeValue = BeforeValue.Trim();
+                                                                                                DP_Input_Format = DP_Input_Format.Trim();
+                                                                                                if (BeforeValue.Substring(0, 1) == "-") { BeforeValue = BeforeValue.Substring(1, BeforeValue.Length - 1); }
+                                                                                                if (DP_Input_Format.Substring(0, 1) == "-") { DP_Input_Format = DP_Input_Format.Substring(1, DP_Input_Format.Length - 1); }
+                                                                                                BeforeValue = BeforeValue.Trim();
+                                                                                                DP_Input_Format = DP_Input_Format.Trim();
+                                                                                            }
+                                                                                            catch (Exception) { }
                                                                                             LastValueResult = PB.ConvertDate_Format(BeforeValue, DP_Input_Format, DP_Output_Format);
                                                                                             break;
                                                                                         }
                                                                                     case "7": //Date - only number ( D:day - M:month - Y:year )
                                                                                         {
+                                                                                            BeforeValue = BeforeValue.Replace("O", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("o", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("C", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("c", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("Q", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("e", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("U", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("u", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("*", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("(", "0");
+                                                                                            BeforeValue = BeforeValue.Replace(")", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("n", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("!", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("L", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("l", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("I", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("i", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("z", "2");
+                                                                                            BeforeValue = BeforeValue.Replace("Z", "2");
+                                                                                            BeforeValue = BeforeValue.Replace("?", "3");
+                                                                                            BeforeValue = BeforeValue.Replace("Y", "4");
+                                                                                            BeforeValue = BeforeValue.Replace("y", "4");
+                                                                                            BeforeValue = BeforeValue.Replace("S", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("s", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("F", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("f", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("P", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("p", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("$", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("G", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("b", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("h", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("r", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("d", "7");
+                                                                                            BeforeValue = BeforeValue.Replace("B", "8");
+                                                                                            BeforeValue = BeforeValue.Replace("&", "8");
+                                                                                            BeforeValue = BeforeValue.Replace("q", "9");
+                                                                                            BeforeValue = BeforeValue.Replace("g", "9");
                                                                                             BeforeValue = BeforeValue.Replace(DP_Input_Format_Sep, "-");
                                                                                             BeforeValue = BeforeValue.Replace("--", "-");
                                                                                             DP_Input_Format = DP_Input_Format.Replace(DP_Input_Format_Sep, "-");
@@ -2202,6 +2377,44 @@ namespace iCore_Administrator.API.Modules
                                                                                         }
                                                                                     case "8": //Time ( H:hour - M:minutes - S:seconds
                                                                                         {
+                                                                                            BeforeValue = BeforeValue.Replace("O", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("o", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("C", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("c", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("Q", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("e", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("U", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("u", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("*", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("(", "0");
+                                                                                            BeforeValue = BeforeValue.Replace(")", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("n", "0");
+                                                                                            BeforeValue = BeforeValue.Replace("!", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("L", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("l", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("I", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("i", "1");
+                                                                                            BeforeValue = BeforeValue.Replace("z", "2");
+                                                                                            BeforeValue = BeforeValue.Replace("Z", "2");
+                                                                                            BeforeValue = BeforeValue.Replace("?", "3");
+                                                                                            BeforeValue = BeforeValue.Replace("Y", "4");
+                                                                                            BeforeValue = BeforeValue.Replace("y", "4");
+                                                                                            BeforeValue = BeforeValue.Replace("S", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("s", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("F", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("f", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("P", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("p", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("$", "5");
+                                                                                            BeforeValue = BeforeValue.Replace("G", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("b", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("h", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("r", "6");
+                                                                                            BeforeValue = BeforeValue.Replace("d", "7");
+                                                                                            BeforeValue = BeforeValue.Replace("B", "8");
+                                                                                            BeforeValue = BeforeValue.Replace("&", "8");
+                                                                                            BeforeValue = BeforeValue.Replace("q", "9");
+                                                                                            BeforeValue = BeforeValue.Replace("g", "9");
                                                                                             LastValueResult = PB.ConvertDate_Format(BeforeValue, DP_Input_Format, DP_Output_Format);
                                                                                             break;
                                                                                         }

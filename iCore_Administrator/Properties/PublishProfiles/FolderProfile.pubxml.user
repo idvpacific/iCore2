@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_PublishTargetUrl>E:\01- Project\02- iCore Admin\02- Publish\2021-03-08 - Ver 2.5</_PublishTargetUrl>
+    <_PublishTargetUrl>E:\01- Project\02- iCore Admin\02- Publish\2021-03-08 - Ver 2.6</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Accord.dll.config">
@@ -143,10 +143,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/24/2020 15:29:24</publishTime>
     </File>
     <File Include="bin/iCore_Administrator.dll">
-      <publishTime>03/08/2021 05:10:34</publishTime>
+      <publishTime>03/08/2021 21:44:09</publishTime>
     </File>
     <File Include="bin/iCore_Administrator.pdb">
-      <publishTime>03/08/2021 05:10:34</publishTime>
+      <publishTime>03/08/2021 21:44:09</publishTime>
     </File>
     <File Include="bin/ICSharpCode.SharpZipLib.dll">
       <publishTime>08/09/2019 08:40:22</publishTime>

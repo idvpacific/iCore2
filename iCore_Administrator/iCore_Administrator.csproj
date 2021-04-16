@@ -119,6 +119,12 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="zxing, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.6\lib\net48\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.6\lib\net48\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -1389,6 +1395,8 @@
     <Compile Include="API\ResultStructure\Acuant_Results.cs" />
     <Compile Include="API\ResultStructure\API_Main_Result.cs" />
     <Compile Include="API\Result\IDV\ROCRIDController.cs" />
+    <Compile Include="API\Result\RetrieveApplicationController.cs" />
+    <Compile Include="API\Result\RetrieveApplicationFileController.cs" />
     <Compile Include="API\Result\RetrieveFileController.cs" />
     <Compile Include="API\Result\RetrieveTransactionController.cs" />
     <Compile Include="API\Result\Acuant\RIDScanController.cs" />
@@ -1416,6 +1424,7 @@
     <Compile Include="Modules\HSU_Application\Application_Guesty.cs" />
     <Compile Include="Modules\HSU_Application\Application_MasterFunction.cs" />
     <Compile Include="Modules\HSU_Application\Conditions\HSU_1.cs" />
+    <Compile Include="Modules\HSU_Application\HSU_Callback.cs" />
     <Compile Include="Modules\MimeTypeMap.cs" />
     <Compile Include="Modules\PublicFunctions.cs" />
     <Compile Include="Modules\RawContentReader.cs" />

@@ -25,4 +25,12 @@ namespace iCore_Administrator.API.ResultStructure
         public object Authentication { get; set; }
         public Transaction_File Files { get; set; }
     }
+
+    public class Application_CLS_Sync
+    {
+        public TransactionApplication_CLS Application { get; set; }
+        public object Data { get; set; }
+        public object Parameters { get; set; }
+        public Transaction_File Files { get; set; }
+    }
 }

@@ -1,4 +1,6 @@
-﻿function T_Account_Login_Clear() {
+﻿//Acount functions
+var T3LD = 0;
+function T_Account_Login_Clear() {
     document.getElementById("TXT_ACC_Login_Email").value = "";
     document.getElementById("TXT_ACC_Login_Username").value = "";
     document.getElementById("TXT_ACC_Login_Password").value = "";
@@ -316,3 +318,144 @@ function ReloadKey(KID) {
         toastr.error('An error occurred while processing your request to get new key', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
     }
 }
+//Reload dynamic tabs information
+function ReloadTab(TInd) {
+    switch (TInd) {
+        case '3': { if (T3LD == 0) { T_AccessPolicy_Reload(); } }
+    }
+}
+//Access policy functions
+function T_AccessPolicy_Clear() { var clist = document.getElementsByClassName("AccPCB"); for (var i = 0; i < clist.length; ++i) { clist[i].checked = false; }; document.getElementById('Txt_ADR').value = "3"; $('#Txt_ADR_Type').val("3"); $('#Txt_ADR_Type').select2({ dropdownAutoWidth: true, width: '100%' }).trigger('change'); }
+function T_AccessPolicy_Reload() {
+    try {
+        if (T3LD == 0) { T_AccessPolicy_Clear(); }
+        T3LD = 1;
+        toastr.clear();
+        document.getElementById('Tab_Wait_3').style.display = "block";
+        document.getElementById('Tab_3').style.display = "none";
+        toastr.info('The system is reviewing your request', 'Please wait ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        var formData = new FormData();
+        formData.append("UI", app.Urls.UID);
+        $.ajax({
+            url: app.Urls.U7, type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+            error: function () {
+                document.getElementById('Tab_Wait_3').style.display = "none";
+                document.getElementById('Tab_3').style.display = "block";
+                toastr.clear();
+                toastr.error('An error occurred while processing your request to reload access policy information', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            },
+            success: function (data) {
+                var ErrorCode = ""; var ErrorResult = "";
+                $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                if (ErrorCode == "0") {
+                    toastr.clear();
+                    T_AccessPolicy_Clear();
+                    var res = ErrorResult.split("-");
+                    if (res[0].trim() == "1") { document.getElementById('C_Portal_UPA').checked = true; }
+                    if (res[1].trim() == "1") { document.getElementById('C_API_IDV_OCR').checked = true; }
+                    if (res[2].trim() == "1") { document.getElementById('C_API_IDV_DrivingLic').checked = true; }
+                    if (res[3].trim() == "1") { document.getElementById('C_API_IDV_Passport').checked = true; }
+                    if (res[4].trim() == "1") { document.getElementById('C_API_Acuant_OCR_IDCard').checked = true; }
+                    if (res[5].trim() == "1") { document.getElementById('C_API_Acuant_Validation_IDCard').checked = true; }
+                    if (res[6].trim() == "1") { document.getElementById('C_API_Acuant_OCR_Passport').checked = true; }
+                    if (res[7].trim() == "1") { document.getElementById('C_API_Acuant_Validation_Passport').checked = true; }
+                    if (res[8].trim() == "1") { document.getElementById('C_API_TVS_Passport').checked = true; }
+                    if (res[9].trim() == "1") { document.getElementById('C_API_Vevo_Check').checked = true; }
+                    if (res[10].trim() == "1") { document.getElementById('C_API_GIC').checked = true; }
+                    if (res[11].trim() == "1") { document.getElementById('C_API_LNT').checked = true; }
+                    if (res[12].trim() == "1") { document.getElementById('C_API_FRM').checked = true; }
+                    if (res[15].trim() == "1") { document.getElementById('C_API_RAD').checked = true; }
+                    if (res[16].trim() == "1") { document.getElementById('C_API_RAF').checked = true; }
+                    document.getElementById('Txt_ADR').value = res[13].trim();
+                    $('#Txt_ADR_Type').val(res[14].trim());
+                    $('#Txt_ADR_Type').select2({ dropdownAutoWidth: true, width: '100%' }).trigger('change');
+                    document.getElementById('Tab_Wait_3').style.display = "none";
+                    document.getElementById('Tab_3').style.display = "block";
+                    toastr.success("User access policy successfully reloaded", 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                }
+                else {
+                    if (ErrorCode != "2") {
+                        document.getElementById('Tab_Wait_3').style.display = "none";
+                        document.getElementById('Tab_3').style.display = "block";
+                        toastr.clear();
+                        toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                    }
+                    else { window.location.href = app.Urls.U2; }
+                }
+            }
+        });
+    } catch (e) {
+        toastr.clear();
+        document.getElementById('Tab_Wait_3').style.display = "none";
+        document.getElementById('Tab_3').style.display = "block";
+        toastr.error('An error occurred while processing your request to reload access policy information', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+    }
+}
+function T_AccessPolicy_Save() {
+    try {
+        toastr.clear();
+        document.getElementById('Tab_Wait_3').style.display = "block";
+        document.getElementById('Tab_3').style.opacity = "0.7";
+        document.getElementById('Tab_3').style.pointerEvents = "none";
+        toastr.info('The system is reviewing your request', 'Please wait ...', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+        var formData = new FormData();
+        formData.append("UI", app.Urls.UID);
+        if (document.getElementById('C_Portal_UPA').checked == true) { formData.append("C1", "1"); } else { formData.append("C1", "0"); }
+        if (document.getElementById('C_API_IDV_OCR').checked == true) { formData.append("C2", "1"); } else { formData.append("C2", "0"); }
+        if (document.getElementById('C_API_IDV_DrivingLic').checked == true) { formData.append("C3", "1"); } else { formData.append("C3", "0"); }
+        if (document.getElementById('C_API_IDV_Passport').checked == true) { formData.append("C4", "1"); } else { formData.append("C4", "0"); }
+        if (document.getElementById('C_API_Acuant_OCR_IDCard').checked == true) { formData.append("C5", "1"); } else { formData.append("C5", "0"); }
+        if (document.getElementById('C_API_Acuant_Validation_IDCard').checked == true) { formData.append("C6", "1"); } else { formData.append("C6", "0"); }
+        if (document.getElementById('C_API_Acuant_OCR_Passport').checked == true) { formData.append("C7", "1"); } else { formData.append("C7", "0"); }
+        if (document.getElementById('C_API_Acuant_Validation_Passport').checked == true) { formData.append("C8", "1"); } else { formData.append("C8", "0"); }
+        if (document.getElementById('C_API_TVS_Passport').checked == true) { formData.append("C9", "1"); } else { formData.append("C9", "0"); }
+        if (document.getElementById('C_API_Vevo_Check').checked == true) { formData.append("C10", "1"); } else { formData.append("C10", "0"); }
+        if (document.getElementById('C_API_GIC').checked == true) { formData.append("C11", "1"); } else { formData.append("C11", "0"); }
+        if (document.getElementById('C_API_LNT').checked == true) { formData.append("C12", "1"); } else { formData.append("C12", "0"); }
+        if (document.getElementById('C_API_FRM').checked == true) { formData.append("C13", "1"); } else { formData.append("C13", "0"); }
+        formData.append("C14", document.getElementById('Txt_ADR').value.trim());
+        formData.append("C15", $("#Txt_ADR_Type :selected").val().trim());
+        formData.append("C16", $("#Txt_ADR_Type :selected").text().trim());
+        if (document.getElementById('C_API_RAD').checked == true) { formData.append("C17", "1"); } else { formData.append("C17", "0"); }
+        if (document.getElementById('C_API_RAF').checked == true) { formData.append("C18", "1"); } else { formData.append("C18", "0"); }
+        $.ajax({
+            url: app.Urls.U8, type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
+            error: function () {
+                document.getElementById('Tab_Wait_3').style.display = "none";
+                document.getElementById('Tab_3').style.opacity = "1";
+                document.getElementById('Tab_3').style.pointerEvents = "auto";
+                toastr.clear();
+                toastr.error('An error occurred while processing your request to save access policy changes', 'An error has occurred! [C02]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+            },
+            success: function (data) {
+                var ErrorCode = ""; var ErrorResult = "";
+                $.each(data, function (i, item) { ErrorResult = item.Text; ErrorCode = item.Value; });
+                if (ErrorCode == "0") {
+                    toastr.clear();
+                    document.getElementById('Tab_Wait_3').style.display = "none";
+                    document.getElementById('Tab_3').style.opacity = "1";
+                    document.getElementById('Tab_3').style.pointerEvents = "auto";
+                    toastr.success("User access policy successfully saved changes", 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                }
+                else {
+                    if (ErrorCode != "2") {
+                        toastr.clear();
+                        document.getElementById('Tab_Wait_3').style.display = "none";
+                        document.getElementById('Tab_3').style.opacity = "1";
+                        document.getElementById('Tab_3').style.pointerEvents = "auto";
+                        toastr.error(ErrorResult.trim(), 'An error has occurred! [C03]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+                    }
+                    else { window.location.href = app.Urls.U2; }
+                }
+            }
+        });
+    } catch (e) {
+        toastr.clear();
+        document.getElementById('Tab_Wait_3').style.display = "none";
+        document.getElementById('Tab_3').style.opacity = "1";
+        document.getElementById('Tab_3').style.pointerEvents = "auto";
+        toastr.error('An error occurred while processing your request to save access policy changes', 'An error has occurred! [C01]', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
+    }
+}
+function T_AccessPolicy_CheckAll() { var clist = document.getElementsByClassName("AccPCB"); for (var i = 0; i < clist.length; ++i) { clist[i].checked = true; }; }
+function T_AccessPolicy_UncheckAll() { var clist = document.getElementsByClassName("AccPCB"); for (var i = 0; i < clist.length; ++i) { clist[i].checked = false; }; }

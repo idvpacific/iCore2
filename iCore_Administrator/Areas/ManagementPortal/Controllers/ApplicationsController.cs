@@ -42,7 +42,6 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
             {
                 return RedirectToAction("Index", "Dashboard", new { id = "", area = "ManagementPortal" });
             }
-
         }
 
         [HttpPost]
@@ -144,7 +143,6 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
             {
                 return RedirectToAction("Index", "Dashboard", new { id = "", area = "ManagementPortal" });
             }
-
         }
 
         [HttpPost]
@@ -264,6 +262,16 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         DataTable DT_Form = new DataTable();
                         DT_Form = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select * From Users_04_Hospitality_SingleUser_RegisterForms Where (ID = '" + DT_App.Rows[0][2].ToString().Trim() + "') And (User_ID = '" + DT_App.Rows[0][3].ToString().Trim() + "')");
                         ViewBag.DT_Form = DT_Form.Rows[0];
+                        try
+                        {
+                            DataTable DT_DataInfo = new DataTable();
+                            DT_DataInfo = Sq.Get_DTable_TSQL(iCore_Administrator.Modules.DataBase_Selector.Administrator, "Select * From Users_13_Hospitality_SingleUser_Application_DataInfo Where (App_ID = '" + DT_App.Rows[0][0].ToString().Trim() + "')");
+                            ViewBag.DT_DataInfo = DT_DataInfo.Rows[0];
+                        }
+                        catch (Exception)
+                        {
+                            ViewBag.DT_DataInfo = null;
+                        }
                         string UserPanelURL = "";
                         UserPanelURL = System.Configuration.ConfigurationManager.AppSettings["iCore_User_URL"];
                         ViewBag.UserPanelURL = UserPanelURL;

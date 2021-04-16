@@ -114,3 +114,7 @@ E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrato
 E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\QRCodeDecoderLibrary.xml
 E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\Spire.Barcode.xml
 E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\Spire.License.xml
+E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\zxing.dll
+E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\zxing.presentation.dll
+E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\zxing.xml
+E:\01- Project\02- iCore Admin\01- Source\iCore_Administrator\iCore_Administrator\bin\zxing.presentation.xml

@@ -32,7 +32,7 @@ namespace iCore_Administrator.API.Request.IDV
         // 7: Front image file format not valid
         // 8: Back image file format not valid
         // 9: Capture patameter value not valid
-        // 10: Cripping patameter value not valid
+        // 10: Cropping patameter value not valid
         //=========================================================================================================================================
         // Status :
         // 1 : Pending

@@ -262,57 +262,23 @@
         </div>
     </div>
 </section>
-<section>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title"><i class="fa fa-upload text-primary"></i> Upload file(s)</h4>
-                </div>
-                <div class="card-content">
-                    <div class="card-body form-inline">
-                        @{
-                            for (int i = 0; i < 6; i++)
-                            {
-                                if (ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim() != "")
-                                {
-                                    string Upload_Image_Path = HttpContext.Current.Server.MapPath("~/Drive/Users/API/" + ViewBag.TID + "/Upload/" + ViewBag.DT_Tran[52 + (i * 10)].ToString().Trim() + "." + ViewBag.DT_Tran[50 + (i * 10)].ToString().Trim());
-                                    if (File.Exists(Upload_Image_Path) == true)
-                                    {
-                                        byte[] imgdata = System.IO.File.ReadAllBytes(Upload_Image_Path);
-                                        var base64 = Convert.ToBase64String(imgdata);
-                                        string IMGSrc = String.Format("data:image/png;base64,{0}", base64);
-                                        <div class="col-lg-3" style="height:300px">
-                                            <h5><i class="fa fa-arrow-circle-o-right text-secondary"></i> @ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim()</h5>
-                                            <img src="@IMGSrc" id="UPIMG_@i" onclick="ShowRealSize(this.id)" style="cursor:pointer;width:auto;max-height:270px;border:1px solid lightgray;border-radius:3px" />
-                                        </div>
-                                    }
-                                }
-                            }
-                        }
+@if (Trans_Type_Code != "10")
+{
+    <section>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title"><i class="fa fa-upload text-primary"></i> Upload file(s)</h4>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title"><i class="fa fa-cogs text-primary"></i> Processed file(s)</h4>
-                </div>
-                <div class="card-content">
-                    <div class="card-body form-inline">
-                        @{
-                            for (int i = 0; i < 6; i++)
-                            {
-                                try
+                    <div class="card-content">
+                        <div class="card-body form-inline">
+                            @{
+                                for (int i = 0; i < 6; i++)
                                 {
                                     if (ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim() != "")
                                     {
-                                        string Upload_Image_Path = HttpContext.Current.Server.MapPath("~/Drive/Users/API/" + ViewBag.TID + "/Result/" + ViewBag.DT_Tran[52 + (i * 10)].ToString().Trim() + "." + ViewBag.DT_Tran[50 + (i * 10)].ToString().Trim());
+                                        string Upload_Image_Path = HttpContext.Current.Server.MapPath("~/Drive/Users/API/" + ViewBag.TID + "/Upload/" + ViewBag.DT_Tran[52 + (i * 10)].ToString().Trim() + "." + ViewBag.DT_Tran[50 + (i * 10)].ToString().Trim());
                                         if (File.Exists(Upload_Image_Path) == true)
                                         {
                                             byte[] imgdata = System.IO.File.ReadAllBytes(Upload_Image_Path);
@@ -320,20 +286,57 @@
                                             string IMGSrc = String.Format("data:image/png;base64,{0}", base64);
                                             <div class="col-lg-3" style="height:300px">
                                                 <h5><i class="fa fa-arrow-circle-o-right text-secondary"></i> @ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim()</h5>
-                                                <img src="@IMGSrc" id="RSIMG_@i" onclick="ShowRealSize(this.id)" style="cursor:pointer;width:auto;max-height:270px;border:1px solid lightgray;border-radius:3px" />
+                                                <img src="@IMGSrc" id="UPIMG_@i" onclick="ShowRealSize(this.id)" style="cursor:pointer;width:auto;max-height:270px;border:1px solid lightgray;border-radius:3px" />
                                             </div>
                                         }
                                     }
                                 }
-                                catch (Exception) { }
                             }
-                        }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+    <section>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title"><i class="fa fa-cogs text-primary"></i> Processed file(s)</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body form-inline">
+                            @{
+                                for (int i = 0; i < 6; i++)
+                                {
+                                    try
+                                    {
+                                        if (ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim() != "")
+                                        {
+                                            string Upload_Image_Path = HttpContext.Current.Server.MapPath("~/Drive/Users/API/" + ViewBag.TID + "/Result/" + ViewBag.DT_Tran[52 + (i * 10)].ToString().Trim() + "." + ViewBag.DT_Tran[50 + (i * 10)].ToString().Trim());
+                                            if (File.Exists(Upload_Image_Path) == true)
+                                            {
+                                                byte[] imgdata = System.IO.File.ReadAllBytes(Upload_Image_Path);
+                                                var base64 = Convert.ToBase64String(imgdata);
+                                                string IMGSrc = String.Format("data:image/png;base64,{0}", base64);
+                                                <div class="col-lg-3" style="height:300px">
+                                                    <h5><i class="fa fa-arrow-circle-o-right text-secondary"></i> @ViewBag.DT_Tran[48 + (i * 10)].ToString().Trim()</h5>
+                                                    <img src="@IMGSrc" id="RSIMG_@i" onclick="ShowRealSize(this.id)" style="cursor:pointer;width:auto;max-height:270px;border:1px solid lightgray;border-radius:3px" />
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                    catch (Exception) { }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
 @{
     if ((Trans_Type_Code == "1") || (Trans_Type_Code == "2") || (Trans_Type_Code == "3") || (Trans_Type_Code == "4"))
     {
@@ -456,7 +459,7 @@
             </div>
         </section>
     }
-    if ((Trans_Type_Code == "7"))
+    if ((Trans_Type_Code == "7") || (Trans_Type_Code == "10"))
     {
         <section>
             <div class="row">

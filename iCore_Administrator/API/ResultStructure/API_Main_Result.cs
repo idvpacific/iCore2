@@ -40,4 +40,21 @@ namespace iCore_Administrator.API.ResultStructure
         public object Upload { get; set; }
         public object Processed { get; set; }
     }
+
+    public class TransactionApplication_CLS
+    {
+        public string ID { get; set; }
+        public string Traking_Code { get; set; }
+        public string First_Name { get; set; }
+        public string Last_Name { get; set; }
+        public string Email { get; set; }
+        public int Status_Code { get; set; }
+        public string Status_Result { get; set; }
+        public string Username { get; set; }
+        public string Date_Format { get; set; }
+        public string Request_Date { get; set; }
+        public string Request_Time { get; set; }
+        public string Request_IP { get; set; }
+        public string Request_Browser { get; set; }
+    }
 }

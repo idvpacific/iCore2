@@ -16,11 +16,60 @@ using iCore_Administrator;
 using System.IO;
 using System.Web.UI;
 using System.Globalization;
+using System.Drawing;
+using ZXing;
+using System.Drawing.Imaging;
+using ZXing.Common;
 
 namespace iCore_Administrator.Modules
 {
     public class PublicFunctions
     {
+        //==========================================================================================================================================================================================
+        //==========================================================================================================================================================================================
+        public string GenerateQrCode(string url, int height = 500, int width = 500, int margin = 0)
+        {
+            string base64String = "";
+            try
+            {
+                var qrWriter = new BarcodeWriter();
+                qrWriter.Format = BarcodeFormat.QR_CODE;
+                qrWriter.Options = new EncodingOptions() { Height = height, Width = width, Margin = margin };
+                using (var q = qrWriter.Write(url))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        q.Save(ms, ImageFormat.Png);
+                        byte[] imageBytes = ms.ToArray();
+                        base64String = Convert.ToBase64String(imageBytes);
+                    }
+                }
+            }
+            catch (Exception) { }
+            return base64String;
+        }
+        //==========================================================================================================================================================================================
+        //==========================================================================================================================================================================================
+        public bool isMobileBrowser()
+        {
+            try
+            {
+                HttpContext context = HttpContext.Current;
+                if (context.Request.Browser.IsMobileDevice) { return true; }
+                if (context.Request.ServerVariables["HTTP_X_WAP_PROFILE"] != null) { return true; }
+                if (context.Request.ServerVariables["HTTP_ACCEPT"] != null && context.Request.ServerVariables["HTTP_ACCEPT"].ToLower().Contains("wap")) { return true; }
+                if (context.Request.ServerVariables["HTTP_USER_AGENT"] != null)
+                {
+                    string[] mobiles = new[] { "midp", "j2me", "avant", "docomo", "novarra", "palmos", "palmsource", "240x320", "opwv", "chtml", "pda", "windows ce", "mmp/", "blackberry", "mib/", "symbian", "wireless", "nokia", "hand", "mobi", "phone", "cdm", "up.b", "audio", "SIE-", "SEC-", "samsung", "HTC", "mot-", "mitsu", "sagem", "sony", "alcatel", "lg", "eric", "vx", "NEC", "philips", "mmm", "xx", "panasonic", "sharp", "wap", "sch", "rover", "pocket", "benq", "java", "pt", "pg", "vox", "amoi", "bird", "compal", "kg", "voda", "sany", "kdd", "dbt", "sendo", "sgh", "gradi", "jb", "dddi", "moto", "iphone" };
+                    foreach (string s in mobiles) { if (context.Request.ServerVariables["HTTP_USER_AGENT"].ToLower().Contains(s.ToLower())) { return true; } }
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         //==========================================================================================================================================================================================
         //==========================================================================================================================================================================================
         public bool IsNumberic(string InTxt)

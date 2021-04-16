@@ -2159,6 +2159,110 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult HSU_Account_AccessP_Reload(string UI)
+        {
+            try
+            {
+                //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+                // Test Menu Access :
+                ViewBag.MenuCode = 114;
+                if (AAuth.User_Authentication_Action(ViewBag.MenuCode) == false) { IList<SelectListItem> FB = new List<SelectListItem> { new SelectListItem { Text = "You do not have permission to access this section", Value = "1" } }; return Json(FB, JsonRequestBehavior.AllowGet); }
+                //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+                string ResVal = "0";
+                string ResSTR = "";
+                string UID = "0";
+                try { UID = Session["Admin_UID"].ToString().Trim(); } catch (Exception) { UID = "0"; }
+                UID = UID.Trim();
+                UI = UI.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                if (UID == "0") { ResVal = "2"; ResSTR = "Your license has expired, Please login again"; }
+                if (UID == "") { ResVal = "2"; ResSTR = "Your license has expired, Please login again"; }
+                if (ResVal == "0")
+                {
+                    string LastRes = "0-0-0-0-0-0-0-0-0-0-0-0-0-3-3-0-0";
+                    try
+                    {
+                        DataTable DT = new DataTable();
+                        DT = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select * From Users_14_APIUser_AccessPolicy Where (User_ID = '" + UI + "')");
+                        if (DT.Rows != null)
+                        {
+                            if (DT.Rows.Count == 1)
+                            {
+                                LastRes = DT.Rows[0][1].ToString().Trim() + "-" + DT.Rows[0][2].ToString().Trim() + "-" + DT.Rows[0][3].ToString().Trim() + "-" + DT.Rows[0][4].ToString().Trim() + "-" + DT.Rows[0][5].ToString().Trim() + "-" + DT.Rows[0][6].ToString().Trim() + "-" + DT.Rows[0][7].ToString().Trim() + "-" + DT.Rows[0][8].ToString().Trim() + "-" + DT.Rows[0][9].ToString().Trim() + "-" + DT.Rows[0][10].ToString().Trim() + "-" + DT.Rows[0][11].ToString().Trim() + "-" + DT.Rows[0][12].ToString().Trim() + "-" + DT.Rows[0][13].ToString().Trim() + "-" + DT.Rows[0][14].ToString().Trim() + "-" + DT.Rows[0][15].ToString().Trim() + "-" + DT.Rows[0][17].ToString().Trim() + "-" + DT.Rows[0][18].ToString().Trim();
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    { LastRes = "0-0-0-0-0-0-0-0-0-0-0-0-0-0-3-3-0-0"; }
+                    ResSTR = LastRes;
+                }
+                IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
+                return Json(FeedBack, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                IList<SelectListItem> FeedBack = new List<SelectListItem>
+                { new SelectListItem{Text = "The server encountered an error while executing your request" , Value = "1"}};
+                return Json(FeedBack, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult HSU_Account_AccessP_Save(string UI, string C1, string C2, string C3, string C4, string C5, string C6, string C7, string C8, string C9, string C10, string C11, string C12, string C13, string C14, string C15, string C16, string C17, string C18)
+        {
+            try
+            {
+                //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+                // Test Menu Access :
+                ViewBag.MenuCode = 133;
+                if (AAuth.User_Authentication_Action(ViewBag.MenuCode) == false) { IList<SelectListItem> FB = new List<SelectListItem> { new SelectListItem { Text = "You do not have permission to access this section", Value = "1" } }; return Json(FB, JsonRequestBehavior.AllowGet); }
+                //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+                string ResVal = "0";
+                string ResSTR = "";
+                string UID = "0";
+                try { UID = Session["Admin_UID"].ToString().Trim(); } catch (Exception) { UID = "0"; }
+                UID = UID.Trim();
+                UI = UI.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                if (UID == "0") { ResVal = "2"; ResSTR = "Your license has expired, Please login again"; }
+                if (UID == "") { ResVal = "2"; ResSTR = "Your license has expired, Please login again"; }
+                if (ResVal == "0")
+                {
+                    C1 = C1.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C2 = C2.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C3 = C3.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C4 = C4.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C5 = C5.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C6 = C6.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C7 = C7.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C8 = C8.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C9 = C9.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C10 = C10.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C11 = C11.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C12 = C12.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C13 = C13.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C14 = C14.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C15 = C15.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C16 = C16.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C17 = C17.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C18 = C18.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Delete From Users_14_APIUser_AccessPolicy Where (User_ID = '" + UI + "')");
+                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Users_14_APIUser_AccessPolicy Values ('" + UI + "','" + C1 + "','" + C2 + "','" + C3 + "','" + C4 + "','" + C5 + "','" + C6 + "','" + C7 + "','" + C8 + "','" + C9 + "','" + C10 + "','" + C11 + "','" + C12 + "','" + C13 + "','" + C14 + "','" + C15 + "','" + C16 + "','" + C17 + "','" + C18 + "')");
+                    string InsDate = Sq.Sql_Date();
+                    string InsTime = Sq.Sql_Time();
+                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_02_SingleUser Set [Last_Update_Date] = '" + InsDate + "',[Last_Update_Time] = '" + InsTime + "',[Last_Update_ID] = '" + UID + "' Where (ID = '" + UI + "') And (User_GroupType_Code = '1')");
+                }
+                IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
+                return Json(FeedBack, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                IList<SelectListItem> FeedBack = new List<SelectListItem>
+                { new SelectListItem{Text = "The server encountered an error while executing your request" , Value = "1"}};
+                return Json(FeedBack, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         //====================================================================================================================
         [HttpGet]
         public ActionResult APISingleUser()
@@ -2646,7 +2750,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     C15 = C15.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     C16 = C16.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     Sq.Execute_TSql(DataBase_Selector.Administrator, "Delete From Users_14_APIUser_AccessPolicy Where (User_ID = '" + UI + "')");
-                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Users_14_APIUser_AccessPolicy Values ('" + UI + "','" + C1 + "','" + C2 + "','" + C3 + "','" + C4 + "','" + C5 + "','" + C6 + "','" + C7 + "','" + C8 + "','" + C9 + "','" + C10 + "','" + C11 + "','" + C12 + "','" + C13 + "','" + C14 + "','" + C15 + "','" + C16 + "')");
+                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Users_14_APIUser_AccessPolicy Values ('" + UI + "','" + C1 + "','" + C2 + "','" + C3 + "','" + C4 + "','" + C5 + "','" + C6 + "','" + C7 + "','" + C8 + "','" + C9 + "','" + C10 + "','" + C11 + "','" + C12 + "','" + C13 + "','" + C14 + "','" + C15 + "','" + C16 + "','','')");
                     string InsDate = Sq.Sql_Date();
                     string InsTime = Sq.Sql_Time();
                     Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_02_SingleUser Set [Last_Update_Date] = '" + InsDate + "',[Last_Update_Time] = '" + InsTime + "',[Last_Update_ID] = '" + UID + "' Where (ID = '" + UI + "') And (User_GroupType_Code = '3')");

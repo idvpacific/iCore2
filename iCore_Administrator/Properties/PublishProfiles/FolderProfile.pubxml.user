@@ -4,17 +4,18 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_PublishTargetUrl>E:\01- Project\02- iCore Admin\02- Publish\2021-03-08 - Ver 2.6</_PublishTargetUrl>
+    <_PublishTargetUrl>E:\01- Project\02- iCore Admin\02- Publish\2021-04-08 - Ver 3.0</_PublishTargetUrl>
+    <History>True|2021-03-18T18:50:13.4597362Z;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Accord.dll.config">
       <publishTime>11/07/2017 01:48:18</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Data/apiuseraccount.js">
-      <publishTime>02/15/2021 00:45:13</publishTime>
+      <publishTime>03/19/2021 00:24:13</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Data/hospitalitysingleuseraccount.js">
-      <publishTime>01/08/2021 06:16:12</publishTime>
+      <publishTime>03/19/2021 01:51:17</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Data/managementapiuser.js">
       <publishTime>02/14/2021 03:40:51</publishTime>
@@ -47,7 +48,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/20/2021 23:42:07</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Views/Applications/HSU_Application.cshtml">
-      <publishTime>02/21/2021 23:34:37</publishTime>
+      <publishTime>03/17/2021 23:18:37</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Views/Applications/HSU_New.cshtml">
       <publishTime>02/20/2021 23:42:14</publishTime>
@@ -95,13 +96,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/22/2021 19:36:22</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Views/Transaction/APIU_Transaction.cshtml">
-      <publishTime>02/28/2021 02:37:22</publishTime>
+      <publishTime>03/27/2021 04:21:13</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Views/Users/APISingleUser.cshtml">
-      <publishTime>02/15/2021 17:39:13</publishTime>
+      <publishTime>03/19/2021 01:51:17</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Views/Users/HospitalitySingleUser.cshtml">
-      <publishTime>02/15/2021 17:39:13</publishTime>
+      <publishTime>03/19/2021 01:52:38</publishTime>
     </File>
     <File Include="Areas/ManagementPortal/Views/Users/Management.cshtml">
       <publishTime>02/14/2021 04:32:40</publishTime>
@@ -143,10 +144,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/24/2020 15:29:24</publishTime>
     </File>
     <File Include="bin/iCore_Administrator.dll">
-      <publishTime>03/08/2021 21:44:09</publishTime>
+      <publishTime>04/08/2021 20:34:55</publishTime>
     </File>
     <File Include="bin/iCore_Administrator.pdb">
-      <publishTime>03/08/2021 21:44:09</publishTime>
+      <publishTime>04/08/2021 20:34:55</publishTime>
     </File>
     <File Include="bin/ICSharpCode.SharpZipLib.dll">
       <publishTime>08/09/2019 08:40:22</publishTime>
@@ -363,6 +364,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="bin/System.Web.Webpages.Razor.dll">
       <publishTime>11/28/2018 14:04:24</publishTime>
+    </File>
+    <File Include="bin/zxing.dll">
+      <publishTime>10/08/2020 18:50:18</publishTime>
+    </File>
+    <File Include="bin/zxing.presentation.dll">
+      <publishTime>10/08/2020 18:50:40</publishTime>
     </File>
     <File Include="FIcon.ico">
       <publishTime>08/22/2020 01:31:11</publishTime>
@@ -4835,7 +4842,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/13/2020 00:31:49</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/28/2021 02:59:29</publishTime>
+      <publishTime>04/08/2021 20:34:56</publishTime>
     </File>
   </ItemGroup>
 </Project>

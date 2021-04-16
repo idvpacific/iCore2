@@ -31,7 +31,7 @@ namespace iCore_Administrator.API.Modules
                     if (DT_User.Rows.Count == 1)
                     {
                         DataTable DT_Access = new DataTable();
-                        DT_Access = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select IDV_OCR_All,IDV_DrivingLicence,IDV_Passport,Acuant_OCR_IDCard,Acuant_Validation_IDCard,Acuant_OCR_Passport,Acuant_Validation_Passport,TVS_Passport,Vevo_Check,GIC,LNT,FRM From Users_14_APIUser_AccessPolicy Where (User_ID = '" + DT_User.Rows[0][0].ToString().Trim() + "')");
+                        DT_Access = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select IDV_OCR_All,IDV_DrivingLicence,IDV_Passport,Acuant_OCR_IDCard,Acuant_Validation_IDCard,Acuant_OCR_Passport,Acuant_Validation_Passport,TVS_Passport,Vevo_Check,GIC,LNT,FRM,Retrieve_Application,Retrieve_ApplicationFile From Users_14_APIUser_AccessPolicy Where (User_ID = '" + DT_User.Rows[0][0].ToString().Trim() + "')");
                         if (DT_Access.Rows != null)
                         {
                             if (DT_Access.Rows.Count == 1)
@@ -43,6 +43,7 @@ namespace iCore_Administrator.API.Modules
                                     case "3": { if (DT_Access.Rows[0][5].ToString().Trim() == "1") { ResAcc = true; } break; }
                                     case "4": { if (DT_Access.Rows[0][6].ToString().Trim() == "1") { ResAcc = true; } break; }
                                     case "7": { if (DT_Access.Rows[0][1].ToString().Trim() == "1") { ResAcc = true; } break; }
+                                    case "8": { if (DT_Access.Rows[0][12].ToString().Trim() == "1") { ResAcc = true; } break; }
                                 }
                             }
                         }

@@ -19,6 +19,7 @@ namespace iCore_Administrator.Modules.HSU_Application
         PublicFunctions Pb = new PublicFunctions();
         Application_Acuant Acuant_Func = new Application_Acuant();
         Application_Guesty Gusty_Func = new Application_Guesty();
+        HSU_Callback HSUCB = new HSU_Callback();
         //====================================================================================================================
         // Application Ststus Code :
         // 1 : Pending
@@ -33,6 +34,8 @@ namespace iCore_Administrator.Modules.HSU_Application
             try { Application_DoTask(App_ID); } catch (Exception) { }
             try { Application_EditStatus(App_ID); } catch (Exception) { }
             try { Application_GuestyDo(App_ID); } catch (Exception) { }
+            try { HSUCB.Send_CallBack_Finished(App_ID); } catch (Exception) { }
+            try { HSUCB.Send_CallBack_Finished2(App_ID); } catch (Exception) { }
         }
         //====================================================================================================================
         public void Application_GetFieldValue(string App_ID)

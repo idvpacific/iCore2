@@ -2175,6 +2175,49 @@ namespace iCore_Administrator.API.Modules
                                                                                                 {
                                                                                                     InFT = "";
                                                                                                     InFT = InF[i].Trim().ToUpper();
+                                                                                                    if (InFT == "MMMM")
+                                                                                                    {
+                                                                                                        int Mn1 = 0; int Mn2 = 0; int Mn3 = 0; int Mn4 = 0; int Mn5 = 0; int Mn6 = 0; int Mn7 = 0; int Mn8 = 0; int Mn9 = 0; int Mn10 = 0; int Mn11 = 0; int Mn12 = 0;
+                                                                                                        Mn1 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "JANUARY");
+                                                                                                        Mn2 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "FEBRUARY");
+                                                                                                        Mn3 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "MARCH");
+                                                                                                        Mn4 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "APRIL");
+                                                                                                        Mn5 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "MAY");
+                                                                                                        Mn6 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "JUNE");
+                                                                                                        Mn7 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "JULY");
+                                                                                                        Mn8 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "AUGUST");
+                                                                                                        Mn9 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "SEPTEMBER");
+                                                                                                        Mn10 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "OCTOBER");
+                                                                                                        Mn11 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "NOVEMBER");
+                                                                                                        Mn12 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "DECEMBER");
+                                                                                                        int MaxRank = 0; int MaxRank_ID = 1; MaxRank = Mn1;
+                                                                                                        if (MaxRank <= Mn2) { MaxRank_ID = 2; }
+                                                                                                        if (MaxRank <= Mn3) { MaxRank_ID = 3; }
+                                                                                                        if (MaxRank <= Mn4) { MaxRank_ID = 4; }
+                                                                                                        if (MaxRank <= Mn5) { MaxRank_ID = 5; }
+                                                                                                        if (MaxRank <= Mn6) { MaxRank_ID = 6; }
+                                                                                                        if (MaxRank <= Mn7) { MaxRank_ID = 7; }
+                                                                                                        if (MaxRank <= Mn8) { MaxRank_ID = 8; }
+                                                                                                        if (MaxRank <= Mn9) { MaxRank_ID = 9; }
+                                                                                                        if (MaxRank <= Mn10) { MaxRank_ID = 10; }
+                                                                                                        if (MaxRank <= Mn11) { MaxRank_ID = 11; }
+                                                                                                        if (MaxRank <= Mn12) { MaxRank_ID = 12; }
+                                                                                                        switch (MaxRank_ID)
+                                                                                                        {
+                                                                                                            case 1: { BF[i] = "January"; break; }
+                                                                                                            case 2: { BF[i] = "February"; break; }
+                                                                                                            case 3: { BF[i] = "March"; break; }
+                                                                                                            case 4: { BF[i] = "April"; break; }
+                                                                                                            case 5: { BF[i] = "May"; break; }
+                                                                                                            case 6: { BF[i] = "June"; break; }
+                                                                                                            case 7: { BF[i] = "July"; break; }
+                                                                                                            case 8: { BF[i] = "August"; break; }
+                                                                                                            case 9: { BF[i] = "September"; break; }
+                                                                                                            case 10: { BF[i] = "October"; break; }
+                                                                                                            case 11: { BF[i] = "November"; break; }
+                                                                                                            case 12: { BF[i] = "December"; break; }
+                                                                                                        }
+                                                                                                    }
                                                                                                     if ((InFT == "D") || (InFT == "DD") || (InFT == "M") || (InFT == "MM") || (InFT == "Y") || (InFT == "YY") || (InFT == "YYY") || (InFT == "YYYY"))
                                                                                                     {
                                                                                                         BF[i] = BF[i].Replace("O", "0");
@@ -2260,6 +2303,49 @@ namespace iCore_Administrator.API.Modules
                                                                                                 {
                                                                                                     InFT = "";
                                                                                                     InFT = InF[i].Trim().ToUpper();
+                                                                                                    if (InFT == "MMM")
+                                                                                                    {
+                                                                                                        int Mn1 = 0; int Mn2 = 0; int Mn3 = 0; int Mn4 = 0; int Mn5 = 0; int Mn6 = 0; int Mn7 = 0; int Mn8 = 0; int Mn9 = 0; int Mn10 = 0; int Mn11 = 0; int Mn12 = 0;
+                                                                                                        Mn1 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "JAN");
+                                                                                                        Mn2 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "FEB");
+                                                                                                        Mn3 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "MAR");
+                                                                                                        Mn4 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "APR");
+                                                                                                        Mn5 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "MAY");
+                                                                                                        Mn6 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "JUN");
+                                                                                                        Mn7 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "JUL");
+                                                                                                        Mn8 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "AUG");
+                                                                                                        Mn9 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "SEP");
+                                                                                                        Mn10 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "OCT");
+                                                                                                        Mn11 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "NOV");
+                                                                                                        Mn12 = SF.GetWordsSimilarity(BF[i].ToUpper().Trim(), "DEC");
+                                                                                                        int MaxRank = 0; int MaxRank_ID = 1; MaxRank = Mn1;
+                                                                                                        if (MaxRank <= Mn2) { MaxRank_ID = 2; }
+                                                                                                        if (MaxRank <= Mn3) { MaxRank_ID = 3; }
+                                                                                                        if (MaxRank <= Mn4) { MaxRank_ID = 4; }
+                                                                                                        if (MaxRank <= Mn5) { MaxRank_ID = 5; }
+                                                                                                        if (MaxRank <= Mn6) { MaxRank_ID = 6; }
+                                                                                                        if (MaxRank <= Mn7) { MaxRank_ID = 7; }
+                                                                                                        if (MaxRank <= Mn8) { MaxRank_ID = 8; }
+                                                                                                        if (MaxRank <= Mn9) { MaxRank_ID = 9; }
+                                                                                                        if (MaxRank <= Mn10) { MaxRank_ID = 10; }
+                                                                                                        if (MaxRank <= Mn11) { MaxRank_ID = 11; }
+                                                                                                        if (MaxRank <= Mn12) { MaxRank_ID = 12; }
+                                                                                                        switch (MaxRank_ID)
+                                                                                                        {
+                                                                                                            case 1: { BF[i] = "Jan"; break; }
+                                                                                                            case 2: { BF[i] = "Feb"; break; }
+                                                                                                            case 3: { BF[i] = "Mar"; break; }
+                                                                                                            case 4: { BF[i] = "Apr"; break; }
+                                                                                                            case 5: { BF[i] = "May"; break; }
+                                                                                                            case 6: { BF[i] = "Jun"; break; }
+                                                                                                            case 7: { BF[i] = "Jul"; break; }
+                                                                                                            case 8: { BF[i] = "Aug"; break; }
+                                                                                                            case 9: { BF[i] = "Sep"; break; }
+                                                                                                            case 10: { BF[i] = "Oct"; break; }
+                                                                                                            case 11: { BF[i] = "Nov"; break; }
+                                                                                                            case 12: { BF[i] = "Dec"; break; }
+                                                                                                        }
+                                                                                                    }
                                                                                                     if ((InFT == "D") || (InFT == "DD") || (InFT == "M") || (InFT == "MM") || (InFT == "Y") || (InFT == "YY") || (InFT == "YYY") || (InFT == "YYYY"))
                                                                                                     {
                                                                                                         BF[i] = BF[i].Replace("O", "0");

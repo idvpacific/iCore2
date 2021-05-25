@@ -35,6 +35,28 @@ namespace iCore_Administrator.API.ResultStructure
         public string Callback_URL { get; set; }
     }
 
+    public class Transaction_CLS_Passport
+    {
+        public string Name { get; set; }
+        public string ID { get; set; }
+        public int Status_Code { get; set; }
+        public string Status_Result { get; set; }
+        public string Username { get; set; }
+        public string Date_Format { get; set; }
+        public string Request_Date { get; set; }
+        public string Request_Time { get; set; }
+        public string Request_IP { get; set; }
+        public int Attached_File { get; set; }
+        public bool Async { get; set; }
+        public string Callback_URL { get; set; }
+        public string Processing_Type { get; set; }
+        public string Document_Validation { get; set; }
+        public string Overlay_Required { get; set; }
+        public string Detect_Orientation { get; set; }
+        public string Image_Scale { get; set; }
+        public string Cropping_Mode { get; set; }
+    }
+
     public class Transaction_File
     {
         public object Upload { get; set; }

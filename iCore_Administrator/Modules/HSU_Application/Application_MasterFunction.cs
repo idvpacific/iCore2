@@ -257,8 +257,8 @@ namespace iCore_Administrator.Modules.HSU_Application
                         bool App_Failed = true;
                         foreach (DataRow RW in DT.Rows)
                         {
-                            if (RW[3].ToString().Trim() != "5") { App_Passed = false; }
-                            if (RW[3].ToString().Trim() != "6") { App_Failed = false; }
+                            if (RW[3].ToString().Trim() != "6") { App_Passed = false; }
+                            if (RW[3].ToString().Trim() != "5") { App_Failed = false; }
                             Err_Text += (RW[0].ToString().Trim() + " - " + RW[1].ToString().Trim() + " - " + RW[2].ToString().Trim()).Trim() + "$";
                         }
                         Err_Text = Err_Text.Replace("$$", "$").Trim();
@@ -317,10 +317,10 @@ namespace iCore_Administrator.Modules.HSU_Application
         {
             string GError = "";
             DataTable DT_Application = new DataTable();
+            DataTable DT_Element = new DataTable();
             try
             {
                 DT_Application = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Form_ID,User_ID,Status_Code,Status_Text,App_Message From Users_08_Hospitality_SingleUser_Application Where (ID = '" + App_ID + "')");
-                DataTable DT_Element = new DataTable();
                 DT_Element = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Element_ID From Users_06_Hospitality_SingleUser_RegisterForms_Elements Where (Group_ID = '" + DT_Application.Rows[0][0].ToString().Trim() + "') And (Element_Type_Code = '1') And (Status_Code = '1') And (Removed = '0') And (ATT19 = '10')");
                 if (DT_Element.Rows.Count == 1)
                 {
@@ -425,19 +425,22 @@ namespace iCore_Administrator.Modules.HSU_Application
             { GError = "Guesty system exception error"; }
             try
             {
-                string DTM = "[" + Pb.Get_Date() + " " + Pb.Get_Time() + "] ";
-                GError = "[Guesty] " + DTM + GError;
-                string BeforeError = DT_Application.Rows[0][4].ToString().Trim();
-                if (BeforeError.Trim() != "")
+                if (DT_Element.Rows.Count != 0)
                 {
-                    BeforeError = BeforeError + "$" + GError.Trim();
+                    string DTM = "[" + Pb.Get_Date() + " " + Pb.Get_Time() + "] ";
+                    GError = "[Guesty] " + DTM + GError;
+                    string BeforeError = DT_Application.Rows[0][4].ToString().Trim();
+                    if (BeforeError.Trim() != "")
+                    {
+                        BeforeError = BeforeError + "$" + GError.Trim();
+                    }
+                    else
+                    {
+                        BeforeError = GError.Trim();
+                    }
+                    BeforeError = BeforeError.Replace("'", "").Replace(",", "");
+                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_08_Hospitality_SingleUser_Application Set [App_Message] = '" + BeforeError + "' Where (ID = '" + App_ID + "')");
                 }
-                else
-                {
-                    BeforeError = GError.Trim();
-                }
-                BeforeError = BeforeError.Replace("'", "").Replace(",", "");
-                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_08_Hospitality_SingleUser_Application Set [App_Message] = '" + BeforeError + "' Where (ID = '" + App_ID + "')");
             }
             catch (Exception)
             { }

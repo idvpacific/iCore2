@@ -2179,7 +2179,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (UID == "") { ResVal = "2"; ResSTR = "Your license has expired, Please login again"; }
                 if (ResVal == "0")
                 {
-                    string LastRes = "0-0-0-0-0-0-0-0-0-0-0-0-0-3-3-0-0";
+                    string LastRes = "0-3-3-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0";
                     try
                     {
                         DataTable DT = new DataTable();
@@ -2188,12 +2188,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         {
                             if (DT.Rows.Count == 1)
                             {
-                                LastRes = DT.Rows[0][1].ToString().Trim() + "-" + DT.Rows[0][2].ToString().Trim() + "-" + DT.Rows[0][3].ToString().Trim() + "-" + DT.Rows[0][4].ToString().Trim() + "-" + DT.Rows[0][5].ToString().Trim() + "-" + DT.Rows[0][6].ToString().Trim() + "-" + DT.Rows[0][7].ToString().Trim() + "-" + DT.Rows[0][8].ToString().Trim() + "-" + DT.Rows[0][9].ToString().Trim() + "-" + DT.Rows[0][10].ToString().Trim() + "-" + DT.Rows[0][11].ToString().Trim() + "-" + DT.Rows[0][12].ToString().Trim() + "-" + DT.Rows[0][13].ToString().Trim() + "-" + DT.Rows[0][14].ToString().Trim() + "-" + DT.Rows[0][15].ToString().Trim() + "-" + DT.Rows[0][17].ToString().Trim() + "-" + DT.Rows[0][18].ToString().Trim();
+                                LastRes = DT.Rows[0][1].ToString().Trim() + "-" + DT.Rows[0][2].ToString().Trim() + "-" + DT.Rows[0][3].ToString().Trim() + "-" + DT.Rows[0][5].ToString().Trim() + "-" + DT.Rows[0][6].ToString().Trim() + "-" + DT.Rows[0][7].ToString().Trim() + "-" + DT.Rows[0][8].ToString().Trim() + "-" + DT.Rows[0][9].ToString().Trim() + "-" + DT.Rows[0][10].ToString().Trim() + "-" + DT.Rows[0][11].ToString().Trim() + "-" + DT.Rows[0][12].ToString().Trim() + "-" + DT.Rows[0][13].ToString().Trim() + "-" + DT.Rows[0][14].ToString().Trim() + "-" + DT.Rows[0][15].ToString().Trim() + "-" + DT.Rows[0][16].ToString().Trim() + "-" + DT.Rows[0][17].ToString().Trim() + "-" + DT.Rows[0][18].ToString().Trim() + "-" + DT.Rows[0][19].ToString().Trim() + "-" + DT.Rows[0][20].ToString().Trim() + "-" + DT.Rows[0][21].ToString().Trim() + "-" + DT.Rows[0][22].ToString().Trim();
                             }
                         }
                     }
                     catch (Exception)
-                    { LastRes = "0-0-0-0-0-0-0-0-0-0-0-0-0-0-3-3-0-0"; }
+                    { LastRes = "0-3-3-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0"; }
                     ResSTR = LastRes;
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -2208,7 +2208,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
         }
 
         [HttpPost]
-        public JsonResult HSU_Account_AccessP_Save(string UI, string C1, string C2, string C3, string C4, string C5, string C6, string C7, string C8, string C9, string C10, string C11, string C12, string C13, string C14, string C15, string C16, string C17, string C18)
+        public JsonResult HSU_Account_AccessP_Save(string UI, string C1, string C2, string C3, string C4, string C5, string C6, string C7, string C8, string C9, string C10, string C11, string C12, string C13, string C14, string C15, string C16, string C17, string C18, string C19, string C20, string C21, string C22)
         {
             try
             {
@@ -2245,8 +2245,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     C16 = C16.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     C17 = C17.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     C18 = C18.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C19 = C19.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C20 = C20.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C21 = C21.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C22 = C22.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     Sq.Execute_TSql(DataBase_Selector.Administrator, "Delete From Users_14_APIUser_AccessPolicy Where (User_ID = '" + UI + "')");
-                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Users_14_APIUser_AccessPolicy Values ('" + UI + "','" + C1 + "','" + C2 + "','" + C3 + "','" + C4 + "','" + C5 + "','" + C6 + "','" + C7 + "','" + C8 + "','" + C9 + "','" + C10 + "','" + C11 + "','" + C12 + "','" + C13 + "','" + C14 + "','" + C15 + "','" + C16 + "','" + C17 + "','" + C18 + "')");
+                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Users_14_APIUser_AccessPolicy Values ('" + UI + "','" + C1 + "','" + C2 + "','" + C3 + "','" + C4 + "','" + C5 + "','" + C6 + "','" + C7 + "','" + C8 + "','" + C9 + "','" + C10 + "','" + C11 + "','" + C12 + "','" + C13 + "','" + C14 + "','" + C15 + "','" + C16 + "','" + C17 + "','" + C18 + "','" + C19 + "','" + C20 + "','" + C21 + "','" + C22 + "')");
                     string InsDate = Sq.Sql_Date();
                     string InsTime = Sq.Sql_Time();
                     Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_02_SingleUser Set [Last_Update_Date] = '" + InsDate + "',[Last_Update_Time] = '" + InsTime + "',[Last_Update_ID] = '" + UID + "' Where (ID = '" + UI + "') And (User_GroupType_Code = '1')");
@@ -2685,7 +2689,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                 if (UID == "") { ResVal = "2"; ResSTR = "Your license has expired, Please login again"; }
                 if (ResVal == "0")
                 {
-                    string LastRes = "0-0-0-0-0-0-0-0-0-0-0-0-0-3-3";
+                    string LastRes = "0-3-3-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0";
                     try
                     {
                         DataTable DT = new DataTable();
@@ -2694,12 +2698,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                         {
                             if (DT.Rows.Count == 1)
                             {
-                                LastRes = DT.Rows[0][1].ToString().Trim() + "-" + DT.Rows[0][2].ToString().Trim() + "-" + DT.Rows[0][3].ToString().Trim() + "-" + DT.Rows[0][4].ToString().Trim() + "-" + DT.Rows[0][5].ToString().Trim() + "-" + DT.Rows[0][6].ToString().Trim() + "-" + DT.Rows[0][7].ToString().Trim() + "-" + DT.Rows[0][8].ToString().Trim() + "-" + DT.Rows[0][9].ToString().Trim() + "-" + DT.Rows[0][10].ToString().Trim() + "-" + DT.Rows[0][11].ToString().Trim() + "-" + DT.Rows[0][12].ToString().Trim() + "-" + DT.Rows[0][13].ToString().Trim() + "-" + DT.Rows[0][14].ToString().Trim() + "-" + DT.Rows[0][15].ToString().Trim();
+                                LastRes = DT.Rows[0][1].ToString().Trim() + "-" + DT.Rows[0][2].ToString().Trim() + "-" + DT.Rows[0][3].ToString().Trim() + "-" + DT.Rows[0][5].ToString().Trim() + "-" + DT.Rows[0][6].ToString().Trim() + "-" + DT.Rows[0][7].ToString().Trim() + "-" + DT.Rows[0][8].ToString().Trim() + "-" + DT.Rows[0][9].ToString().Trim() + "-" + DT.Rows[0][10].ToString().Trim() + "-" + DT.Rows[0][11].ToString().Trim() + "-" + DT.Rows[0][12].ToString().Trim() + "-" + DT.Rows[0][13].ToString().Trim() + "-" + DT.Rows[0][14].ToString().Trim() + "-" + DT.Rows[0][15].ToString().Trim() + "-" + DT.Rows[0][16].ToString().Trim() + "-" + DT.Rows[0][17].ToString().Trim() + "-" + DT.Rows[0][18].ToString().Trim() + "-" + DT.Rows[0][19].ToString().Trim() + "-" + DT.Rows[0][20].ToString().Trim();
                             }
                         }
                     }
                     catch (Exception)
-                    { LastRes = "0-0-0-0-0-0-0-0-0-0-0-0-0-0-3-3"; }
+                    { LastRes = "0-3-3-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0"; }
                     ResSTR = LastRes;
                 }
                 IList<SelectListItem> FeedBack = new List<SelectListItem> { new SelectListItem { Value = ResVal, Text = ResSTR.Trim() } };
@@ -2714,7 +2718,7 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
         }
 
         [HttpPost]
-        public JsonResult APIUser_AccessP_Save(string UI, string C1, string C2, string C3, string C4, string C5, string C6, string C7, string C8, string C9, string C10, string C11, string C12, string C13, string C14, string C15, string C16)
+        public JsonResult APIUser_AccessP_Save(string UI, string C1, string C2, string C3, string C4, string C5, string C6, string C7, string C8, string C9, string C10, string C11, string C12, string C13, string C14, string C15, string C16, string C17, string C18, string C19, string C20)
         {
             try
             {
@@ -2749,8 +2753,12 @@ namespace iCore_Administrator.Areas.ManagementPortal.Controllers
                     C14 = C14.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     C15 = C15.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     C16 = C16.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C17 = C17.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C18 = C18.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C19 = C19.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
+                    C20 = C20.Replace(",", " ").Replace("#", "").Replace("  ", " ").Trim();
                     Sq.Execute_TSql(DataBase_Selector.Administrator, "Delete From Users_14_APIUser_AccessPolicy Where (User_ID = '" + UI + "')");
-                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Users_14_APIUser_AccessPolicy Values ('" + UI + "','" + C1 + "','" + C2 + "','" + C3 + "','" + C4 + "','" + C5 + "','" + C6 + "','" + C7 + "','" + C8 + "','" + C9 + "','" + C10 + "','" + C11 + "','" + C12 + "','" + C13 + "','" + C14 + "','" + C15 + "','" + C16 + "','','')");
+                    Sq.Execute_TSql(DataBase_Selector.Administrator, "Insert Into Users_14_APIUser_AccessPolicy Values ('" + UI + "','" + C1 + "','" + C2 + "','" + C3 + "','" + C4 + "','" + C5 + "','" + C6 + "','" + C7 + "','" + C8 + "','" + C9 + "','" + C10 + "','" + C11 + "','" + C12 + "','" + C13 + "','" + C14 + "','" + C15 + "','" + C16 + "','" + C17 + "','" + C18 + "','" + C19 + "','" + C20 + "','0','0')");
                     string InsDate = Sq.Sql_Date();
                     string InsTime = Sq.Sql_Time();
                     Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_02_SingleUser Set [Last_Update_Date] = '" + InsDate + "',[Last_Update_Time] = '" + InsTime + "',[Last_Update_ID] = '" + UID + "' Where (ID = '" + UI + "') And (User_GroupType_Code = '3')");

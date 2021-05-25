@@ -17,6 +17,13 @@ namespace iCore_Administrator.API.ResultStructure
         public Transaction_File Files { get; set; }
     }
 
+    public class Passport_CLS_OCR_Sync
+    {
+        public Transaction_CLS_Passport Transaction { get; set; }
+        public object Data { get; set; }
+        public Transaction_File Files { get; set; }
+    }
+
     public class Acuant_CLS_Validation_Sync
     {
         public Transaction_CLS Transaction { get; set; }

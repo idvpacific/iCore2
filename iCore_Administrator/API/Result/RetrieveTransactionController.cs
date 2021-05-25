@@ -78,580 +78,867 @@ namespace iCore_Administrator.API.Result
                                             Err_User_ID = DT_Transaction.Rows[0][2].ToString().Trim();
                                             Err_User_Type = DT_Transaction.Rows[0][3].ToString().Trim();
                                             User_API_AccessPolicy UAP = new User_API_AccessPolicy();
-                                            if (UAP.User_Access(API_Username, API_Password, DT_Transaction.Rows[0][5].ToString().Trim()) == true)
+                                            if (UAP.User_Access(API_Username, API_Password, API_Code) == true)
                                             {
-                                                switch (DT_Transaction.Rows[0][5].ToString().Trim())
+                                                if (UAP.User_Access(API_Username, API_Password, DT_Transaction.Rows[0][5].ToString().Trim()) == true)
                                                 {
-                                                    case "1":
-                                                        {
-                                                            string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
-                                                            string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
-                                                            Acuant_CLS_OCR_Sync AIDC = new Acuant_CLS_OCR_Sync();
-                                                            Transaction_CLS Transaction_CLS = new Transaction_CLS();
-                                                            Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
-                                                            Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
-                                                            Transaction_CLS.Username = API_Username;
-                                                            Transaction_CLS.Date_Format = Date_Format;
-                                                            Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
-                                                            Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
-                                                            Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
-                                                            Transaction_CLS.Attached_File = 0;
-                                                            if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
-                                                            Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
-                                                            Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
-                                                            Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
-                                                            AIDC.Transaction = Transaction_CLS;
-                                                            var jsonObject_CD = new JObject();
-                                                            DataTable DT_CaptureData = new DataTable();
-                                                            DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
-                                                            if (DT_CaptureData.Rows != null)
+                                                    switch (DT_Transaction.Rows[0][5].ToString().Trim())
+                                                    {
+                                                        case "1":
                                                             {
-                                                                foreach (DataRow RW in DT_CaptureData.Rows)
+                                                                string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
+                                                                string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
+                                                                Acuant_CLS_OCR_Sync AIDC = new Acuant_CLS_OCR_Sync();
+                                                                Transaction_CLS Transaction_CLS = new Transaction_CLS();
+                                                                Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
+                                                                Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
+                                                                Transaction_CLS.Username = API_Username;
+                                                                Transaction_CLS.Date_Format = Date_Format;
+                                                                Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
+                                                                Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
+                                                                Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
+                                                                Transaction_CLS.Attached_File = 0;
+                                                                if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
+                                                                Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
+                                                                Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
+                                                                Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
+                                                                AIDC.Transaction = Transaction_CLS;
+                                                                var jsonObject_CD = new JObject();
+                                                                DataTable DT_CaptureData = new DataTable();
+                                                                DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
+                                                                if (DT_CaptureData.Rows != null)
                                                                 {
-                                                                    try
+                                                                    foreach (DataRow RW in DT_CaptureData.Rows)
                                                                     {
-                                                                        string DataValue = RW[1].ToString().Trim();
                                                                         try
                                                                         {
-                                                                            string CheckDate = DataValue.Substring(0, 10);
-                                                                            if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
+                                                                            string DataValue = RW[1].ToString().Trim();
+                                                                            try
                                                                             {
-                                                                                DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
+                                                                                string CheckDate = DataValue.Substring(0, 10);
+                                                                                if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
+                                                                                {
+                                                                                    DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
+                                                                                }
                                                                             }
-                                                                        }
-                                                                        catch (Exception)
-                                                                        {
-                                                                            DataValue = RW[1].ToString().Trim();
-                                                                        }
-                                                                        jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                            }
-                                                            AIDC.Data = jsonObject_CD;
-                                                            int Img_Cnt = 0;
-                                                            try
-                                                            {
-                                                                Transaction_File TFL = new Transaction_File();
-                                                                DataTable DT_Files = new DataTable();
-                                                                DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
-                                                                string FilePath = "";
-                                                                var jsonObject_Upload = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
-                                                                        {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
+                                                                            catch (Exception)
                                                                             {
-                                                                                jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                                Img_Cnt++;
+                                                                                DataValue = RW[1].ToString().Trim();
                                                                             }
+                                                                            jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
                                                                         }
+                                                                        catch (Exception) { }
                                                                     }
-                                                                    catch (Exception) { }
                                                                 }
-                                                                TFL.Upload = jsonObject_Upload;
-                                                                var jsonObject_Processed = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
-                                                                        {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
-                                                                            {
-                                                                                jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                                TFL.Processed = jsonObject_Processed;
-                                                                AIDC.Files = TFL;
-                                                            }
-                                                            catch (Exception) { }
-                                                            AIDC.Transaction.Attached_File = Img_Cnt;
-                                                            Result_API = AIDC;
-                                                            break;
-                                                        }
-                                                    case "2":
-                                                        {
-                                                            string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
-                                                            string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
-                                                            Acuant_CLS_Validation_Sync AIDC = new Acuant_CLS_Validation_Sync();
-                                                            Transaction_CLS Transaction_CLS = new Transaction_CLS();
-                                                            Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
-                                                            Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
-                                                            Transaction_CLS.Username = API_Username;
-                                                            Transaction_CLS.Date_Format = Date_Format;
-                                                            Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
-                                                            Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
-                                                            Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
-                                                            Transaction_CLS.Attached_File = 0;
-                                                            if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
-                                                            Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
-                                                            Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
-                                                            Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
-                                                            AIDC.Transaction = Transaction_CLS;
-                                                            var jsonObject_CD = new JObject();
-                                                            DataTable DT_CaptureData = new DataTable();
-                                                            DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
-                                                            if (DT_CaptureData.Rows != null)
-                                                            {
-                                                                foreach (DataRow RW in DT_CaptureData.Rows)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        string DataValue = RW[1].ToString().Trim();
-                                                                        try
-                                                                        {
-                                                                            string CheckDate = DataValue.Substring(0, 10);
-                                                                            if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
-                                                                            {
-                                                                                DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
-                                                                            }
-                                                                        }
-                                                                        catch (Exception)
-                                                                        {
-                                                                            DataValue = RW[1].ToString().Trim();
-                                                                        }
-                                                                        jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                            }
-                                                            AIDC.Data = jsonObject_CD;
-                                                            jsonObject_CD = new JObject();
-                                                            DataTable DT_Alert = new DataTable();
-                                                            DT_Alert = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Alert_Text From Users_17_API_Acuant_Alert Where (Transaction_ID = '" + Trans_ID + "') Order By Alert_Text");
-                                                            if (DT_Alert.Rows != null)
-                                                            {
-                                                                int NoCounter = 0;
-                                                                foreach (DataRow RW in DT_Alert.Rows)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        NoCounter++;
-                                                                        jsonObject_CD.Add("N" + NoCounter.ToString(), RW[0].ToString().Trim());
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                            }
-                                                            AIDC.Alert = jsonObject_CD;
-                                                            jsonObject_CD = new JObject();
-                                                            DataTable DT_Authtication = new DataTable();
-                                                            DT_Authtication = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Top 1 Result_Code,Result_Text From Users_18_API_Acuant_Authentication Where (Transaction_ID = '" + Trans_ID + "')");
-                                                            if (DT_Authtication.Rows != null)
-                                                            {
+                                                                AIDC.Data = jsonObject_CD;
+                                                                int Img_Cnt = 0;
                                                                 try
                                                                 {
-                                                                    jsonObject_CD.Add("Code", DT_Authtication.Rows[0][0].ToString().Trim());
-                                                                    jsonObject_CD.Add("Result", DT_Authtication.Rows[0][1].ToString().Trim());
+                                                                    Transaction_File TFL = new Transaction_File();
+                                                                    DataTable DT_Files = new DataTable();
+                                                                    DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
+                                                                    string FilePath = "";
+                                                                    var jsonObject_Upload = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                    Img_Cnt++;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Upload = jsonObject_Upload;
+                                                                    var jsonObject_Processed = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Processed = jsonObject_Processed;
+                                                                    AIDC.Files = TFL;
                                                                 }
                                                                 catch (Exception) { }
+                                                                AIDC.Transaction.Attached_File = Img_Cnt;
+                                                                Result_API = AIDC;
+                                                                break;
                                                             }
-                                                            AIDC.Authentication = jsonObject_CD;
-                                                            int Img_Cnt = 0;
-                                                            try
+                                                        case "2":
                                                             {
-                                                                Transaction_File TFL = new Transaction_File();
-                                                                DataTable DT_Files = new DataTable();
-                                                                DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
-                                                                string FilePath = "";
-                                                                var jsonObject_Upload = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
+                                                                string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
+                                                                string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
+                                                                Acuant_CLS_Validation_Sync AIDC = new Acuant_CLS_Validation_Sync();
+                                                                Transaction_CLS Transaction_CLS = new Transaction_CLS();
+                                                                Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
+                                                                Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
+                                                                Transaction_CLS.Username = API_Username;
+                                                                Transaction_CLS.Date_Format = Date_Format;
+                                                                Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
+                                                                Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
+                                                                Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
+                                                                Transaction_CLS.Attached_File = 0;
+                                                                if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
+                                                                Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
+                                                                Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
+                                                                Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
+                                                                AIDC.Transaction = Transaction_CLS;
+                                                                var jsonObject_CD = new JObject();
+                                                                DataTable DT_CaptureData = new DataTable();
+                                                                DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
+                                                                if (DT_CaptureData.Rows != null)
                                                                 {
-                                                                    try
+                                                                    foreach (DataRow RW in DT_CaptureData.Rows)
                                                                     {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
-                                                                        {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
-                                                                            {
-                                                                                jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                                Img_Cnt++;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                                TFL.Upload = jsonObject_Upload;
-                                                                var jsonObject_Processed = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
-                                                                        {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
-                                                                            {
-                                                                                jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                                TFL.Processed = jsonObject_Processed;
-                                                                AIDC.Files = TFL;
-                                                            }
-                                                            catch (Exception) { }
-                                                            AIDC.Transaction.Attached_File = Img_Cnt;
-                                                            Result_API = AIDC;
-                                                            break;
-                                                        }
-                                                    case "3":
-                                                        {
-                                                            string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
-                                                            string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
-                                                            Acuant_CLS_OCR_Sync AIDC = new Acuant_CLS_OCR_Sync();
-                                                            Transaction_CLS Transaction_CLS = new Transaction_CLS();
-                                                            Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
-                                                            Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
-                                                            Transaction_CLS.Username = API_Username;
-                                                            Transaction_CLS.Date_Format = Date_Format;
-                                                            Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
-                                                            Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
-                                                            Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
-                                                            Transaction_CLS.Attached_File = 0;
-                                                            if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
-                                                            Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
-                                                            Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
-                                                            Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
-                                                            AIDC.Transaction = Transaction_CLS;
-                                                            var jsonObject_CD = new JObject();
-                                                            DataTable DT_CaptureData = new DataTable();
-                                                            DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
-                                                            if (DT_CaptureData.Rows != null)
-                                                            {
-                                                                foreach (DataRow RW in DT_CaptureData.Rows)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        string DataValue = RW[1].ToString().Trim();
                                                                         try
                                                                         {
-                                                                            string CheckDate = DataValue.Substring(0, 10);
-                                                                            if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
+                                                                            string DataValue = RW[1].ToString().Trim();
+                                                                            try
                                                                             {
-                                                                                DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
+                                                                                string CheckDate = DataValue.Substring(0, 10);
+                                                                                if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
+                                                                                {
+                                                                                    DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
+                                                                                }
                                                                             }
-                                                                        }
-                                                                        catch (Exception)
-                                                                        {
-                                                                            DataValue = RW[1].ToString().Trim();
-                                                                        }
-                                                                        jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                            }
-                                                            AIDC.Data = jsonObject_CD;
-                                                            int Img_Cnt = 0;
-                                                            try
-                                                            {
-                                                                Transaction_File TFL = new Transaction_File();
-                                                                DataTable DT_Files = new DataTable();
-                                                                DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
-                                                                string FilePath = "";
-                                                                var jsonObject_Upload = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
-                                                                        {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
+                                                                            catch (Exception)
                                                                             {
-                                                                                jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                                Img_Cnt++;
+                                                                                DataValue = RW[1].ToString().Trim();
                                                                             }
+                                                                            jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
                                                                         }
+                                                                        catch (Exception) { }
                                                                     }
-                                                                    catch (Exception) { }
                                                                 }
-                                                                TFL.Upload = jsonObject_Upload;
-                                                                var jsonObject_Processed = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
+                                                                AIDC.Data = jsonObject_CD;
+                                                                jsonObject_CD = new JObject();
+                                                                DataTable DT_Alert = new DataTable();
+                                                                DT_Alert = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Alert_Text From Users_17_API_Acuant_Alert Where (Transaction_ID = '" + Trans_ID + "') Order By Alert_Text");
+                                                                if (DT_Alert.Rows != null)
                                                                 {
-                                                                    try
+                                                                    int NoCounter = 0;
+                                                                    foreach (DataRow RW in DT_Alert.Rows)
                                                                     {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
-                                                                        {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
-                                                                            {
-                                                                                jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                                TFL.Processed = jsonObject_Processed;
-                                                                AIDC.Files = TFL;
-                                                            }
-                                                            catch (Exception) { }
-                                                            AIDC.Transaction.Attached_File = Img_Cnt;
-                                                            Result_API = AIDC;
-                                                            break;
-                                                        }
-                                                    case "4":
-                                                        {
-                                                            string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
-                                                            string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
-                                                            Acuant_CLS_Validation_Sync AIDC = new Acuant_CLS_Validation_Sync();
-                                                            Transaction_CLS Transaction_CLS = new Transaction_CLS();
-                                                            Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
-                                                            Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
-                                                            Transaction_CLS.Username = API_Username;
-                                                            Transaction_CLS.Date_Format = Date_Format;
-                                                            Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
-                                                            Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
-                                                            Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
-                                                            Transaction_CLS.Attached_File = 0;
-                                                            if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
-                                                            Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
-                                                            Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
-                                                            Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
-                                                            AIDC.Transaction = Transaction_CLS;
-                                                            var jsonObject_CD = new JObject();
-                                                            DataTable DT_CaptureData = new DataTable();
-                                                            DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
-                                                            if (DT_CaptureData.Rows != null)
-                                                            {
-                                                                foreach (DataRow RW in DT_CaptureData.Rows)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        string DataValue = RW[1].ToString().Trim();
                                                                         try
                                                                         {
-                                                                            string CheckDate = DataValue.Substring(0, 10);
-                                                                            if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
-                                                                            {
-                                                                                DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
-                                                                            }
+                                                                            NoCounter++;
+                                                                            jsonObject_CD.Add("N" + NoCounter.ToString(), RW[0].ToString().Trim());
                                                                         }
-                                                                        catch (Exception)
-                                                                        {
-                                                                            DataValue = RW[1].ToString().Trim();
-                                                                        }
-                                                                        jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
+                                                                        catch (Exception) { }
                                                                     }
-                                                                    catch (Exception) { }
                                                                 }
-                                                            }
-                                                            AIDC.Data = jsonObject_CD;
-                                                            jsonObject_CD = new JObject();
-                                                            DataTable DT_Alert = new DataTable();
-                                                            DT_Alert = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Alert_Text From Users_17_API_Acuant_Alert Where (Transaction_ID = '" + Trans_ID + "') Order By Alert_Text");
-                                                            if (DT_Alert.Rows != null)
-                                                            {
-                                                                int NoCounter = 0;
-                                                                foreach (DataRow RW in DT_Alert.Rows)
+                                                                AIDC.Alert = jsonObject_CD;
+                                                                jsonObject_CD = new JObject();
+                                                                DataTable DT_Authtication = new DataTable();
+                                                                DT_Authtication = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Top 1 Result_Code,Result_Text From Users_18_API_Acuant_Authentication Where (Transaction_ID = '" + Trans_ID + "')");
+                                                                if (DT_Authtication.Rows != null)
                                                                 {
                                                                     try
                                                                     {
-                                                                        NoCounter++;
-                                                                        jsonObject_CD.Add("N" + NoCounter.ToString(), RW[0].ToString().Trim());
+                                                                        jsonObject_CD.Add("Code", DT_Authtication.Rows[0][0].ToString().Trim());
+                                                                        jsonObject_CD.Add("Result", DT_Authtication.Rows[0][1].ToString().Trim());
                                                                     }
                                                                     catch (Exception) { }
                                                                 }
-                                                            }
-                                                            AIDC.Alert = jsonObject_CD;
-                                                            jsonObject_CD = new JObject();
-                                                            DataTable DT_Authtication = new DataTable();
-                                                            DT_Authtication = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Top 1 Result_Code,Result_Text From Users_18_API_Acuant_Authentication Where (Transaction_ID = '" + Trans_ID + "')");
-                                                            if (DT_Authtication.Rows != null)
-                                                            {
+                                                                AIDC.Authentication = jsonObject_CD;
+                                                                int Img_Cnt = 0;
                                                                 try
                                                                 {
-                                                                    jsonObject_CD.Add("Code", DT_Authtication.Rows[0][0].ToString().Trim());
-                                                                    jsonObject_CD.Add("Result", DT_Authtication.Rows[0][1].ToString().Trim());
-                                                                }
-                                                                catch (Exception) { }
-                                                            }
-                                                            AIDC.Authentication = jsonObject_CD;
-                                                            int Img_Cnt = 0;
-                                                            try
-                                                            {
-                                                                Transaction_File TFL = new Transaction_File();
-                                                                DataTable DT_Files = new DataTable();
-                                                                DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
-                                                                string FilePath = "";
-                                                                var jsonObject_Upload = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
-                                                                {
-                                                                    try
+                                                                    Transaction_File TFL = new Transaction_File();
+                                                                    DataTable DT_Files = new DataTable();
+                                                                    DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
+                                                                    string FilePath = "";
+                                                                    var jsonObject_Upload = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
                                                                     {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
-                                                                        {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
-                                                                            {
-                                                                                jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                                Img_Cnt++;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                                TFL.Upload = jsonObject_Upload;
-                                                                var jsonObject_Processed = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
-                                                                        {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
-                                                                            {
-                                                                                jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    catch (Exception) { }
-                                                                }
-                                                                TFL.Processed = jsonObject_Processed;
-                                                                AIDC.Files = TFL;
-                                                            }
-                                                            catch (Exception) { }
-                                                            AIDC.Transaction.Attached_File = Img_Cnt;
-                                                            Result_API = AIDC;
-                                                            break;
-                                                        }
-                                                    case "7":
-                                                        {
-                                                            string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
-                                                            string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
-                                                            Acuant_CLS_OCR_Sync AIDC = new Acuant_CLS_OCR_Sync();
-                                                            Transaction_CLS Transaction_CLS = new Transaction_CLS();
-                                                            Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
-                                                            Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
-                                                            Transaction_CLS.Username = API_Username;
-                                                            Transaction_CLS.Date_Format = Date_Format;
-                                                            Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
-                                                            Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
-                                                            Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
-                                                            Transaction_CLS.Attached_File = 0;
-                                                            if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
-                                                            Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
-                                                            Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
-                                                            Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
-                                                            AIDC.Transaction = Transaction_CLS;
-                                                            var jsonObject_CD = new JObject();
-                                                            DataTable DT_CaptureData = new DataTable();
-                                                            DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
-                                                            if (DT_CaptureData.Rows != null)
-                                                            {
-                                                                foreach (DataRow RW in DT_CaptureData.Rows)
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        string DataValue = RW[1].ToString().Trim();
                                                                         try
                                                                         {
-                                                                            string CheckDate = DataValue.Substring(0, 10);
-                                                                            if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
                                                                             {
-                                                                                DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                    Img_Cnt++;
+                                                                                }
                                                                             }
                                                                         }
-                                                                        catch (Exception)
-                                                                        {
-                                                                            DataValue = RW[1].ToString().Trim();
-                                                                        }
-                                                                        jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
+                                                                        catch (Exception) { }
                                                                     }
-                                                                    catch (Exception) { }
+                                                                    TFL.Upload = jsonObject_Upload;
+                                                                    var jsonObject_Processed = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Processed = jsonObject_Processed;
+                                                                    AIDC.Files = TFL;
                                                                 }
+                                                                catch (Exception) { }
+                                                                AIDC.Transaction.Attached_File = Img_Cnt;
+                                                                Result_API = AIDC;
+                                                                break;
                                                             }
-                                                            AIDC.Data = jsonObject_CD;
-                                                            int Img_Cnt = 0;
-                                                            try
+                                                        case "3":
                                                             {
-                                                                Transaction_File TFL = new Transaction_File();
-                                                                DataTable DT_Files = new DataTable();
-                                                                DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
-                                                                string FilePath = "";
-                                                                var jsonObject_Upload = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
+                                                                string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
+                                                                string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
+                                                                Acuant_CLS_OCR_Sync AIDC = new Acuant_CLS_OCR_Sync();
+                                                                Transaction_CLS Transaction_CLS = new Transaction_CLS();
+                                                                Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
+                                                                Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
+                                                                Transaction_CLS.Username = API_Username;
+                                                                Transaction_CLS.Date_Format = Date_Format;
+                                                                Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
+                                                                Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
+                                                                Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
+                                                                Transaction_CLS.Attached_File = 0;
+                                                                if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
+                                                                Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
+                                                                Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
+                                                                Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
+                                                                AIDC.Transaction = Transaction_CLS;
+                                                                var jsonObject_CD = new JObject();
+                                                                DataTable DT_CaptureData = new DataTable();
+                                                                DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
+                                                                if (DT_CaptureData.Rows != null)
                                                                 {
-                                                                    try
+                                                                    foreach (DataRow RW in DT_CaptureData.Rows)
                                                                     {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                        try
                                                                         {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
+                                                                            string DataValue = RW[1].ToString().Trim();
+                                                                            try
                                                                             {
-                                                                                jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
-                                                                                Img_Cnt++;
+                                                                                string CheckDate = DataValue.Substring(0, 10);
+                                                                                if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
+                                                                                {
+                                                                                    DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
+                                                                                }
+                                                                            }
+                                                                            catch (Exception)
+                                                                            {
+                                                                                DataValue = RW[1].ToString().Trim();
+                                                                            }
+                                                                            jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                }
+                                                                AIDC.Data = jsonObject_CD;
+                                                                int Img_Cnt = 0;
+                                                                try
+                                                                {
+                                                                    Transaction_File TFL = new Transaction_File();
+                                                                    DataTable DT_Files = new DataTable();
+                                                                    DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
+                                                                    string FilePath = "";
+                                                                    var jsonObject_Upload = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                    Img_Cnt++;
+                                                                                }
                                                                             }
                                                                         }
+                                                                        catch (Exception) { }
                                                                     }
-                                                                    catch (Exception) { }
-                                                                }
-                                                                TFL.Upload = jsonObject_Upload;
-                                                                var jsonObject_Processed = new JObject();
-                                                                for (int i = 0; i < 18; i += 3)
-                                                                {
-                                                                    try
+                                                                    TFL.Upload = jsonObject_Upload;
+                                                                    var jsonObject_Processed = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
                                                                     {
-                                                                        FilePath = "";
-                                                                        if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                        try
                                                                         {
-                                                                            FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
-                                                                            if (File.Exists(FilePath) == true)
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
                                                                             {
-                                                                                jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                }
                                                                             }
                                                                         }
+                                                                        catch (Exception) { }
                                                                     }
-                                                                    catch (Exception) { }
+                                                                    TFL.Processed = jsonObject_Processed;
+                                                                    AIDC.Files = TFL;
                                                                 }
-                                                                TFL.Processed = jsonObject_Processed;
-                                                                AIDC.Files = TFL;
+                                                                catch (Exception) { }
+                                                                AIDC.Transaction.Attached_File = Img_Cnt;
+                                                                Result_API = AIDC;
+                                                                break;
                                                             }
-                                                            catch (Exception) { }
-                                                            AIDC.Transaction.Attached_File = Img_Cnt;
-                                                            Result_API = AIDC;
-                                                            break;
+                                                        case "4":
+                                                            {
+                                                                string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
+                                                                string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
+                                                                Acuant_CLS_Validation_Sync AIDC = new Acuant_CLS_Validation_Sync();
+                                                                Transaction_CLS Transaction_CLS = new Transaction_CLS();
+                                                                Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
+                                                                Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
+                                                                Transaction_CLS.Username = API_Username;
+                                                                Transaction_CLS.Date_Format = Date_Format;
+                                                                Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
+                                                                Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
+                                                                Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
+                                                                Transaction_CLS.Attached_File = 0;
+                                                                if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
+                                                                Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
+                                                                Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
+                                                                Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
+                                                                AIDC.Transaction = Transaction_CLS;
+                                                                var jsonObject_CD = new JObject();
+                                                                DataTable DT_CaptureData = new DataTable();
+                                                                DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
+                                                                if (DT_CaptureData.Rows != null)
+                                                                {
+                                                                    foreach (DataRow RW in DT_CaptureData.Rows)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            string DataValue = RW[1].ToString().Trim();
+                                                                            try
+                                                                            {
+                                                                                string CheckDate = DataValue.Substring(0, 10);
+                                                                                if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
+                                                                                {
+                                                                                    DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
+                                                                                }
+                                                                            }
+                                                                            catch (Exception)
+                                                                            {
+                                                                                DataValue = RW[1].ToString().Trim();
+                                                                            }
+                                                                            jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                }
+                                                                AIDC.Data = jsonObject_CD;
+                                                                jsonObject_CD = new JObject();
+                                                                DataTable DT_Alert = new DataTable();
+                                                                DT_Alert = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Alert_Text From Users_17_API_Acuant_Alert Where (Transaction_ID = '" + Trans_ID + "') Order By Alert_Text");
+                                                                if (DT_Alert.Rows != null)
+                                                                {
+                                                                    int NoCounter = 0;
+                                                                    foreach (DataRow RW in DT_Alert.Rows)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            NoCounter++;
+                                                                            jsonObject_CD.Add("N" + NoCounter.ToString(), RW[0].ToString().Trim());
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                }
+                                                                AIDC.Alert = jsonObject_CD;
+                                                                jsonObject_CD = new JObject();
+                                                                DataTable DT_Authtication = new DataTable();
+                                                                DT_Authtication = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Top 1 Result_Code,Result_Text From Users_18_API_Acuant_Authentication Where (Transaction_ID = '" + Trans_ID + "')");
+                                                                if (DT_Authtication.Rows != null)
+                                                                {
+                                                                    try
+                                                                    {
+                                                                        jsonObject_CD.Add("Code", DT_Authtication.Rows[0][0].ToString().Trim());
+                                                                        jsonObject_CD.Add("Result", DT_Authtication.Rows[0][1].ToString().Trim());
+                                                                    }
+                                                                    catch (Exception) { }
+                                                                }
+                                                                AIDC.Authentication = jsonObject_CD;
+                                                                int Img_Cnt = 0;
+                                                                try
+                                                                {
+                                                                    Transaction_File TFL = new Transaction_File();
+                                                                    DataTable DT_Files = new DataTable();
+                                                                    DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
+                                                                    string FilePath = "";
+                                                                    var jsonObject_Upload = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                    Img_Cnt++;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Upload = jsonObject_Upload;
+                                                                    var jsonObject_Processed = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Processed = jsonObject_Processed;
+                                                                    AIDC.Files = TFL;
+                                                                }
+                                                                catch (Exception) { }
+                                                                AIDC.Transaction.Attached_File = Img_Cnt;
+                                                                Result_API = AIDC;
+                                                                break;
+                                                            }
+                                                        case "7":
+                                                            {
+                                                                string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
+                                                                string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
+                                                                Acuant_CLS_OCR_Sync AIDC = new Acuant_CLS_OCR_Sync();
+                                                                Transaction_CLS Transaction_CLS = new Transaction_CLS();
+                                                                Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
+                                                                Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
+                                                                Transaction_CLS.Username = API_Username;
+                                                                Transaction_CLS.Date_Format = Date_Format;
+                                                                Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
+                                                                Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
+                                                                Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
+                                                                Transaction_CLS.Attached_File = 0;
+                                                                if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
+                                                                Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
+                                                                Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
+                                                                Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
+                                                                AIDC.Transaction = Transaction_CLS;
+                                                                var jsonObject_CD = new JObject();
+                                                                DataTable DT_CaptureData = new DataTable();
+                                                                DT_CaptureData = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Document_Key,Document_Value From Users_16_API_Acuant_Result Where (Transaction_ID = '" + Trans_ID + "') Order By Document_ID");
+                                                                if (DT_CaptureData.Rows != null)
+                                                                {
+                                                                    foreach (DataRow RW in DT_CaptureData.Rows)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            string DataValue = RW[1].ToString().Trim();
+                                                                            try
+                                                                            {
+                                                                                string CheckDate = DataValue.Substring(0, 10);
+                                                                                if ((CheckDate[2] == '/') && (CheckDate[5] == '/'))
+                                                                                {
+                                                                                    DataValue = Pb.ConvertDate_Format(CheckDate, "dd/MM/yyyy", Date_Format);
+                                                                                }
+                                                                            }
+                                                                            catch (Exception)
+                                                                            {
+                                                                                DataValue = RW[1].ToString().Trim();
+                                                                            }
+                                                                            jsonObject_CD.Add(RW[0].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), DataValue);
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                }
+                                                                AIDC.Data = jsonObject_CD;
+                                                                int Img_Cnt = 0;
+                                                                try
+                                                                {
+                                                                    Transaction_File TFL = new Transaction_File();
+                                                                    DataTable DT_Files = new DataTable();
+                                                                    DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
+                                                                    string FilePath = "";
+                                                                    var jsonObject_Upload = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                    Img_Cnt++;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Upload = jsonObject_Upload;
+                                                                    var jsonObject_Processed = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Processed = jsonObject_Processed;
+                                                                    AIDC.Files = TFL;
+                                                                }
+                                                                catch (Exception) { }
+                                                                AIDC.Transaction.Attached_File = Img_Cnt;
+                                                                Result_API = AIDC;
+                                                                break;
+                                                            }
+                                                        case "11":
+                                                            {
+                                                                string Trans_ID = DT_Transaction.Rows[0][0].ToString().Trim();
+                                                                string Date_Format = DT_Transaction.Rows[0][15].ToString().Trim();
+                                                                Passport_CLS_OCR_Sync AIDC = new Passport_CLS_OCR_Sync();
+                                                                Transaction_CLS_Passport Transaction_CLS = new Transaction_CLS_Passport();
+                                                                Transaction_CLS.Name = DT_Transaction.Rows[0][4].ToString().Trim();
+                                                                Transaction_CLS.ID = DT_Transaction.Rows[0][1].ToString().Trim();
+                                                                Transaction_CLS.Username = API_Username;
+                                                                Transaction_CLS.Date_Format = Date_Format;
+                                                                Transaction_CLS.Request_Date = Pb.ConvertDate_Format(DT_Transaction.Rows[0][7].ToString().Trim(), "yyyy-MM-dd", Date_Format);
+                                                                Transaction_CLS.Request_Time = DT_Transaction.Rows[0][8].ToString().Trim();
+                                                                Transaction_CLS.Request_IP = DT_Transaction.Rows[0][9].ToString().Trim();
+                                                                Transaction_CLS.Attached_File = 0;
+                                                                if (DT_Transaction.Rows[0][37].ToString().Trim() == "") { Transaction_CLS.Async = false; } else { Transaction_CLS.Async = true; }
+                                                                Transaction_CLS.Callback_URL = DT_Transaction.Rows[0][37].ToString().Trim();
+                                                                try
+                                                                {
+                                                                    DataTable DT_Get_Pass_Argument = new DataTable();
+                                                                    DT_Get_Pass_Argument = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Processing_Type,Document_Validation,Overlay_Required,Detect_Orientation,Image_Scale,Cropping_Mode From Users_15_API_Transaction_RequestArgument Where (Transaction_ID = '" + Trans_ID + "')");
+                                                                    if (DT_Get_Pass_Argument.Rows != null)
+                                                                    {
+                                                                        if (DT_Get_Pass_Argument.Rows.Count == 1)
+                                                                        {
+                                                                            Transaction_CLS.Processing_Type = DT_Get_Pass_Argument.Rows[0][0].ToString().Trim();
+                                                                            if (DT_Get_Pass_Argument.Rows[0][1].ToString().Trim() == "1") { Transaction_CLS.Document_Validation = "True"; }
+                                                                            if (DT_Get_Pass_Argument.Rows[0][2].ToString().Trim() == "1") { Transaction_CLS.Overlay_Required = "True"; }
+                                                                            if (DT_Get_Pass_Argument.Rows[0][3].ToString().Trim() == "1") { Transaction_CLS.Detect_Orientation = "True"; }
+                                                                            if (DT_Get_Pass_Argument.Rows[0][4].ToString().Trim() == "1") { Transaction_CLS.Image_Scale = "True"; }
+                                                                            if (DT_Get_Pass_Argument.Rows[0][5].ToString().Trim() == "1") { Transaction_CLS.Cropping_Mode = "True"; }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                catch (Exception) { }
+                                                                Transaction_CLS.Status_Code = int.Parse(DT_Transaction.Rows[0][13].ToString().Trim());
+                                                                Transaction_CLS.Status_Result = DT_Transaction.Rows[0][14].ToString().Trim();
+                                                                AIDC.Transaction = Transaction_CLS;
+                                                                var Json_Data = new JObject();
+                                                                // MRZ :
+                                                                try
+                                                                {
+                                                                    int BMRZ1 = 0; int BMRZ2 = 0;
+                                                                    var Json_MRZLines = new JObject();
+                                                                    var Json_MRZClassification = new JObject();
+                                                                    try
+                                                                    {
+                                                                        DataTable DT_Get_MRZ_Lines = new DataTable();
+                                                                        DT_Get_MRZ_Lines = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select * From Users_19_API_Passport_MRZ Where (Transaction_ID = '" + Trans_ID + "')");
+                                                                        if (DT_Get_MRZ_Lines.Rows != null)
+                                                                        {
+                                                                            if (DT_Get_MRZ_Lines.Rows.Count == 1)
+                                                                            {
+                                                                                try
+                                                                                {
+                                                                                    Json_MRZLines.Add("Line_1", DT_Get_MRZ_Lines.Rows[0][1].ToString().Trim());
+                                                                                    Json_MRZLines.Add("Line_2", DT_Get_MRZ_Lines.Rows[0][2].ToString().Trim());
+                                                                                    Json_MRZLines.Add("Message", DT_Get_MRZ_Lines.Rows[0][3].ToString().Trim());
+                                                                                    BMRZ1 = 1;
+                                                                                }
+                                                                                catch (Exception) { }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    catch (Exception) { }
+                                                                    try
+                                                                    {
+                                                                        DataTable DT_Get_MRZ_Classification = new DataTable();
+                                                                        DT_Get_MRZ_Classification = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select * From Users_20_API_Passport_MRZ_Decoded Where (Transaction_ID = '" + Trans_ID + "') Order By Field_ID");
+                                                                        if (DT_Get_MRZ_Classification.Rows != null)
+                                                                        {
+                                                                            if (DT_Get_MRZ_Classification.Rows.Count != 0)
+                                                                            {
+                                                                                foreach (DataRow RW in DT_Get_MRZ_Classification.Rows)
+                                                                                {
+                                                                                    try
+                                                                                    {
+                                                                                        if ((RW[1].ToString().Trim() == "10") || (RW[1].ToString().Trim() == "13"))
+                                                                                        {
+                                                                                            Json_MRZClassification.Add(RW[2].ToString().Trim().Replace(" ", "_"), Pb.ConvertDate_Format(RW[3].ToString().Trim(), "yyMMdd", Date_Format));
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            Json_MRZClassification.Add(RW[2].ToString().Trim().Replace(" ", "_"), RW[3].ToString().Trim());
+                                                                                        }
+                                                                                    }
+                                                                                    catch (Exception) { }
+                                                                                    BMRZ2 = 1;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    catch (Exception) { }
+                                                                    if ((BMRZ1 == 1) || (BMRZ2 == 1))
+                                                                    {
+                                                                        var Json_MRZ = new JObject();
+                                                                        if (BMRZ1 == 1) { Json_MRZ.Add("Lines", Json_MRZLines); }
+                                                                        if (BMRZ2 == 1) { Json_MRZ.Add("Classification", Json_MRZClassification); }
+                                                                        Json_Data.Add("MRZ", Json_MRZ);
+                                                                    }
+                                                                }
+                                                                catch (Exception) { }
+                                                                // Passport :
+                                                                try
+                                                                {
+                                                                    int BPass1 = 0; int BPass2 = 0; int BPass3 = 0;
+                                                                    string Json_Pass_Lines = "";
+                                                                    string Json_Pass_ParsedText = "";
+                                                                    var Json_Pass_Classification = new JObject();
+                                                                    try
+                                                                    {
+                                                                        DataTable DT_Get_Passport_LinesText = new DataTable();
+                                                                        DT_Get_Passport_LinesText = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select * From Users_21_API_Passport_OCR Where (Transaction_ID = '" + Trans_ID + "')");
+                                                                        if (DT_Get_Passport_LinesText.Rows != null)
+                                                                        {
+                                                                            if (DT_Get_Passport_LinesText.Rows.Count == 1)
+                                                                            {
+                                                                                try
+                                                                                {
+                                                                                    if (DT_Get_Passport_LinesText.Rows[0][1].ToString().Trim() != "")
+                                                                                    {
+                                                                                        string FullOCRResult = "";
+                                                                                        FullOCRResult = DT_Get_Passport_LinesText.Rows[0][1].ToString().Trim();
+                                                                                        FullOCRResult = FullOCRResult.Replace('#', ',');
+                                                                                        FullOCRResult = FullOCRResult.Replace('$', '\'');
+                                                                                        FullOCRResult = FullOCRResult.Replace('%', '\"');
+                                                                                        FullOCRResult = FullOCRResult.Trim();
+                                                                                        OCR_Result OCR_Orientation_Res = JsonConvert.DeserializeObject<OCR_Result>(FullOCRResult);
+                                                                                        Json_Pass_Lines = JsonConvert.SerializeObject(OCR_Orientation_Res.ParsedResults[0].TextOverlay);
+                                                                                        BPass1 = 1;
+                                                                                    }
+                                                                                }
+                                                                                catch (Exception) { BPass1 = 0; }
+                                                                                try
+                                                                                {
+                                                                                    if (DT_Get_Passport_LinesText.Rows[0][2].ToString().Trim() != "")
+                                                                                    {
+                                                                                        Json_Pass_ParsedText = DT_Get_Passport_LinesText.Rows[0][2].ToString().Trim();
+                                                                                        Json_Pass_ParsedText = Json_Pass_ParsedText.Replace('#', ',');
+                                                                                        Json_Pass_ParsedText = Json_Pass_ParsedText.Replace('$', '\'');
+                                                                                        Json_Pass_ParsedText = Json_Pass_ParsedText.Replace('%', '\"');
+                                                                                        Json_Pass_ParsedText = Json_Pass_ParsedText.Trim();
+                                                                                        BPass2 = 1;
+                                                                                    }
+                                                                                }
+                                                                                catch (Exception) { BPass2 = 0; }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    catch (Exception) { }
+                                                                    try
+                                                                    {
+                                                                        DataTable DT_Get_MRZ_Classification = new DataTable();
+                                                                        DT_Get_MRZ_Classification = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select * From Users_22_API_Passport_OCR_Decoded Where (Transaction_ID = '" + Trans_ID + "') Order By Field_ID");
+                                                                        if (DT_Get_MRZ_Classification.Rows != null)
+                                                                        {
+                                                                            if (DT_Get_MRZ_Classification.Rows.Count != 0)
+                                                                            {
+                                                                                foreach (DataRow RW in DT_Get_MRZ_Classification.Rows)
+                                                                                {
+                                                                                    try { Json_Pass_Classification.Add(RW[2].ToString().Trim().Replace(" ", "_"), RW[3].ToString().Trim()); } catch (Exception) { }
+                                                                                    BPass2 = 1;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    catch (Exception) { }
+                                                                    if ((BPass1 == 1) || (BPass2 == 1) || (BPass3 == 1))
+                                                                    {
+                                                                        var Json_Passport = new JObject();
+                                                                        if (BPass1 == 1) { Json_Passport.Add("Lines", Json_Pass_Lines); }
+                                                                        if (BPass2 == 1) { Json_Passport.Add("ParsedText", Json_Pass_ParsedText); }
+                                                                        if (BPass3 == 1) { Json_Passport.Add("Classification", Json_Pass_Classification); }
+                                                                        Json_Data.Add("Passport", Json_Passport);
+                                                                    }
+                                                                }
+                                                                catch (Exception) { }
+                                                                // Validation :
+                                                                try
+                                                                {
+                                                                    int BValid1 = 0; int BValid2 = 0;
+                                                                    string Validation_Code = "0";
+                                                                    string Validation_Status = "Unknown";
+                                                                    var Json_Validation_Details = new JObject();
+                                                                    try
+                                                                    {
+                                                                        DataTable DT_Get_Validation_Result = new DataTable();
+                                                                        DT_Get_Validation_Result = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select * From Users_24_API_Passport_Validation_Result Where (Transaction_ID = '" + Trans_ID + "')");
+                                                                        if (DT_Get_Validation_Result.Rows != null)
+                                                                        {
+                                                                            if (DT_Get_Validation_Result.Rows.Count == 1)
+                                                                            {
+                                                                                Validation_Code = DT_Get_Validation_Result.Rows[0][1].ToString().Trim();
+                                                                                Validation_Status = DT_Get_Validation_Result.Rows[0][2].ToString().Trim();
+                                                                                BValid1 = 1;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    catch (Exception) { }
+                                                                    try
+                                                                    {
+                                                                        DataTable DT_Get_ValidationDetails = new DataTable();
+                                                                        DT_Get_ValidationDetails = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select * From Users_23_API_Passport_Validation Where (Transaction_ID = '" + Trans_ID + "') Order By Field_ID");
+                                                                        if (DT_Get_ValidationDetails.Rows != null)
+                                                                        {
+                                                                            if (DT_Get_ValidationDetails.Rows.Count != 0)
+                                                                            {
+                                                                                foreach (DataRow RW in DT_Get_ValidationDetails.Rows)
+                                                                                {
+                                                                                    try { Json_Validation_Details.Add(RW[2].ToString().Trim().Replace(" ", "_"), RW[3].ToString().Trim()); } catch (Exception) { }
+                                                                                    BValid2 = 1;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    catch (Exception) { }
+                                                                    if ((BValid1 == 1) || (BValid2 == 1))
+                                                                    {
+                                                                        var Json_Passport = new JObject();
+                                                                        if (BValid1 == 1) { Json_Passport.Add("Code", Validation_Code); Json_Passport.Add("Status", Validation_Status); }
+                                                                        if (BValid2 == 1) { Json_Passport.Add("Details", Json_Validation_Details); }
+                                                                        Json_Data.Add("Validation", Json_Passport);
+                                                                    }
+                                                                }
+                                                                catch (Exception) { }
+                                                                // Setup Result :
+                                                                AIDC.Data = Json_Data;
+                                                                // Image Files :
+                                                                int Img_Cnt = 0;
+                                                                try
+                                                                {
+                                                                    Transaction_File TFL = new Transaction_File();
+                                                                    DataTable DT_Files = new DataTable();
+                                                                    DT_Files = Sq.Get_DTable_TSQL(DataBase_Selector.Administrator, "Select Image_1_Title,Image_1_Download_ID,Image_1_File_Format,Image_2_Title,Image_2_Download_ID,Image_2_File_Format,Image_3_Title,Image_3_Download_ID,Image_3_File_Format,Image_4_Title,Image_4_Download_ID,Image_4_File_Format,Image_5_Title,Image_5_Download_ID,Image_5_File_Format,Image_6_Title,Image_6_Download_ID,Image_6_File_Format From Users_15_API_Transaction Where (ID = '" + Trans_ID + "')");
+                                                                    string FilePath = "";
+                                                                    var jsonObject_Upload = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Upload/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Upload.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "U" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                    Img_Cnt++;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Upload = jsonObject_Upload;
+                                                                    var jsonObject_Processed = new JObject();
+                                                                    for (int i = 0; i < 18; i += 3)
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            FilePath = "";
+                                                                            if (DT_Files.Rows[0][i + 1].ToString().Trim() != "")
+                                                                            {
+                                                                                FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Users/API/" + Trans_ID + "/Result/" + DT_Files.Rows[0][i + 1].ToString().Trim() + "." + DT_Files.Rows[0][i + 2].ToString().Trim());
+                                                                                if (File.Exists(FilePath) == true)
+                                                                                {
+                                                                                    jsonObject_Processed.Add(DT_Files.Rows[0][i].ToString().Trim().Replace("  ", " ").Replace(" ", "_"), "P" + DT_Files.Rows[0][i + 1].ToString().Trim());
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception) { }
+                                                                    }
+                                                                    TFL.Processed = jsonObject_Processed;
+                                                                    AIDC.Files = TFL;
+                                                                }
+                                                                catch (Exception) { }
+                                                                AIDC.Transaction.Attached_File = Img_Cnt;
+                                                                Result_API = AIDC;
+                                                                break;
+                                                            }
+                                                    }
+                                                    try
+                                                    {
+                                                        string URetIP = Pb.GetUserIP_HttpRequest(HttpContext.Current.Request); ;
+                                                        if (DT_Transaction.Rows[0][40].ToString().Trim() == "0")
+                                                        {
+                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Retrieve_Flag] = '1',[Retrieve_Count] = '1',[Retrieve_First_Date] = '" + Sq.Sql_Date() + "',[Retrieve_First_Time] = '" + Sq.Sql_Time() + "',[Retrieve_First_IP] = '" + URetIP + "',[Retrieve_Last_Date] = '" + Sq.Sql_Date() + "',[Retrieve_Last_Time] = '" + Sq.Sql_Time() + "',[Retrieve_Last_IP] = '" + URetIP + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
                                                         }
+                                                        else
+                                                        {
+                                                            int RetCount = int.Parse(DT_Transaction.Rows[0][41].ToString().Trim());
+                                                            RetCount = RetCount + 1;
+                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Retrieve_Count] = '" + RetCount + "',[Retrieve_Last_Date] = '" + Sq.Sql_Date() + "',[Retrieve_Last_Time] = '" + Sq.Sql_Time() + "',[Retrieve_Last_IP] = '" + URetIP + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                        }
+                                                    }
+                                                    catch (Exception) { }
                                                 }
-                                                try
+                                                else
                                                 {
-                                                    string URetIP = Pb.GetUserIP_HttpRequest(HttpContext.Current.Request); ;
-                                                    if (DT_Transaction.Rows[0][40].ToString().Trim() == "0")
-                                                    {
-                                                        Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Retrieve_Flag] = '1',[Retrieve_Count] = '1',[Retrieve_First_Date] = '" + Sq.Sql_Date() + "',[Retrieve_First_Time] = '" + Sq.Sql_Time() + "',[Retrieve_First_IP] = '" + URetIP + "',[Retrieve_Last_Date] = '" + Sq.Sql_Date() + "',[Retrieve_Last_Time] = '" + Sq.Sql_Time() + "',[Retrieve_Last_IP] = '" + URetIP + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                    }
-                                                    else
-                                                    {
-                                                        int RetCount = int.Parse(DT_Transaction.Rows[0][41].ToString().Trim());
-                                                        RetCount = RetCount + 1;
-                                                        Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Retrieve_Count] = '" + RetCount + "',[Retrieve_Last_Date] = '" + Sq.Sql_Date() + "',[Retrieve_Last_Time] = '" + Sq.Sql_Time() + "',[Retrieve_Last_IP] = '" + URetIP + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                    }
+                                                    FunctionResult_Mesaage.Code = 8;
+                                                    FunctionResult_Mesaage.Error = true;
+                                                    FunctionResult_Mesaage.Description = "You do not have permission to use this service, Please contact the IDV support team";
                                                 }
-                                                catch (Exception) { }
                                             }
                                             else
                                             {
-                                                FunctionResult_Mesaage.Code = 8;
+                                                FunctionResult_Mesaage.Code = 10;
                                                 FunctionResult_Mesaage.Error = true;
                                                 FunctionResult_Mesaage.Description = "You do not have permission to use this service, Please contact the IDV support team";
                                             }

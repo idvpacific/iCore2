@@ -82,155 +82,165 @@ namespace iCore_Administrator.API.Result
                                             Err_User_ID = DT_Transaction.Rows[0][2].ToString().Trim();
                                             Err_User_Type = DT_Transaction.Rows[0][3].ToString().Trim();
                                             User_API_AccessPolicy UAP = new User_API_AccessPolicy();
-                                            if (UAP.User_Access(API_Username, API_Password, DT_Transaction.Rows[0][5].ToString().Trim()) == true)
-                                            {
-                                                if (Image_ID != "")
-                                                {
-                                                    HttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.OK);
-                                                    string BasicFileFolder = "";
-                                                    string ImageFileName = "";
-                                                    string ImageFileTitle = "";
-                                                    string ImageFileFormat = "";
-                                                    if (Image_ID[0].ToString().ToUpper() == "U") { BasicFileFolder = "Upload"; }
-                                                    if (Image_ID[0].ToString().ToUpper() == "P") { BasicFileFolder = "Result"; }
-                                                    try { ImageFileName = Image_ID.Substring(1, Image_ID.Length - 1).Trim(); } catch (Exception) { ImageFileName = "ArashMasihi843"; }
-                                                    if (ImageFileName == DT_Transaction.Rows[0][52].ToString().Trim())
-                                                    {
-                                                        ImageFileTitle = DT_Transaction.Rows[0][48].ToString().Trim();
-                                                        ImageFileFormat = DT_Transaction.Rows[0][50].ToString().Trim();
-                                                        if (DT_Transaction.Rows[0][53].ToString().Trim() == "0")
-                                                        {
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_1_Download_Count] = '1',[Image_1_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_1_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                        else
-                                                        {
-                                                            int DCnt = 1;
-                                                            DCnt = int.Parse(DT_Transaction.Rows[0][53].ToString().Trim());
-                                                            DCnt++;
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_1_Download_Count] = '" + DCnt + "',[Image_1_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_1_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                    }
-                                                    if (ImageFileName == DT_Transaction.Rows[0][62].ToString().Trim())
-                                                    {
-                                                        ImageFileTitle = DT_Transaction.Rows[0][58].ToString().Trim();
-                                                        ImageFileFormat = DT_Transaction.Rows[0][60].ToString().Trim();
-                                                        if (DT_Transaction.Rows[0][63].ToString().Trim() == "0")
-                                                        {
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_2_Download_Count] = '1',[Image_2_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_2_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                        else
-                                                        {
-                                                            int DCnt = 1;
-                                                            DCnt = int.Parse(DT_Transaction.Rows[0][63].ToString().Trim());
-                                                            DCnt++;
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_2_Download_Count] = '" + DCnt + "',[Image_2_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_2_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                    }
-                                                    if (ImageFileName == DT_Transaction.Rows[0][72].ToString().Trim())
-                                                    {
-                                                        ImageFileTitle = DT_Transaction.Rows[0][68].ToString().Trim();
-                                                        ImageFileFormat = DT_Transaction.Rows[0][70].ToString().Trim();
-                                                        if (DT_Transaction.Rows[0][73].ToString().Trim() == "0")
-                                                        {
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_3_Download_Count] = '1',[Image_3_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_3_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                        else
-                                                        {
-                                                            int DCnt = 1;
-                                                            DCnt = int.Parse(DT_Transaction.Rows[0][73].ToString().Trim());
-                                                            DCnt++;
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_3_Download_Count] = '" + DCnt + "',[Image_3_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_3_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                    }
-                                                    if (ImageFileName == DT_Transaction.Rows[0][82].ToString().Trim())
-                                                    {
-                                                        ImageFileTitle = DT_Transaction.Rows[0][78].ToString().Trim();
-                                                        ImageFileFormat = DT_Transaction.Rows[0][80].ToString().Trim();
-                                                        if (DT_Transaction.Rows[0][83].ToString().Trim() == "0")
-                                                        {
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_4_Download_Count] = '1',[Image_4_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_4_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                        else
-                                                        {
-                                                            int DCnt = 1;
-                                                            DCnt = int.Parse(DT_Transaction.Rows[0][83].ToString().Trim());
-                                                            DCnt++;
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_4_Download_Count] = '" + DCnt + "',[Image_4_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_4_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                    }
-                                                    if (ImageFileName == DT_Transaction.Rows[0][92].ToString().Trim())
-                                                    {
-                                                        ImageFileTitle = DT_Transaction.Rows[0][88].ToString().Trim();
-                                                        ImageFileFormat = DT_Transaction.Rows[0][90].ToString().Trim();
-                                                        if (DT_Transaction.Rows[0][93].ToString().Trim() == "0")
-                                                        {
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_5_Download_Count] = '1',[Image_5_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_5_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                        else
-                                                        {
-                                                            int DCnt = 1;
-                                                            DCnt = int.Parse(DT_Transaction.Rows[0][93].ToString().Trim());
-                                                            DCnt++;
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_5_Download_Count] = '" + DCnt + "',[Image_5_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_5_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                    }
-                                                    if (ImageFileName == DT_Transaction.Rows[0][102].ToString().Trim())
-                                                    {
-                                                        ImageFileTitle = DT_Transaction.Rows[0][98].ToString().Trim();
-                                                        ImageFileFormat = DT_Transaction.Rows[0][100].ToString().Trim();
-                                                        if (DT_Transaction.Rows[0][103].ToString().Trim() == "0")
-                                                        {
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_6_Download_Count] = '1',[Image_6_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_6_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                        else
-                                                        {
-                                                            int DCnt = 1;
-                                                            DCnt = int.Parse(DT_Transaction.Rows[0][103].ToString().Trim());
-                                                            DCnt++;
-                                                            Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_6_Download_Count] = '" + DCnt + "',[Image_6_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_6_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
-                                                        }
-                                                    }
-                                                    try
-                                                    {
-                                                        var ImgPath = HttpContext.Current.Server.MapPath("~/Drive/Users/API/" + DT_Transaction.Rows[0][0].ToString().Trim() + "/" + BasicFileFolder + "/" + ImageFileName + "." + ImageFileFormat);
-                                                        if (File.Exists(ImgPath) == true)
-                                                        {
-                                                            res = new HttpResponseMessage(HttpStatusCode.OK);
-                                                            var stream = new FileStream(ImgPath, FileMode.Open, FileAccess.Read);
-                                                            res.Content = new StreamContent(stream);
 
-                                                            res.Content.Headers.ContentDisposition =
-                                                                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
-                                                                {
-                                                                    FileName = ImageFileTitle + "-" + ImageFileName + "-" + DT_Transaction.Rows[0][1].ToString().Trim() + "." + ImageFileFormat
-                                                                };
-                                                            res.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                                                            return res;
+                                            if (UAP.User_Access(API_Username, API_Password, API_Code) == true)
+                                            {
+                                                if (UAP.User_Access(API_Username, API_Password, DT_Transaction.Rows[0][5].ToString().Trim()) == true)
+                                                {
+                                                    if (Image_ID != "")
+                                                    {
+                                                        HttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.OK);
+                                                        string BasicFileFolder = "";
+                                                        string ImageFileName = "";
+                                                        string ImageFileTitle = "";
+                                                        string ImageFileFormat = "";
+                                                        if (Image_ID[0].ToString().ToUpper() == "U") { BasicFileFolder = "Upload"; }
+                                                        if (Image_ID[0].ToString().ToUpper() == "P") { BasicFileFolder = "Result"; }
+                                                        try { ImageFileName = Image_ID.Substring(1, Image_ID.Length - 1).Trim(); } catch (Exception) { ImageFileName = "ArashMasihi843"; }
+                                                        if (ImageFileName == DT_Transaction.Rows[0][52].ToString().Trim())
+                                                        {
+                                                            ImageFileTitle = DT_Transaction.Rows[0][48].ToString().Trim();
+                                                            ImageFileFormat = DT_Transaction.Rows[0][50].ToString().Trim();
+                                                            if (DT_Transaction.Rows[0][53].ToString().Trim() == "0")
+                                                            {
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_1_Download_Count] = '1',[Image_1_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_1_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                            else
+                                                            {
+                                                                int DCnt = 1;
+                                                                DCnt = int.Parse(DT_Transaction.Rows[0][53].ToString().Trim());
+                                                                DCnt++;
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_1_Download_Count] = '" + DCnt + "',[Image_1_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_1_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
                                                         }
-                                                        else
+                                                        if (ImageFileName == DT_Transaction.Rows[0][62].ToString().Trim())
+                                                        {
+                                                            ImageFileTitle = DT_Transaction.Rows[0][58].ToString().Trim();
+                                                            ImageFileFormat = DT_Transaction.Rows[0][60].ToString().Trim();
+                                                            if (DT_Transaction.Rows[0][63].ToString().Trim() == "0")
+                                                            {
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_2_Download_Count] = '1',[Image_2_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_2_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                            else
+                                                            {
+                                                                int DCnt = 1;
+                                                                DCnt = int.Parse(DT_Transaction.Rows[0][63].ToString().Trim());
+                                                                DCnt++;
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_2_Download_Count] = '" + DCnt + "',[Image_2_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_2_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                        }
+                                                        if (ImageFileName == DT_Transaction.Rows[0][72].ToString().Trim())
+                                                        {
+                                                            ImageFileTitle = DT_Transaction.Rows[0][68].ToString().Trim();
+                                                            ImageFileFormat = DT_Transaction.Rows[0][70].ToString().Trim();
+                                                            if (DT_Transaction.Rows[0][73].ToString().Trim() == "0")
+                                                            {
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_3_Download_Count] = '1',[Image_3_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_3_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                            else
+                                                            {
+                                                                int DCnt = 1;
+                                                                DCnt = int.Parse(DT_Transaction.Rows[0][73].ToString().Trim());
+                                                                DCnt++;
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_3_Download_Count] = '" + DCnt + "',[Image_3_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_3_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                        }
+                                                        if (ImageFileName == DT_Transaction.Rows[0][82].ToString().Trim())
+                                                        {
+                                                            ImageFileTitle = DT_Transaction.Rows[0][78].ToString().Trim();
+                                                            ImageFileFormat = DT_Transaction.Rows[0][80].ToString().Trim();
+                                                            if (DT_Transaction.Rows[0][83].ToString().Trim() == "0")
+                                                            {
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_4_Download_Count] = '1',[Image_4_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_4_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                            else
+                                                            {
+                                                                int DCnt = 1;
+                                                                DCnt = int.Parse(DT_Transaction.Rows[0][83].ToString().Trim());
+                                                                DCnt++;
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_4_Download_Count] = '" + DCnt + "',[Image_4_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_4_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                        }
+                                                        if (ImageFileName == DT_Transaction.Rows[0][92].ToString().Trim())
+                                                        {
+                                                            ImageFileTitle = DT_Transaction.Rows[0][88].ToString().Trim();
+                                                            ImageFileFormat = DT_Transaction.Rows[0][90].ToString().Trim();
+                                                            if (DT_Transaction.Rows[0][93].ToString().Trim() == "0")
+                                                            {
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_5_Download_Count] = '1',[Image_5_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_5_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                            else
+                                                            {
+                                                                int DCnt = 1;
+                                                                DCnt = int.Parse(DT_Transaction.Rows[0][93].ToString().Trim());
+                                                                DCnt++;
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_5_Download_Count] = '" + DCnt + "',[Image_5_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_5_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                        }
+                                                        if (ImageFileName == DT_Transaction.Rows[0][102].ToString().Trim())
+                                                        {
+                                                            ImageFileTitle = DT_Transaction.Rows[0][98].ToString().Trim();
+                                                            ImageFileFormat = DT_Transaction.Rows[0][100].ToString().Trim();
+                                                            if (DT_Transaction.Rows[0][103].ToString().Trim() == "0")
+                                                            {
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_6_Download_Count] = '1',[Image_6_Download_FIrst_Date] = '" + Sq.Sql_Date() + "',[Image_6_Download_FIrst_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                            else
+                                                            {
+                                                                int DCnt = 1;
+                                                                DCnt = int.Parse(DT_Transaction.Rows[0][103].ToString().Trim());
+                                                                DCnt++;
+                                                                Sq.Execute_TSql(DataBase_Selector.Administrator, "Update Users_15_API_Transaction Set [Image_6_Download_Count] = '" + DCnt + "',[Image_6_Download_Last_Date] = '" + Sq.Sql_Date() + "',[Image_6_Download_Last_Time] = '" + Sq.Sql_Time() + "' Where (ID = '" + DT_Transaction.Rows[0][0].ToString().Trim() + "')");
+                                                            }
+                                                        }
+                                                        try
+                                                        {
+                                                            var ImgPath = HttpContext.Current.Server.MapPath("~/Drive/Users/API/" + DT_Transaction.Rows[0][0].ToString().Trim() + "/" + BasicFileFolder + "/" + ImageFileName + "." + ImageFileFormat);
+                                                            if (File.Exists(ImgPath) == true)
+                                                            {
+                                                                res = new HttpResponseMessage(HttpStatusCode.OK);
+                                                                var stream = new FileStream(ImgPath, FileMode.Open, FileAccess.Read);
+                                                                res.Content = new StreamContent(stream);
+
+                                                                res.Content.Headers.ContentDisposition =
+                                                                    new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                                                                    {
+                                                                        FileName = ImageFileTitle + "-" + ImageFileName + "-" + DT_Transaction.Rows[0][1].ToString().Trim() + "." + ImageFileFormat
+                                                                    };
+                                                                res.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                                                                return res;
+                                                            }
+                                                            else
+                                                            {
+                                                                FunctionResult_Mesaage.Code = 13;
+                                                                FunctionResult_Mesaage.Error = true;
+                                                                FunctionResult_Mesaage.Description = "Image ID is not valid, Please reviewing your request structure";
+                                                            }
+                                                        }
+                                                        catch (Exception)
                                                         {
                                                             FunctionResult_Mesaage.Code = 12;
                                                             FunctionResult_Mesaage.Error = true;
                                                             FunctionResult_Mesaage.Description = "Image ID is not valid, Please reviewing your request structure";
                                                         }
                                                     }
-                                                    catch (Exception)
+                                                    else
                                                     {
                                                         FunctionResult_Mesaage.Code = 11;
                                                         FunctionResult_Mesaage.Error = true;
-                                                        FunctionResult_Mesaage.Description = "Image ID is not valid, Please reviewing your request structure";
+                                                        FunctionResult_Mesaage.Description = "Image ID is not founded, Please reviewing your request structure";
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    FunctionResult_Mesaage.Code = 10;
+                                                    FunctionResult_Mesaage.Code = 8;
                                                     FunctionResult_Mesaage.Error = true;
-                                                    FunctionResult_Mesaage.Description = "Image ID is not founded, Please reviewing your request structure";
+                                                    FunctionResult_Mesaage.Description = "You do not have permission to use this service, Please contact the IDV support team";
                                                 }
                                             }
                                             else
                                             {
-                                                FunctionResult_Mesaage.Code = 8;
+                                                FunctionResult_Mesaage.Code = 10;
                                                 FunctionResult_Mesaage.Error = true;
                                                 FunctionResult_Mesaage.Description = "You do not have permission to use this service, Please contact the IDV support team";
                                             }

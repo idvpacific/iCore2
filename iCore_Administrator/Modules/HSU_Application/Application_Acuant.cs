@@ -169,7 +169,7 @@ namespace iCore_Administrator.Modules.HSU_Application
                                         case "Signature":
                                             {
                                                 Bitmap SIMG = _assureIdServiceClient.GetDocumentFieldImage(document.InstanceId, "Signature");
-                                                var filePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/" + AppID + "/Result/" + Front_Image_ID + "_Signature" + ".png");
+                                                var filePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/" + Front_Image_ID + "_Signature" + ".png");
                                                 SIMG.Save(filePath, ImageFormat.Jpeg);
                                                 break;
                                             }
@@ -215,29 +215,49 @@ namespace iCore_Administrator.Modules.HSU_Application
                         string SIMGP = "";
                         if (document.Classification.PresentationChanged == false)
                         {
-                            if (VF == true)
+                            try
                             {
-                                SIMGP = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/" + Front_Image_ID + ".jpg");
-                                VFI.Save(SIMGP, ImageFormat.Jpeg);
+                                if (VF == true)
+                                {
+                                    SIMGP = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/" + Front_Image_ID + ".jpg");
+                                    VFI.Save(SIMGP, ImageFormat.Jpeg);
+                                }
+
                             }
-                            if (VB == true)
+                            catch (Exception)
+                            {}
+                            try
                             {
-                                SIMGP = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/" + Back_Image_ID + ".jpg");
-                                VBI.Save(SIMGP, ImageFormat.Jpeg);
+                                if (VB == true)
+                                {
+                                    SIMGP = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/" + Back_Image_ID + ".jpg");
+                                    VBI.Save(SIMGP, ImageFormat.Jpeg);
+                                }
                             }
+                            catch (Exception) { }
                         }
                         else
                         {
-                            if (VF == true)
+                            try
                             {
-                                SIMGP = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/"  + Back_Image_ID +  ".jpg");
-                                VFI.Save(SIMGP, ImageFormat.Jpeg);
+                                if (VF == true)
+                                {
+                                    SIMGP = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/" + Back_Image_ID + ".jpg");
+                                    VFI.Save(SIMGP, ImageFormat.Jpeg);
+                                }
                             }
-                            if (VB == true)
+                            catch (Exception)
+                            { }
+                            try
                             {
-                                SIMGP = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/"  + Front_Image_ID +  ".jpg");
-                                VBI.Save(SIMGP, ImageFormat.Jpeg);
+                                if (VB == true)
+                                {
+                                    SIMGP = System.Web.Hosting.HostingEnvironment.MapPath("~/Drive/Hospitality/CustomerData/" + AppID + "/Result/" + Front_Image_ID + ".jpg");
+                                    VBI.Save(SIMGP, ImageFormat.Jpeg);
+                                }
                             }
+                            catch (Exception)
+                            { }
                         }
                         // Set Application Status :
                         if (result == AuthenticationResult.Unknown)

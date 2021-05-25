@@ -352,23 +352,27 @@ function T_AccessPolicy_Reload() {
                     T_AccessPolicy_Clear();
                     var res = ErrorResult.split("-");
                     if (res[0].trim() == "1") { document.getElementById('C_Portal_UPA').checked = true; }
-                    if (res[1].trim() == "1") { document.getElementById('C_API_IDV_OCR').checked = true; }
-                    if (res[2].trim() == "1") { document.getElementById('C_API_IDV_DrivingLic').checked = true; }
-                    if (res[3].trim() == "1") { document.getElementById('C_API_IDV_Passport').checked = true; }
-                    if (res[4].trim() == "1") { document.getElementById('C_API_Acuant_OCR_IDCard').checked = true; }
-                    if (res[5].trim() == "1") { document.getElementById('C_API_Acuant_Validation_IDCard').checked = true; }
-                    if (res[6].trim() == "1") { document.getElementById('C_API_Acuant_OCR_Passport').checked = true; }
-                    if (res[7].trim() == "1") { document.getElementById('C_API_Acuant_Validation_Passport').checked = true; }
-                    if (res[8].trim() == "1") { document.getElementById('C_API_TVS_Passport').checked = true; }
-                    if (res[9].trim() == "1") { document.getElementById('C_API_Vevo_Check').checked = true; }
-                    if (res[10].trim() == "1") { document.getElementById('C_API_GIC').checked = true; }
-                    if (res[11].trim() == "1") { document.getElementById('C_API_LNT').checked = true; }
-                    if (res[12].trim() == "1") { document.getElementById('C_API_FRM').checked = true; }
-                    if (res[15].trim() == "1") { document.getElementById('C_API_RAD').checked = true; }
-                    if (res[16].trim() == "1") { document.getElementById('C_API_RAF').checked = true; }
-                    document.getElementById('Txt_ADR').value = res[13].trim();
-                    $('#Txt_ADR_Type').val(res[14].trim());
+                    document.getElementById('Txt_ADR').value = res[1].trim();
+                    $('#Txt_ADR_Type').val(res[2].trim());
                     $('#Txt_ADR_Type').select2({ dropdownAutoWidth: true, width: '100%' }).trigger('change');
+                    if (res[3].trim() == "1") { document.getElementById('C_API_IDV_OCR').checked = true; }
+                    if (res[4].trim() == "1") { document.getElementById('C_API_IDV_DrivingLic').checked = true; }
+                    if (res[5].trim() == "1") { document.getElementById('C_API_IDV_DrivingLic_Valication').checked = true; }
+                    if (res[6].trim() == "1") { document.getElementById('C_API_IDV_Passport').checked = true; }
+                    if (res[7].trim() == "1") { document.getElementById('C_API_IDV_Passport_validation').checked = true; }
+                    if (res[8].trim() == "1") { document.getElementById('C_API_Acuant_OCR_IDCard').checked = true; }
+                    if (res[9].trim() == "1") { document.getElementById('C_API_Acuant_Validation_IDCard').checked = true; }
+                    if (res[10].trim() == "1") { document.getElementById('C_API_Acuant_OCR_Passport').checked = true; }
+                    if (res[11].trim() == "1") { document.getElementById('C_API_Acuant_Validation_Passport').checked = true; }
+                    if (res[12].trim() == "1") { document.getElementById('C_API_TVS_Passport').checked = true; }
+                    if (res[13].trim() == "1") { document.getElementById('C_API_Vevo_Check').checked = true; }
+                    if (res[14].trim() == "1") { document.getElementById('C_API_GIC').checked = true; }
+                    if (res[15].trim() == "1") { document.getElementById('C_API_LNT').checked = true; }
+                    if (res[16].trim() == "1") { document.getElementById('C_API_FRM').checked = true; }
+                    if (res[17].trim() == "1") { document.getElementById('C_API_RetriveAllTrans_Data').checked = true; }
+                    if (res[18].trim() == "1") { document.getElementById('C_API_RetriveAllTrans_File').checked = true; }
+                    if (res[19].trim() == "1") { document.getElementById('C_API_RAD').checked = true; }
+                    if (res[20].trim() == "1") { document.getElementById('C_API_RAF').checked = true; }
                     document.getElementById('Tab_Wait_3').style.display = "none";
                     document.getElementById('Tab_3').style.display = "block";
                     toastr.success("User access policy successfully reloaded", 'Congratulations', { "showMethod": "slideDown", "hideMethod": "slideUp", positionClass: 'toast-bottom-right', "progressBar": true, "closeButton": true, "timeOut": 8000 });
@@ -401,23 +405,27 @@ function T_AccessPolicy_Save() {
         var formData = new FormData();
         formData.append("UI", app.Urls.UID);
         if (document.getElementById('C_Portal_UPA').checked == true) { formData.append("C1", "1"); } else { formData.append("C1", "0"); }
-        if (document.getElementById('C_API_IDV_OCR').checked == true) { formData.append("C2", "1"); } else { formData.append("C2", "0"); }
-        if (document.getElementById('C_API_IDV_DrivingLic').checked == true) { formData.append("C3", "1"); } else { formData.append("C3", "0"); }
-        if (document.getElementById('C_API_IDV_Passport').checked == true) { formData.append("C4", "1"); } else { formData.append("C4", "0"); }
-        if (document.getElementById('C_API_Acuant_OCR_IDCard').checked == true) { formData.append("C5", "1"); } else { formData.append("C5", "0"); }
-        if (document.getElementById('C_API_Acuant_Validation_IDCard').checked == true) { formData.append("C6", "1"); } else { formData.append("C6", "0"); }
-        if (document.getElementById('C_API_Acuant_OCR_Passport').checked == true) { formData.append("C7", "1"); } else { formData.append("C7", "0"); }
-        if (document.getElementById('C_API_Acuant_Validation_Passport').checked == true) { formData.append("C8", "1"); } else { formData.append("C8", "0"); }
-        if (document.getElementById('C_API_TVS_Passport').checked == true) { formData.append("C9", "1"); } else { formData.append("C9", "0"); }
-        if (document.getElementById('C_API_Vevo_Check').checked == true) { formData.append("C10", "1"); } else { formData.append("C10", "0"); }
-        if (document.getElementById('C_API_GIC').checked == true) { formData.append("C11", "1"); } else { formData.append("C11", "0"); }
-        if (document.getElementById('C_API_LNT').checked == true) { formData.append("C12", "1"); } else { formData.append("C12", "0"); }
-        if (document.getElementById('C_API_FRM').checked == true) { formData.append("C13", "1"); } else { formData.append("C13", "0"); }
-        formData.append("C14", document.getElementById('Txt_ADR').value.trim());
-        formData.append("C15", $("#Txt_ADR_Type :selected").val().trim());
-        formData.append("C16", $("#Txt_ADR_Type :selected").text().trim());
-        if (document.getElementById('C_API_RAD').checked == true) { formData.append("C17", "1"); } else { formData.append("C17", "0"); }
-        if (document.getElementById('C_API_RAF').checked == true) { formData.append("C18", "1"); } else { formData.append("C18", "0"); }
+        formData.append("C2", document.getElementById('Txt_ADR').value.trim());
+        formData.append("C3", $("#Txt_ADR_Type :selected").val().trim());
+        formData.append("C4", $("#Txt_ADR_Type :selected").text().trim());
+        if (document.getElementById('C_API_IDV_OCR').checked == true) { formData.append("C5", "1"); } else { formData.append("C5", "0"); }
+        if (document.getElementById('C_API_IDV_DrivingLic').checked == true) { formData.append("C6", "1"); } else { formData.append("C6", "0"); }
+        if (document.getElementById('C_API_IDV_DrivingLic_Valication').checked == true) { formData.append("C7", "1"); } else { formData.append("C7", "0"); }
+        if (document.getElementById('C_API_IDV_Passport').checked == true) { formData.append("C8", "1"); } else { formData.append("C8", "0"); }
+        if (document.getElementById('C_API_IDV_Passport_validation').checked == true) { formData.append("C9", "1"); } else { formData.append("C9", "0"); }
+        if (document.getElementById('C_API_Acuant_OCR_IDCard').checked == true) { formData.append("C10", "1"); } else { formData.append("C10", "0"); }
+        if (document.getElementById('C_API_Acuant_Validation_IDCard').checked == true) { formData.append("C11", "1"); } else { formData.append("C11", "0"); }
+        if (document.getElementById('C_API_Acuant_OCR_Passport').checked == true) { formData.append("C12", "1"); } else { formData.append("C12", "0"); }
+        if (document.getElementById('C_API_Acuant_Validation_Passport').checked == true) { formData.append("C13", "1"); } else { formData.append("C13", "0"); }
+        if (document.getElementById('C_API_TVS_Passport').checked == true) { formData.append("C14", "1"); } else { formData.append("C14", "0"); }
+        if (document.getElementById('C_API_Vevo_Check').checked == true) { formData.append("C15", "1"); } else { formData.append("C15", "0"); }
+        if (document.getElementById('C_API_GIC').checked == true) { formData.append("C16", "1"); } else { formData.append("C16", "0"); }
+        if (document.getElementById('C_API_LNT').checked == true) { formData.append("C17", "1"); } else { formData.append("C17", "0"); }
+        if (document.getElementById('C_API_FRM').checked == true) { formData.append("C18", "1"); } else { formData.append("C18", "0"); }
+        if (document.getElementById('C_API_RetriveAllTrans_Data').checked == true) { formData.append("C19", "1"); } else { formData.append("C19", "0"); }
+        if (document.getElementById('C_API_RetriveAllTrans_File').checked == true) { formData.append("C20", "1"); } else { formData.append("C20", "0"); }
+        if (document.getElementById('C_API_RAD').checked == true) { formData.append("C21", "1"); } else { formData.append("C21", "0"); }
+        if (document.getElementById('C_API_RAF').checked == true) { formData.append("C22", "1"); } else { formData.append("C22", "0"); }
         $.ajax({
             url: app.Urls.U8, type: "POST", data: formData, dataType: 'json', contentType: false, processData: false, async: true,
             error: function () {
